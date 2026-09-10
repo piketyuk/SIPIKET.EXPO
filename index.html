@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="SIPIKET.EXPO - Sistem piket transparan dan membangun karakter siswa. Dibuat oleh Kelompok 4 | IX-F">
+<meta name="theme-color" content="#ff6b00">
+<title>SIPIKET.EXPO — Piket Transparan, Karakter Berkembang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+
+<header class="nav-wrap" role="banner">
+<nav class="nav" aria-label="Navigasi utama">
+<button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu navigasi">
+<span></span><span></span><span></span>
+</button>
+<a class="brand" href="index.html" aria-label="SIPIKET.EXPO beranda">SIPIKET<span>.EXPO</span></a>
+<a class="btn-login" href="login.html">Login Sekarang</a>
+</nav>
+</header>
+
+<div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="Menu navigasi">
+<div class="drawer-head">
+<span class="brand small">SIPIKET<span>.EXPO</span></span>
+<button class="close" id="closeDrawer" aria-label="Tutup menu">✕</button>
+</div>
+<ul role="list">
+<li><a href="#fitur">Fitur Unggulan</a></li>
+<li><a href="pengembang.html">Tentang Pengembang</a></li>
+<li><a href="login.html" class="drawer-cta">Login Sekarang →</a></li>
+</ul>
+</div>
+<div class="overlay" id="overlay" hidden></div>
+
+<main id="main">
+<section class="hero" aria-labelledby="hero-title">
+<div class="hero-bg" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="hero-inner reveal">
+<p class="eyebrow">✦ Kelompok 4 | IX-F — Karya Pelajar Untuk Kelas Lebih Tertib</p>
+<h1 id="hero-title">Piket yang <em>Membangun</em> Karakter,<br>Transparan dalam <em>Aksi.</em></h1>
+<p class="hero-desc">SIPIKET.EXPO hadir untuk mengubah tugas piket menjadi budaya tanggung jawab. Bukan sekadar jadwal — sistem yang <strong>adil, terpantau, dan membanggakan</strong> setiap siswa yang berkontribusi menjaga kelas.</p>
+<p class="hero-meta">Dibuat dengan dedikasi oleh <strong>Kelompok 4 | IX-F</strong> — untuk kelas yang lebih bersih, kompak, dan berprestasi.</p>
+<button class="btn-primary" id="openMenu" aria-haspopup="dialog" aria-controls="quickMenu">Klik untuk Mulai <span aria-hidden="true">→</span></button>
+<div class="hero-stats" role="list">
+<div role="listitem"><strong>100%</strong><span>Transparan</span></div>
+<div role="listitem"><strong>5 Hari</strong><span>Notifikasi Aktif</span></div>
+<div role="listitem"><strong>IX-F</strong><span>Karya Asli</span></div>
+</div>
+</div>
+</section>
+
+<section class="features" id="fitur" aria-labelledby="fitur-title">
+<div class="container">
+<div class="section-head reveal">
+<p class="eyebrow orange">Kenapa SIPIKET.EXPO Berbeda?</p>
+<h2 id="fitur-title">Fitur yang Dibuat untuk <span>Kedisiplinan Tanpa Paksaan</span></h2>
+<p class="section-desc">Tiga pilar utama yang membuat piket bukan lagi beban — tapi kebiasaan membanggakan yang terekam dan terapresiasi.</p>
+</div>
+<div class="cards">
+<article class="card reveal">
+<div class="icon" aria-hidden="true">🔔</div>
+<h3>Notifikasi Setiap Hari Senin–Jumat pada Pukul 5 Sore</h3>
+<p>Sistem ini dibuat agar siswa <strong>tidak ada alasan untuk lupa</strong> — pengingat dikirimkan otomatis setiap Senin sampai Jumat pukul 17.00, tepat sebelum hari piket berikutnya.</p>
+<span class="badge">Otomatis • Tepat Waktu</span>
+</article>
+<article class="card reveal">
+<div class="icon" aria-hidden="true">⚖️</div>
+<h3>Pembagian Tugas Secara Otomatis atau Dapat Diatur Manual</h3>
+<p>Guru dapat menambahkan tugas secara manual untuk menyesuaikan kebutuhan kelas. Tugas yang dibuat akan <strong>dibagikan secara adil dan otomatis</strong> ke setiap regu — tanpa pilih kasih.</p>
+<span class="badge">Adil • Fleksibel</span>
+</article>
+<article class="card reveal">
+<div class="icon" aria-hidden="true">🎥</div>
+<h3>Pengambilan Video Bukti Melakukan Tugas Piket</h3>
+<p>Saat bertugas, siswa wajib merekam video beberapa detik sebagai bukti pelaksanaan. Satu regu juga diwajibkan <strong>mengambil video mengelilingi kelas</strong> untuk memastikan hasil piket terekam transparan.</p>
+<span class="badge">Terbukti • Transparan</span>
+</article>
+</div>
+</div>
+</section>
+</main>
+
+<footer role="contentinfo">
+<div class="container footer-inner">
+<div class="footer-logo" aria-hidden="true"><span>S</span></div>
+<p class="footer-about"><strong>About Us</strong> — SIPIKET.EXPO adalah platform manajemen piket kelas karya <strong>Kelompok 4 | IX-F</strong>. Kami percaya kebersihan kelas adalah cerminan karakter. Dengan teknologi yang transparan dan adil, kami membangun generasi yang bertanggung jawab mulai dari hal kecil.</p>
+<h2 class="footer-soc-title">Media Sosial</h2>
+<a class="ig" href="https://instagram.com/sipiket.expo" target="_blank" rel="noopener noreferrer" aria-label="Instagram SIPIKET.EXPO">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+@sipiket.expo
+</a>
+<p class="copy">© 2026 SIPIKET.EXPO — Kelompok 4 | IX-F. Dibuat dengan semangat kolaborasi.</p>
+</div>
+</footer>
+
+<dialog id="quickMenu" aria-labelledby="qm-title">
+<div class="qm-head">
+<h2 id="qm-title">Mau ke mana?</h2>
+<button class="close" id="closeQm" aria-label="Tutup dialog">✕</button>
+</div>
+<p class="qm-desc">Pilih tujuanmu — kenali tim di balik layar atau langsung masuk ke sistem.</p>
+<div class="qm-actions">
+<a class="qm-card" href="pengembang.html">
+<span class="qm-icon">👨‍💻</span>
+<span><strong>Tentang Pengembang</strong><small>Kenali Kelompok 4 | IX-F</small></span>
+<span aria-hidden="true">→</span>
+</a>
+<a class="qm-card accent" href="login.html">
+<span class="qm-icon">🔐</span>
+<span><strong>Login Sekarang</strong><small>Masuk ke dashboard piket</small></span>
+<span aria-hidden="true">→</span>
+</a>
+</div>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lengkapi Profil — SIPIKET.EXPO</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+<header class="nav-wrap"><nav class="nav" aria-label="Navigasi utama">
+<button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html">SIPIKET<span>.EXPO</span></a>
+<a class="btn-login" href="login.html">Login Sekarang</a>
+</nav></header>
+<div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="drawer-head"><span class="brand small">SIPIKET<span>.EXPO</span></span><button class="close" id="closeDrawer" aria-label="Tutup">✕</button></div><ul role="list"><li><a href="index.html#fitur">Fitur Unggulan</a></li><li><a href="pengembang.html">Tentang Pengembang</a></li><li><a href="login.html" class="drawer-cta">Login Sekarang →</a></li></ul></div>
+<div class="overlay" id="overlay" hidden></div>
+<main id="main">
+<section class="page-hero" aria-labelledby="profile-title">
+<p class="eyebrow">Satu langkah lagi</p>
+<h1 id="profile-title" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.04em;font-size:clamp(1.7rem,5vw,2.4rem)">Lengkapi <em style="color:var(--orange);font-style:normal">Profil</em></h1>
+<p style="color:var(--muted);max-width:520px;margin:10px auto 0">Isi nama lengkap dan foto profil — kamu akan otomatis masuk kelas sesuai kode verifikasi.</p>
+<form class="profile-card" id="profileForm" novalidate>
+<div class="avatar-upload">
+<div class="avatar-preview" id="avatarPrev" aria-hidden="true">📷</div>
+<label class="file-btn" for="avatarInput">Pilih foto profil *wajib</label>
+<input type="file" id="avatarInput" accept="image/*" hidden required>
+<p id="avatarName" style="font-size:.8rem;color:var(--muted)"></p>
+</div>
+<label for="fullName">Nama Lengkap *wajib</label>
+<input type="text" id="fullName" placeholder="Contoh: Aisyah Putri" required autocomplete="name" maxlength="60">
+<p id="profileStatus" role="status" aria-live="polite" style="text-align:center;font-size:.88rem;min-height:1.2em;color:var(--muted)"></p>
+<button class="btn-primary btn-full" type="submit">Simpan & Masuk Kelas →</button>
+</form>
+</section>
+</main>
+<footer role="contentinfo">
+<div class="container footer-inner">
+<div class="footer-logo" aria-hidden="true"><span>S</span></div>
+<p class="footer-about"><strong>About Us</strong> — SIPIKET.EXPO adalah platform manajemen piket kelas karya <strong>Kelompok 4 | IX-F</strong>.</p>
+<h2 class="footer-soc-title">Media Sosial</h2>
+<a class="ig" href="https://instagram.com/sipiket.expo" target="_blank" rel="noopener noreferrer" aria-label="Instagram SIPIKET.EXPO">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+@sipiket.expo
+</a>
+<p class="copy">© 2026 SIPIKET.EXPO — Kelompok 4 | IX-F. Dibuat dengan semangat kolaborasi.</p>
+</div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
