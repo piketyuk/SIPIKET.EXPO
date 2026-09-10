@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kelas — SIPIKET.EXPO</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+<header class="nav-wrap"><nav class="nav" aria-label="Navigasi utama">
+<button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html">SIPIKET<span>.EXPO</span></a>
+<a class="btn-login" href="login.html" id="navAuthBtn">Kelas</a>
+</nav></header>
+<div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="drawer-head"><span class="brand small">SIPIKET<span>.EXPO</span></span><button class="close" id="closeDrawer" aria-label="Tutup">✕</button></div><ul role="list"><li><a href="index.html#fitur">Fitur</a></li><li><a href="kelas.html" aria-current="page">Kelas Saya</a></li><li><a href="#" id="logoutBtn">Keluar</a></li></ul></div>
+<div class="overlay" id="overlay" hidden></div>
+<main id="main">
+<section class="page-hero" aria-labelledby="kelasTitle">
+<p class="eyebrow" id="kelasCodeBadge">Memuat kelas...</p>
+<h1 id="kelasTitle" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.04em;font-size:clamp(1.7rem,5vw,2.4rem)">Regu <em style="color:var(--orange);font-style:normal">Piket</em> Saya</h1>
+<p style="color:var(--muted);max-width:640px;margin:10px auto 0">Semua fitur piket ada di dalam regu — tugas, video bukti, dan notifikasi terpusat.</p>
+<div id="userChip" style="margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:100px;box-shadow:0 4px 16px rgba(0,0,0,.04)"><img id="userAvatar" alt="" width="32" height="32" style="border-radius:50%;object-fit:cover;display:none"><span id="userName" style="font-weight:700"></span><span id="userEmail" style="color:var(--muted);font-size:.84rem"></span></div>
+</section>
+
+<section style="padding:18px 20px 48px">
+<div class="container" style="display:grid;gap:18px;max-width:980px;margin:0 auto">
+<section aria-labelledby="reguTitle" style="display:grid;gap:14px">
+<h2 id="reguTitle" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.03em">Regu Piket — Tugas &amp; Bukti dalam Satu Tempat</h2>
+<div class="cards" id="reguGrid"></div>
+</section>
+
+<section aria-labelledby="notifTitle" class="card" style="display:grid;gap:10px">
+<h3 id="notifTitle">🔔 Notifikasi Senin–Jumat 17:00</h3>
+<p style="color:var(--muted)">Pengingat otomatis setiap jam 5 sore agar tidak ada alasan lupa.</p>
+<label style="display:flex;align-items:center;gap:10px;font-weight:600"><input type="checkbox" id="notifToggle" checked style="accent-color:var(--orange);width:18px;height:18px"> Aktifkan notifikasi browser (terenkripsi lokal)</label>
+<p id="notifStatus" role="status" aria-live="polite" style="font-size:.84rem;color:var(--muted)"></p>
+</section>
+</div>
+</section>
+</main>
+<footer role="contentinfo"><div class="container footer-inner"><div class="footer-logo"><span>S</span></div><p class="footer-about"><strong>About Us</strong> — SIPIKET.EXPO Kelompok 4 | IX-F.</p><h2 class="footer-soc-title">Media Sosial</h2><a class="ig" href="https://instagram.com/sipiket.expo" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>@sipiket.expo</a><p class="copy">© 2026 SIPIKET.EXPO</p></div></footer>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="script.js"></script>
+</body>
+</html>

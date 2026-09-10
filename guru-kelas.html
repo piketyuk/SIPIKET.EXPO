@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guru — Kelas — SIPIKET.EXPO</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+<header class="nav-wrap"><nav class="nav" aria-label="Navigasi utama">
+<button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html">SIPIKET<span>.EXPO</span></a>
+<a class="btn-login" href="login.html" id="navAuthBtnGuru">Guru</a>
+</nav></header>
+<div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="drawer-head"><span class="brand small">SIPIKET<span>.EXPO</span></span><button class="close" id="closeDrawer" aria-label="Tutup">✕</button></div><ul role="list"><li><a href="index.html#fitur">Fitur</a></li><li><a href="guru-kelas.html" aria-current="page">Panel Guru</a></li><li><a href="#" id="logoutGuru">Keluar</a></li></ul></div>
+<div class="overlay" id="overlay" hidden></div>
+<main id="main">
+<section class="page-hero" aria-labelledby="guruTitle">
+<p class="eyebrow">Akses Guru — terenkripsi</p>
+<h1 id="guruTitle" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.04em;font-size:clamp(1.7rem,5vw,2.5rem)">Panel <em style="color:var(--orange);font-style:normal">Guru</em></h1>
+<p style="color:var(--muted);max-width:640px;margin:10px auto 0">Kelola regu, tugas, dan bukti video — data siswa terenkripsi end-to-end (AES-GCM).</p>
+<div id="guruChip" style="margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:100px;box-shadow:0 4px 16px rgba(0,0,0,.04)"><img id="guruAvatar" alt="" width="32" height="32" style="border-radius:50%;object-fit:cover;display:none"><span id="guruName" style="font-weight:700"></span><span id="guruEmail" style="color:var(--muted);font-size:.84rem"></span></div>
+</section>
+<section style="padding:18px 20px 48px">
+<div class="container" style="display:grid;gap:18px;max-width:980px;margin:0 auto">
+<section class="card" style="display:grid;gap:12px">
+<h3>Tambah Tugas Regu (manual / auto-bagi)</h3>
+<form id="taskForm" style="display:grid;gap:10px">
+<label for="taskTitle" style="font-weight:600;font-size:.9rem">Judul tugas</label>
+<input id="taskTitle" type="text" placeholder="Contoh: Sapu kelas, buang sampah" required style="padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);font:inherit">
+<label for="taskRegu" style="font-weight:600;font-size:.9rem">Regu</label>
+<select id="taskRegu" style="padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);font:inherit">
+<option value="auto">Otomatis — bagi adil ke regu berikutnya</option>
+<option value="A">Regu A</option><option value="B">Regu B</option><option value="C">Regu C</option>
+</select>
+<button class="btn-primary btn-full" type="submit" style="justify-content:center">Simpan Tugas (terenkripsi)</button>
+<p id="taskStatus" role="status" aria-live="polite" style="font-size:.84rem;color:var(--muted);min-height:1em"></p>
+</form>
+</section>
+<section aria-labelledby="buktiTitle" style="display:grid;gap:12px">
+<h3 id="buktiTitle">Bukti Video Regu</h3>
+<div class="cards" id="guruGrid"></div>
+<p style="color:var(--muted);font-size:.88rem">Siswa merekam beberapa detik + video keliling kelas sebagai bukti. Guru memverifikasi di sini.</p>
+</section>
+</div>
+</section>
+</main>
+<footer role="contentinfo"><div class="container footer-inner"><div class="footer-logo"><span>S</span></div><p class="footer-about"><strong>About Us</strong> — SIPIKET.EXPO Kelompok 4 | IX-F.</p><h2 class="footer-soc-title">Media Sosial</h2><a class="ig" href="https://instagram.com/sipiket.expo" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>@sipiket.expo</a><p class="copy">© 2026 SIPIKET.EXPO</p></div></footer>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="secure.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
