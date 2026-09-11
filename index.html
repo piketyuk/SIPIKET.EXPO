@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="canonical" href="https://sipiket.my.id/" />
-    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   </head>
   <body>
@@ -161,6 +161,47 @@
           </div>
         </div>
       </section>
+
+      <section class="feedback" id="feedback" aria-labelledby="feedback-title">
+        <div class="feedback-inner">
+          <div class="feedback-head reveal">
+            <p class="eyebrow orange">Suara Kamu Berarti</p>
+            <h2 id="feedback-title">Bantu Kami <span>Lebih Baik</span></h2>
+            <p>Setiap masukan membangun SIPIKET.EXPO yang lebih adil dan nyaman. Feedbackmu langsung masuk ke inbox kami dan dibaca tim IX-F.</p>
+          </div>
+          <form class="feedback-card reveal" id="feedbackForm" action="https://formsubmit.co/ajax/sipiket.anchor@gmail.com" method="POST" novalidate>
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_subject" value="[SIPIKET.EXPO] Feedback Landing Page" />
+            <input type="hidden" name="_template" value="table" />
+            <div class="feedback-grid">
+              <label for="fbName">Nama (opsional)<input id="fbName" name="nama" type="text" placeholder="Aisyah — IX-F" autocomplete="name" maxlength="60" /></label>
+              <label for="fbEmail">Email <span aria-hidden="true" style="color:#d93025">*</span><input id="fbEmail" name="email" type="email" placeholder="kamu@email.com" required autocomplete="email" /></label>
+            </div>
+            <div class="feedback-grid">
+              <label for="fbKategori">Kategori<input id="fbKategori" name="kategori" type="text" list="kategoriList" placeholder="Saran / Bug / Pujian" />
+                <datalist id="kategoriList"><option value="Saran"></option><option value="Bug"></option><option value="Pujian"></option><option value="Pertanyaan"></option></datalist>
+              </label>
+              <fieldset style="border:0;padding:0;display:grid;gap:6px"><legend style="font-weight:600;font-size:0.86rem">Rating Kepuasan</legend>
+                <div class="stars" role="group" aria-label="Rating 1 sampai 5">
+                  <button type="button" data-star="1" aria-pressed="false" aria-label="Rating 1">1</button>
+                  <button type="button" data-star="2" aria-pressed="false" aria-label="Rating 2">2</button>
+                  <button type="button" data-star="3" aria-pressed="false" aria-label="Rating 3">3</button>
+                  <button type="button" data-star="4" aria-pressed="false" aria-label="Rating 4">4</button>
+                  <button type="button" data-star="5" aria-pressed="false" aria-label="Rating 5">5</button>
+                </div>
+                <input type="hidden" name="rating" id="fbRating" value="" />
+              </fieldset>
+            </div>
+            <label for="fbPesan">Pesan <span aria-hidden="true" style="color:#d93025">*</span><textarea id="fbPesan" name="pesan" placeholder="Tulis kekurangan, ide, atau apresiasi — jelas dan enak dibaca, kami dengarkan." required maxlength="1000" rows="4"></textarea><span class="feedback-hint"><span id="fbCount">0</span>/1000 karakter</span></label>
+            <p class="feedback-hint">Dengan mengirim, kamu setuju pesan terenkripsi dan hanya dipakai untuk perbaikan SIPIKET.EXPO.</p>
+            <button class="btn-primary btn-full" type="submit" id="fbSubmit" style="justify-content:center">Kirim Feedback ✈️</button>
+            <p id="fbStatus" class="feedback-status" role="status" aria-live="polite"></p>
+            <p class="feedback-hint" style="text-align:center">Langsung ke <a href="mailto:sipiket.anchor@gmail.com" style="color:var(--orange);font-weight:700">sipiket.anchor@gmail.com</a> — format tabel rapi, mudah dibaca.</p>
+          </form>
+        </div>
+      </section>
+
     </main>
 
     <footer role="contentinfo">
