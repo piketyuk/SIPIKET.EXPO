@@ -608,7 +608,7 @@ window.onGoogleCredential = async function (response) {
       sessionStorage.setItem("sipiket_pendingRole", "guru");
     localStorage.setItem("sipiket_last_email", email);
 
-    otpSentMsg.textContent = `Kode OTP 6 digit telah dikirim ke ${email} (demo: ${emailOtp}). Klik Verifikasi Email untuk konfirmasi terakhir.`;
+    otpSentMsg.textContent = `Kode OTP 6 digit telah dikirim ke ${email} (kode: ${emailOtp}). Klik Verifikasi Email untuk konfirmasi terakhir.`;
     if (emailPreviewTo) emailPreviewTo.textContent = `kepada ${email}`;
     otpSentCard.hidden = false;
     if (emailVerifyBtn)
@@ -650,17 +650,13 @@ function triggerGoogleChooser() {
     termsCheck.focus();
     return;
   }
-  const demoEmail =
-    "siswa" + Math.floor(Math.random() * 900 + 100) + "@gmail.com";
-  const fakeCred = btoa(
-    JSON.stringify({ email: demoEmail, name: "Siswa Demo", picture: "" }),
-  )
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-  window.onGoogleCredential({
-    credential: "eyJhbGciOiJIUzI1NiJ9." + fakeCred + ".sig",
-  });
+  // real mode: no fallback
+  otpStatus.textContent =
+    "Google login belum terkonfigurasi — periksa Authorized origins di Console (sipiket.my.id)";
+  otpStatus.style.color = "#d93025";
+  console.error(
+    "GIS not configured or origin_mismatch — add https://sipiket.my.id to Authorized JavaScript origins",
+  );
 }
 
 googleBtn?.addEventListener("click", (e) => {
@@ -682,9 +678,9 @@ resendEmailBtn?.addEventListener("click", async () => {
   if (!email) return;
   const newOtp = String(Math.floor(100000 + Math.random() * 900000));
   sessionStorage.setItem("sipiket_emailOtp", newOtp);
-  otpSentMsg.textContent = `Kode OTP baru dikirim ke ${email} (demo: ${newOtp}).`;
+  otpSentMsg.textContent = `Kode OTP baru dikirim ke ${email} (kode: ${newOtp}).`;
   if (resendStatus) {
-    resendStatus.textContent = "Terkirim! Cek email (demo OTP: " + newOtp + ")";
+    resendStatus.textContent = "Terkirim! Cek email (kode OTP: " + newOtp + ")";
     resendStatus.style.color = "var(--orange)";
   }
   if (emailVerifyBtn)
@@ -703,13 +699,13 @@ if (emailHint) {
     emailHint.textContent =
       "Kode 6 digit telah dikirim ke " + em + ". Masukkan untuk verifikasi.";
   const pending = sessionStorage.getItem("sipiket_emailOtp");
-  if (pending) emailHint.textContent += " (demo: " + pending + ")";
+  if (pending) emailHint.textContent += " (kode: " + pending + ")";
 }
 let resendTimer = null;
 resendBtn?.addEventListener("click", () => {
   const newOtp = String(Math.floor(100000 + Math.random() * 900000));
   sessionStorage.setItem("sipiket_emailOtp", newOtp);
-  resendHint.textContent = " (demo OTP baru: " + newOtp + ")";
+  resendHint.textContent = " (kode OTP baru: " + newOtp + ")";
   emailStatus.textContent = "Kode baru dikirim!";
   emailStatus.style.color = "var(--orange)";
   resendBtn.disabled = true;
@@ -736,7 +732,7 @@ emailForm?.addEventListener("submit", async (e) => {
   const expect = sessionStorage.getItem("sipiket_emailOtp");
   if (expect && code !== expect) {
     emailStatus.textContent =
-      "Kode OTP salah — coba lagi (demo: " + expect + ")";
+      "Kode OTP salah — coba lagi (kode: " + expect + ")";
     emailStatus.style.color = "#d93025";
     return;
   }
@@ -979,6 +975,70 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
         `<article class="card reveal in"><div class="icon">✅</div><h3>${title}</h3><p>Regu: ${regu} • oleh ${email}</p><span class="badge">Tersimpan</span></article>`,
       );
   });
+})();
+
+(function devStackBoot() {
+  const stack = document.getElementById("devStack");
+  if (!stack) return;
+  const hint = document.getElementById("devStackHint");
+  const nextBtn = document.getElementById("devStackNext");
+  const backBtn = document.getElementById("devBack");
+  const devs = [
+    {
+      name: "Raja",
+      role: "Lead Developer & Full Stack Developer",
+      img: "images/raja.webp",
+      lead: true,
+    },
+    { name: "Kibi", role: "Assistant & Publisher", img: "images/kibi.jpg" },
+    {
+      name: "Zanet",
+      role: "Social Media & Content Manager",
+      img: "images/zanet.jpg",
+    },
+    {
+      name: "Avara",
+      role: "Mediator & Project Coordinator",
+      img: "images/avara.jpg",
+    },
+    {
+      name: "Surya",
+      role: "Creator & Build Script Engineer",
+      img: "images/surya.jpg",
+    },
+    {
+      name: "Gabriel",
+      role: "Assistant Build Script Engineer",
+      img: "images/gabriel.jpg",
+    },
+  ];
+  let idx = 0;
+  function render() {
+    stack.innerHTML = "";
+    for (let k = 0; k < 3; k++) {
+      const i = (idx + k) % devs.length;
+      const d = devs[i];
+      const card = document.createElement("article");
+      card.className =
+        "stack-card " +
+        (k === 0 ? "is-active" : k === 1 ? "is-next" : "is-behind");
+      if (d.lead) card.classList.add("dev-card--lead");
+      card.innerHTML = `<div class="dev-img-wrap"><img src="${d.img}" alt="Foto ${d.name}" loading="lazy" width="200" height="200" /></div><h3>${d.name}</h3><p>${d.role}</p>`;
+      card.style.transform += ` translateZ(0)`;
+      stack.appendChild(card);
+    }
+    if (hint)
+      hint.textContent = `${idx + 1} / ${devs.length} — ${devs[idx].name} • ${devs[idx].role} • Next untuk berikut, Kembali untuk sebelumnya`;
+  }
+  nextBtn?.addEventListener("click", () => {
+    idx = (idx + 1) % devs.length;
+    render();
+  });
+  backBtn?.addEventListener("click", () => {
+    idx = (idx - 1 + devs.length) % devs.length;
+    render();
+  });
+  render();
 })();
 
 (function feedbackBoot() {
