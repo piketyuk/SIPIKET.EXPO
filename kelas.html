@@ -180,6 +180,18 @@
       </div>
     </footer>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="script.js"></script>
-  </body>
+    <script src="secure.js"></script>
+<script src="script.js"></script>
+  
+<script>
+(function(){
+  const role=sessionStorage.getItem('sipiket_role')||sessionStorage.getItem('sipiket_pendingRole');
+  const reg=sessionStorage.getItem('sipiket_registered');
+  const code=sessionStorage.getItem('sipiket_classCode');
+  if(!reg || !code){ location.replace('login.html'); return; }
+  if(location.pathname.includes('guru-kelas') && role!=='guru'){ location.replace('kelas.html'); return; }
+  if(location.pathname.includes('kelas.html') && !location.pathname.includes('guru-') && role==='guru'){ location.replace('guru-kelas.html'); return; }
+})();
+</script>
+</body>
 </html>

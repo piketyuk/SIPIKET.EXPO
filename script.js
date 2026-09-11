@@ -439,14 +439,9 @@ profileForm?.addEventListener("submit", (e) => {
     " sebagai " +
     name;
   profileStatus.style.color = "var(--orange)";
-  setTimeout(() => {
-    alert(
-      "Selamat " +
-        name +
-        "! Kamu otomatis masuk kelas " +
-        sessionStorage.getItem("sipiket_classCode") +
-        " — ponytail: hubungkan ke backend & simpan profil",
-    );
-    location.href = "index.html";
-  }, 700);
+  const _role = sessionStorage.getItem("sipiket_role") || sessionStorage.getItem("sipiket_pendingRole");
+  const _target = _role === "guru" ? "guru-kelas.html" : "kelas.html";
+  profileStatus.textContent = "✓ Pendaftaran berhasil — membuka " + _target + "...";
+  profileStatus.style.color = "var(--orange)";
+  setTimeout(() => { location.href = _target; }, 700);
 });

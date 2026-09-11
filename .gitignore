@@ -1,2 +1,3 @@
-.vercel
 --staged delete
+.vercel
+watch-push.sh
