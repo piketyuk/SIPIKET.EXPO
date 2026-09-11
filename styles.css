@@ -1264,13 +1264,13 @@ dialog::backdrop {
   display: grid;
   gap: 10px;
   justify-items: center;
-  box-shadow: 0 8px 24px rgba(255,107,0,0.06);
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.06);
   transition: 0.28s;
   overflow: hidden;
 }
 .dev-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(255,107,0,0.12);
+  box-shadow: 0 16px 32px rgba(255, 107, 0, 0.12);
 }
 .dev-img-wrap {
   width: 96px;
@@ -1279,7 +1279,7 @@ dialog::backdrop {
   overflow: hidden;
   border: 3px solid var(--line);
   background: var(--orange3);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 .dev-img-wrap img {
   width: 100%;
@@ -1313,8 +1313,12 @@ dialog::backdrop {
   padding: 4px;
   background: linear-gradient(90deg, #ff1a1a, #ff6b6b, #ff1a1a, #ff4444);
   background-size: 200% 100%;
-  animation: rajaGlow 2.2s ease-in-out infinite, rajaPulse 1.8s ease-in-out infinite;
-  box-shadow: 0 0 0 4px rgba(255,26,26,0.18), 0 8px 32px rgba(255,26,26,0.35);
+  animation:
+    rajaGlow 2.2s ease-in-out infinite,
+    rajaPulse 1.8s ease-in-out infinite;
+  box-shadow:
+    0 0 0 4px rgba(255, 26, 26, 0.18),
+    0 8px 32px rgba(255, 26, 26, 0.35);
 }
 .dev-card--lead .dev-img-wrap img {
   border-radius: 50%;
@@ -1329,12 +1333,28 @@ dialog::backdrop {
   color: #1a1a1a;
 }
 @keyframes rajaGlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 @keyframes rajaPulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(255,26,26,0.18), 0 8px 32px rgba(255,26,26,0.35); transform: scale(1); }
-  50% { box-shadow: 0 0 0 7px rgba(255,26,26,0.28), 0 12px 40px rgba(255,26,26,0.45); transform: scale(1.02); }
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(255, 26, 26, 0.18),
+      0 8px 32px rgba(255, 26, 26, 0.35);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(255, 26, 26, 0.28),
+      0 12px 40px rgba(255, 26, 26, 0.45);
+    transform: scale(1.02);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1345,95 +1365,6 @@ dialog::backdrop {
   .loader-logo {
     animation: none;
   }
-}
-
-
-.dev-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
-  margin-top: 18px;
-}
-.dev-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: 20px 16px 18px;
-  text-align: center;
-  display: grid;
-  gap: 10px;
-  justify-items: center;
-  box-shadow: 0 8px 24px rgba(255,107,0,0.06);
-  transition: 0.28s;
-  overflow: hidden;
-}
-.dev-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(255,107,0,0.12);
-}
-.dev-img-wrap {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid var(--line);
-  background: var(--orange3);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-}
-.dev-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.dev-card h3 {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 1.05rem;
-  letter-spacing: -0.02em;
-}
-.dev-card p {
-  color: var(--muted);
-  font-size: 0.86rem;
-  line-height: 1.4;
-}
-.dev-card--lead {
-  grid-column: 1 / -1;
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #fff 0%, #fff7ed 100%);
-  border-width: 2px;
-  position: relative;
-}
-.dev-card--lead .dev-img-wrap {
-  width: 128px;
-  height: 128px;
-  border-width: 0;
-  padding: 4px;
-  background: linear-gradient(90deg, #ff1a1a, #ff6b6b, #ff1a1a, #ff4444);
-  background-size: 200% 100%;
-  animation: rajaGlow 2.2s ease-in-out infinite, rajaPulse 1.8s ease-in-out infinite;
-  box-shadow: 0 0 0 4px rgba(255,26,26,0.18), 0 8px 32px rgba(255,26,26,0.35);
-}
-.dev-card--lead .dev-img-wrap img {
-  border-radius: 50%;
-  border: 3px solid #fff;
-}
-.dev-card--lead h3 {
-  font-size: 1.22rem;
-  color: #cc0000;
-}
-.dev-card--lead p {
-  font-weight: 600;
-  color: #1a1a1a;
-}
-@keyframes rajaGlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-@keyframes rajaPulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(255,26,26,0.18), 0 8px 32px rgba(255,26,26,0.35); transform: scale(1); }
-  50% { box-shadow: 0 0 0 7px rgba(255,26,26,0.28), 0 12px 40px rgba(255,26,26,0.45); transform: scale(1.02); }
 }
 
 @media (prefers-reduced-motion: reduce) {
