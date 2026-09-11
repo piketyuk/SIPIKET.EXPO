@@ -857,6 +857,10 @@ dialog::backdrop {
   color: var(--muted);
   transition: 0.18s;
 }
+.teacher-toggle.is-off {
+  opacity: 0.62;
+  background: #f8f8f8;
+}
 .teacher-toggle:hover {
   border-color: var(--orange);
   color: var(--dark);
