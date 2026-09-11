@@ -153,8 +153,73 @@ const teacherToggle = $("#teacherToggle"),
   codeDesc = $("#codeDesc"),
   loginDesc = $("#loginDesc"),
   codeGroup = $("#codeGroup");
+const classToggle = $("#classToggle"),
+  codeFieldset = $("#codeFieldset"),
+  classOffHint = $("#classOffHint"),
+  accountHint = $("#accountHint"),
+  googleStep = $("#googleStep"),
+  emailPreview = $("#emailPreview"),
+  emailPreviewTo = $("#emailPreviewTo"),
+  emailVerifyBtn = $("#emailVerifyBtn"),
+  resendEmailBtn = $("#resendEmailBtn"),
+  resendStatus = $("#resendStatus"),
+  termsLink = $("#termsLink");
 let classVerified = false;
 let teacherMode = false;
+let classEnabled = true;
+async function countSavedAccounts(){
+  let n=0;
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k && k.startsWith("enc_account_")) n++;
+  }
+  return n;
+}
+async function showAccountHint(){
+  if(!accountHint) return;
+  const n = await countSavedAccounts();
+  const lastEmail = localStorage.getItem("sipiket_last_email");
+  if(n>0){
+    accountHint.style.display="block";
+    accountHint.textContent = lastEmail
+      ? `Terdeteksi ${n} akun tersimpan. Email terakhir: ${lastEmail} — matikan Kode kelas untuk login langsung tanpa kode.`
+      : `Terdeteksi ${n} akun tersimpan — matikan Kode kelas untuk login langsung tanpa kode (auto ke kelas).`;
+  } else {
+    accountHint.style.display="none";
+  }
+}
+showAccountHint();
+function updateClassEnabled(on){
+  classEnabled = on;
+  if(classToggle){
+    classToggle.setAttribute("aria-checked", String(on));
+    classToggle.classList.toggle("is-off", !on);
+    classToggle.setAttribute("aria-label", on ? "Kode kelas aktif" : "Kode kelas mati — login tanpa kode (akun lama)");
+    classToggle.title = on ? "Kode kelas aktif" : "Kode kelas mati";
+  }
+  if(codeFieldset) codeFieldset.classList.toggle("is-off", !on);
+  classBoxes.forEach(b=> b.disabled = !on ? true : classVerified ? true : false);
+  if(verifyBtn){
+    verifyBtn.style.display = on && !teacherMode ? "" : "none";
+    verifyBtn.disabled = !on ? true : classVerified ? true : false;
+  }
+  if(classOffHint) classOffHint.textContent = !on ? "Kode kelas dimatikan — langsung centang S&K & Google (akun lama auto ke kelas)." : "Matikan kode kelas jika sudah pernah daftar — email akan otomatis ke kelas terkait.";
+  updateGoogleVisibility();
+  syncGoogle();
+}
+function updateGoogleVisibility(){
+  if(!googleStep) return;
+  if(teacherMode){
+    googleStep.hidden = !classVerified;
+    googleStep.style.display = classVerified ? "grid" : "none";
+  } else if(!classEnabled){
+    googleStep.hidden = false;
+    googleStep.style.display = "grid";
+  } else {
+    googleStep.hidden = !classVerified;
+    googleStep.style.display = classVerified ? "grid" : "none";
+  }
+}
 function applyTeacherMode(on) {
   teacherMode = on;
   renderClassInputs(on);
@@ -167,6 +232,11 @@ function applyTeacherMode(on) {
         : "Aktifkan kode guru",
     );
     teacherToggle.title = on ? "Kode guru aktif" : "Kode guru";
+    teacherToggle.classList.toggle("is-off", false);
+  }
+  if(classToggle){
+    classToggle.style.display = on ? "none" : "";
+    if(on && !classEnabled) updateClassEnabled(true);
   }
   if (codeLegend)
     codeLegend.textContent = on ? "Masukkan Kode Guru" : "Masukkan Kode Kelas";
@@ -182,9 +252,10 @@ function applyTeacherMode(on) {
   if (loginDesc)
     loginDesc.textContent = on
       ? "Kode untuk guru, Google untuk akun. Belum daftar? Otomatis didaftarkan."
-      : "Kode kelas untuk masuk kelas, Google untuk akun. Belum terdaftar? Otomatis didaftarkan.";
+      : classEnabled ? "Kode kelas untuk masuk kelas, Google untuk akun. Belum terdaftar? Otomatis didaftarkan." : "Tanpa kode — Google akan auto ke kelas kamu.";
   sessionStorage.setItem("sipiket_teacherMode", on ? "1" : "0");
   if (!on) sessionStorage.removeItem("sipiket_pendingRole");
+  updateGoogleVisibility();
 }
 teacherToggle?.addEventListener("click", () => {
   const next = !teacherMode;
@@ -195,7 +266,7 @@ teacherToggle?.addEventListener("click", () => {
     ? "Mode kode guru aktif"
     : "Mode kode kelas aktif";
   otpStatus.style.color = "var(--muted)";
-  classBoxes[0]?.focus();
+  if(next) classBoxes[0]?.focus();
 });
 teacherToggle?.addEventListener("keydown", (e) => {
   if (e.key === " " || e.key === "Enter") {
@@ -203,8 +274,28 @@ teacherToggle?.addEventListener("keydown", (e) => {
     teacherToggle.click();
   }
 });
+classToggle?.addEventListener("click", ()=>{
+  const next = !classEnabled;
+  if(teacherMode) return;
+  updateClassEnabled(next);
+  if(classVerified) resetClass();
+  if(!next){
+    sessionStorage.removeItem("sipiket_classCode");
+    otpStatus.textContent = "Kode kelas dimatikan — akun lama akan auto ke kelas.";
+    otpStatus.style.color = "var(--muted)";
+  } else {
+    otpStatus.textContent = "Kode kelas diaktifkan";
+    otpStatus.style.color = "var(--muted)";
+    classBoxes[0]?.focus();
+  }
+});
+classToggle?.addEventListener("keydown", (e)=>{
+  if(e.key===" "||e.key==="Enter"){ e.preventDefault(); classToggle.click(); }
+});
 if (sessionStorage.getItem("sipiket_teacherMode") === "1")
   applyTeacherMode(true);
+updateClassEnabled(true);
+termsLink?.addEventListener("click",(e)=>{ e.preventDefault(); alert('Syarat & Ketentuan: Data terenkripsi AES-GCM, dipakai hanya untuk piket. Google OAuth untuk akun, kode kelas/guru untuk penempatan kelas.'); });
 function syncGoogle() {
   if (!googleBtn) return;
   const ok = classVerified && !!termsCheck?.checked;
