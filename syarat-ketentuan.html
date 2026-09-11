@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Syarat & Ketentuan — SIPIKET.EXPO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://sipiket.my.id/syarat-ketentuan.html" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Lewati ke konten</a>
+    <header class="nav-wrap"><nav class="nav" aria-label="Navigasi utama"><button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu"><span></span><span></span><span></span></button><a class="brand" href="/">SIPIKET<span>.EXPO</span></a><span class="nav-spacer" aria-hidden="true"></span></nav></header>
+    <div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="drawer-head"><span class="brand small">SIPIKET<span>.EXPO</span></span><button class="close" id="closeDrawer" aria-label="Tutup">✕</button></div><ul role="list"><li><a href="/#fitur">Fitur Unggulan</a></li><li><a href="pengembang.html">Pengembang</a></li><li><a href="login.html">Login</a></li></ul></div>
+    <div class="overlay" id="overlay" hidden></div>
+    <main id="main">
+      <section class="page-hero" aria-labelledby="skTitle" style="text-align:left;max-width:800px;margin:0 auto">
+        <p class="eyebrow">Hukum & Keamanan</p>
+        <h1 id="skTitle" style="font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.04em;font-size:clamp(1.8rem,5vw,2.4rem)">Syarat & <em style="color:var(--orange);font-style:normal">Ketentuan</em></h1>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:6px">Terakhir diperbarui: 11 Sep 2026 • Berlaku untuk sipiket.my.id • Kelompok 4 | IX-F</p>
+        <article style="margin-top:22px;display:grid;gap:18px;line-height:1.7;color:#1a2a44">
+          <section><h2 style="font-size:1.1rem">1. Penerimaan & Akun</h2><p>Dengan mendaftar kamu setuju verifikasi kode <b>kelas 6 digit</b> atau <b>guru 10 digit</b> (<code>guru062026</code>, <code>rajagantng</code>) auto-verify, lalu Google OAuth (Client <code>10838039...</code>) dengan origin <code>sipiket.my.id</code>. Akun tanpa verifikasi email tidak aktif.</p></section>
+          <section><h2 style="font-size:1.1rem">2. Enkripsi & Keamanan (Wajib Baca)</h2><ul style="padding-left:18px;display:grid;gap:6px"><li><b>100% terenkripsi:</b> email, nama, avatar, pesan, video path, tugas — disimpan sebagai <code>AES-256-GCM</code> (PBKDF2 120k + salt <code>sipiket-v1-salt-ixf</code> + IV 12B) via <code>secure.js</code>. Plaintext tidak pernah di-log.</li><li><b>Transport:</b> HSTS <code>max-age 63072000</code>, <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy: strict-origin-when-cross-origin</code>, Anti-track <code>no ?email=</code> di URL.</li><li><b>Video bukti:</b> durasi 3–300 detik, storage path terenkripsi, hanya regu & guru verifikasi.</li><li><b>Pengungkapan:</b> laporkan celah ke <a href="mailto:sipiket.anchor@gmail.com" style="color:var(--orange);font-weight:700">sipiket.anchor@gmail.com</a> — responsible disclosure, tidak ada bounty.</li></ul></section>
+          <section><h2 style="font-size:1.1rem">3. Peran & Data Tersimpan Otomatis</h2><p><b>Siswa:</b> kode kelas → masuk <code>kelas.html</code> sebagai <code>siswa kelas [kode]</code>. <b>Guru:</b> kode 10 digit → <code>guru-kelas.html</code> (role <code>guru</code>). Email + kelas terenkripsi per akun (<code>enc_account_* + sipiket_last_email</code>) — tanpa kode pun auto ke kelas yang terkait. Profil (nama/foto) bisa diganti tiap <b>14 hari</b>.</p></section>
+          <section><h2 style="font-size:1.1rem">4. Penggunaan Wajar</h2><p>Dilarang spam feedback, upload video non-piket, atau bypass kode guru. Pelanggaran → suspend + data tetap terenkripsi tetapi tidak dapat login.</p></section>
+          <section><h2 style="font-size:1.1rem">5. Privasi & Retensi</h2><p>Data dipakai hanya untuk piket. Retensi hingga akun dihapus (request via email). Feedback masuk <code>sipiket.anchor@gmail.com</code> via <code>formsubmit.co</code> format tabel — tidak dijual. Cookie hanya <code>sessionStorage</code> + <code>localStorage enc_*</code>.</p></section>
+          <section><h2 style="font-size:1.1rem">6. Tanggung Jawab</h2><p>SIPIKET.EXPO disediakan apa adanya oleh Kelompok 4 | IX-F. Ketua: <b>Rachmatullah Rajasyah M.S.</b> — lihat <a href="pengembang.html" style="color:var(--orange);font-weight:700">pengembang</a>.</p></section>
+          <p style="margin-top:8px"><a href="login.html" class="btn-primary" style="justify-content:center">Kembali ke Login →</a></p>
+        </article>
+      </section>
+    </main>
+    <footer role="contentinfo"><div class="container footer-inner"><div class="footer-logo" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect width="44" height="44" rx="12" fill="url(#g)"/><g stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 28 L24 18 M21 18 L24 18 L24 21"/><rect x="12" y="26" width="14" height="4" rx="1.2" fill="#fff" stroke="none" opacity="0.9"/><rect x="9" y="30" width="20" height="3" rx="1" fill="#fff" stroke="none" opacity="0.9"/><circle cx="32" cy="14" r="2.2" fill="#fff" stroke="none" opacity="0.9"/><path d="M29 11 L30.5 8 M32 9 L33.2 6.5 M35 10 L36.5 7.2" stroke="#fff" opacity="0.9"/></g><defs><linearGradient id="g" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#0f5bff"/><stop offset="1" stop-color="#3b82ff"/></linearGradient></defs></svg></div><h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;color:#fff">About Us</h2><p class="footer-about">Kami dari <strong>Kelompok 4 Kelas 9-F</strong> — ketua: <strong>Rachmatullah Rajasyah M.S.</strong></p><p class="copy">© 2026 SIPIKET.EXPO</p></div></footer>
+    <script src="script.js"></script>
+  </body>
+</html>

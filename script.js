@@ -389,10 +389,8 @@ if (sessionStorage.getItem("sipiket_teacherMode") === "1")
   applyTeacherMode(true);
 updateClassEnabled(true);
 termsLink?.addEventListener("click", (e) => {
-  e.preventDefault();
-  alert(
-    "Syarat & Ketentuan: Data terenkripsi AES-GCM, dipakai hanya untuk piket. Google OAuth untuk akun, kode kelas/guru untuk penempatan kelas.",
-  );
+  // Allow navigation to syarat-ketentuan.html (real page) — no alert
+  // Keep checkbox checked requirement elsewhere
 });
 
 function syncGoogle() {
