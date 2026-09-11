@@ -1168,7 +1168,6 @@ dialog::backdrop {
   text-align: center;
 }
 
-
 .loader {
   position: fixed;
   inset: 0;
@@ -1181,7 +1180,9 @@ dialog::backdrop {
     radial-gradient(600px 600px at 52% 46%, #fff3a0 0%, transparent 62%),
     linear-gradient(135deg, #fff7ed 0%, #ff8c2f 48%, #ff6b00 100%);
   color: #1a1a1a;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition:
+    opacity 0.45s ease,
+    visibility 0.45s ease;
 }
 .loader.is-hide {
   opacity: 0;
@@ -1190,22 +1191,30 @@ dialog::backdrop {
 }
 .loader-card {
   width: min(420px, calc(100% - 32px));
-  background: rgba(255,255,255,0.88);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border: 1px solid rgba(255,255,255,0.9);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: 24px;
   padding: 28px 24px 22px;
   display: grid;
   gap: 16px;
   justify-items: center;
   text-align: center;
-  box-shadow: 0 16px 48px rgba(255,107,0,0.22), 0 1px 0 rgba(255,255,255,1) inset;
-  animation: loaderCard 0.55s cubic-bezier(0.2,0.8,0.2,1) both;
+  box-shadow:
+    0 16px 48px rgba(255, 107, 0, 0.22),
+    0 1px 0 rgba(255, 255, 255, 1) inset;
+  animation: loaderCard 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 @keyframes loaderCard {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .loader-logo {
   width: 72px;
@@ -1218,7 +1227,7 @@ dialog::backdrop {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 800;
   font-size: 2rem;
-  box-shadow: 0 10px 28px rgba(255,107,0,0.38);
+  box-shadow: 0 10px 28px rgba(255, 107, 0, 0.38);
   animation: logoFloat 2.2s ease-in-out infinite;
 }
 .loader-title {
@@ -1228,8 +1237,13 @@ dialog::backdrop {
   font-size: clamp(1.3rem, 4vw, 1.65rem);
   line-height: 1.1;
 }
-.loader-title span { color: var(--orange); }
-.loader-sub { color: var(--muted); font-size: 0.88rem; }
+.loader-title span {
+  color: var(--orange);
+}
+.loader-sub {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
 .loader-bar {
   width: 100%;
   height: 10px;
@@ -1245,10 +1259,20 @@ dialog::backdrop {
   border-radius: 100px;
   transition: width 0.08s linear;
 }
-.loader-pct { font-weight: 700; font-size: 0.82rem; color: var(--muted); letter-spacing: 0.08em; }
+.loader-pct {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
 @media (prefers-reduced-motion: reduce) {
-  .loader { transition: none; }
-  .loader-card, .loader-logo { animation: none; }
+  .loader {
+    transition: none;
+  }
+  .loader-card,
+  .loader-logo {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

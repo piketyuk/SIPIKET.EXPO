@@ -24,16 +24,34 @@
   </head>
   <body>
     <a class="skip" href="#main">Lewati ke konten</a>
-    <div class="loader" id="loader" role="status" aria-live="polite" aria-label="Memuat SIPIKET.EXPO">
+    <div
+      class="loader"
+      id="loader"
+      role="status"
+      aria-live="polite"
+      aria-label="Memuat SIPIKET.EXPO"
+    >
       <div class="loader-card">
         <div class="loader-logo" aria-hidden="true">S</div>
-        <h2 class="loader-title">Selamat Datang di <span>SIPIKET.EXPO</span></h2>
-        <p class="loader-sub">Piket transparan, karakter berkembang — Kelompok 4 | IX-F</p>
-        <div class="loader-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Memuat"><div class="loader-fill" id="loaderFill"></div></div>
+        <h2 class="loader-title">
+          Selamat Datang di <span>SIPIKET.EXPO</span>
+        </h2>
+        <p class="loader-sub">
+          Piket transparan, karakter berkembang — Kelompok 4 | IX-F
+        </p>
+        <div
+          class="loader-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          aria-label="Memuat"
+        >
+          <div class="loader-fill" id="loaderFill"></div>
+        </div>
         <p class="loader-pct" id="loaderPct" aria-hidden="true">0%</p>
       </div>
     </div>
-
 
     <header class="nav-wrap" role="banner">
       <nav class="nav" aria-label="Navigasi utama">
@@ -411,27 +429,54 @@
       </div>
     </dialog>
 
-        <script>
-    (function(){
-      const loader=document.getElementById('loader'), fill=document.getElementById('loaderFill'), pct=document.getElementById('loaderPct'), bar=loader?.querySelector('.loader-bar');
-      if(!loader||!fill) return;
-      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        loader.classList.add('is-hide'); loader.setAttribute('aria-hidden','true');
-        return;
-      }
-      if(sessionStorage.getItem('sipiket_loader_done')==='1'){
-        loader.classList.add('is-hide'); loader.setAttribute('aria-hidden','true');
-        return;
-      }
-      let p=0;
-      const timer=setInterval(()=>{
-        p+= Math.random()*18+8;
-        if(p>=100){ p=100; clearInterval(timer); fill.style.width='100%'; pct.textContent='100%'; bar?.setAttribute('aria-valuenow','100');
-          setTimeout(()=>{ loader.classList.add('is-hide'); loader.setAttribute('aria-hidden','true'); sessionStorage.setItem('sipiket_loader_done','1'); }, 260);
-        } else { fill.style.width=p+'%'; pct.textContent=Math.round(p)+'%'; bar?.setAttribute('aria-valuenow', String(Math.round(p))); }
-      }, 110);
-      setTimeout(()=>{ if(!loader.classList.contains('is-hide')){ clearInterval(timer); fill.style.width='100%'; pct.textContent='100%'; bar?.setAttribute('aria-valuenow','100'); loader.classList.add('is-hide'); loader.setAttribute('aria-hidden','true'); }}, 2000);
-    })();
+    <script>
+      (function () {
+        const loader = document.getElementById("loader"),
+          fill = document.getElementById("loaderFill"),
+          pct = document.getElementById("loaderPct"),
+          bar = loader?.querySelector(".loader-bar");
+        if (!loader || !fill) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          loader.classList.add("is-hide");
+          loader.setAttribute("aria-hidden", "true");
+          return;
+        }
+        if (sessionStorage.getItem("sipiket_loader_done") === "1") {
+          loader.classList.add("is-hide");
+          loader.setAttribute("aria-hidden", "true");
+          return;
+        }
+        let p = 0;
+        const timer = setInterval(() => {
+          p += Math.random() * 18 + 8;
+          if (p >= 100) {
+            p = 100;
+            clearInterval(timer);
+            fill.style.width = "100%";
+            pct.textContent = "100%";
+            bar?.setAttribute("aria-valuenow", "100");
+            setTimeout(() => {
+              loader.classList.add("is-hide");
+              loader.setAttribute("aria-hidden", "true");
+              sessionStorage.setItem("sipiket_loader_done", "1");
+            }, 260);
+          } else {
+            fill.style.width = p + "%";
+            pct.textContent = Math.round(p) + "%";
+            bar?.setAttribute("aria-valuenow", String(Math.round(p)));
+          }
+        }, 110);
+        setTimeout(() => {
+          if (!loader.classList.contains("is-hide")) {
+            clearInterval(timer);
+            fill.style.width = "100%";
+            pct.textContent = "100%";
+            bar?.setAttribute("aria-valuenow", "100");
+            loader.classList.add("is-hide");
+            loader.setAttribute("aria-hidden", "true");
+          }
+        }, 2000);
+      })();
     </script>
     <script src="script.js"></script>
     <script>
