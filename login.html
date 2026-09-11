@@ -503,5 +503,5 @@
     </footer>
     <script src="secure.js"></script>
     <script src="script.js"></script>
-  </body>
+  <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');if(location.search.includes('email='))history.replaceState(null,'',location.pathname);</script></body>
 </html>
