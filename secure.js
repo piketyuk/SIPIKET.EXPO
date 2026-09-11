@@ -5,7 +5,7 @@ async function getKey() {
   const enc = new TextEncoder();
   const mat = await crypto.subtle.importKey(
     "raw",
-    enc.encode("SIPIKET_ENCRYPTION_PASSPHRASE_CHANGE_ME"),
+    enc.encode((location.hostname + "-sipiket-ixf-2026")),
     { name: "PBKDF2" },
     false,
     ["deriveKey"],
