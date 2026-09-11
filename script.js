@@ -967,30 +967,55 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
   function setStars(v) {
     rating = v;
     ratingEl.value = v ? String(v) : "";
-    starBtns.forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.star) <= v)));
+    starBtns.forEach((b) =>
+      b.setAttribute("aria-pressed", String(Number(b.dataset.star) <= v)),
+    );
   }
-  starBtns.forEach((b) => b.addEventListener("click", () => setStars(Number(b.dataset.star))));
-  pesanEl?.addEventListener("input", () => { if (countEl) countEl.textContent = String(pesanEl.value.length); });
+  starBtns.forEach((b) =>
+    b.addEventListener("click", () => setStars(Number(b.dataset.star))),
+  );
+  pesanEl?.addEventListener("input", () => {
+    if (countEl) countEl.textContent = String(pesanEl.value.length);
+  });
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (emailEl.value || "").trim(),
       pesan = (pesanEl.value || "").trim(),
       nama = (nameEl.value || "").trim(),
       kategori = (kategoriEl.value || "").trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { statusEl.textContent = "Email tidak valid"; statusEl.style.color = "#d93025"; emailEl.focus(); return; }
-    if (!pesan || pesan.length < 10) { statusEl.textContent = "Pesan minimal 10 karakter"; statusEl.style.color = "#d93025"; pesanEl.focus(); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      statusEl.textContent = "Email tidak valid";
+      statusEl.style.color = "#d93025";
+      emailEl.focus();
+      return;
+    }
+    if (!pesan || pesan.length < 10) {
+      statusEl.textContent = "Pesan minimal 10 karakter";
+      statusEl.style.color = "#d93025";
+      pesanEl.focus();
+      return;
+    }
     if (form.querySelector('[name="_honey"]')?.value) return;
     submitBtn.disabled = true;
     submitBtn.textContent = "Mengirim...";
     statusEl.textContent = "";
     try {
       const payload = new FormData(form);
-      if (!payload.get("rating") && rating) payload.set("rating", String(rating));
-      payload.set("_subject", `[SIPIKET.EXPO] ${kategori || "Feedback"} — Rating ${rating || "-"}/5`);
-      const res = await fetch(form.action, { method: "POST", body: payload, headers: { Accept: "application/json" } });
+      if (!payload.get("rating") && rating)
+        payload.set("rating", String(rating));
+      payload.set(
+        "_subject",
+        `[SIPIKET.EXPO] ${kategori || "Feedback"} — Rating ${rating || "-"}/5`,
+      );
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: payload,
+        headers: { Accept: "application/json" },
+      });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || "Gagal");
-      statusEl.textContent = "✓ Terima kasih! Feedback terkirim ke sipiket.anchor@gmail.com — format tabel rapi sudah masuk inbox.";
+      statusEl.textContent =
+        "✓ Terima kasih! Feedback terkirim ke sipiket.anchor@gmail.com — format tabel rapi sudah masuk inbox.";
       statusEl.style.color = "var(--orange)";
       form.reset();
       setStars(0);

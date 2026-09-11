@@ -1079,8 +1079,14 @@ dialog::backdrop {
   font-size: clamp(1.5rem, 4vw, 2.2rem);
   line-height: 1.05;
 }
-.feedback-head h2 span { color: var(--orange); }
-.feedback-head p { color: var(--muted); max-width: 560px; font-size: 0.94rem; }
+.feedback-head h2 span {
+  color: var(--orange);
+}
+.feedback-head p {
+  color: var(--muted);
+  max-width: 560px;
+  font-size: 0.94rem;
+}
 .feedback-card {
   max-width: 640px;
   width: 100%;
@@ -1091,14 +1097,18 @@ dialog::backdrop {
   padding: 22px;
   display: grid;
   gap: 16px;
-  box-shadow: 0 12px 32px rgba(255,107,0,0.08);
+  box-shadow: 0 12px 32px rgba(255, 107, 0, 0.08);
 }
 .feedback-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
-@media (max-width: 560px) { .feedback-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+}
 .feedback-card label {
   font-weight: 600;
   font-size: 0.86rem;
@@ -1120,10 +1130,13 @@ dialog::backdrop {
 .feedback-card select:focus,
 .feedback-card textarea:focus {
   border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(255,107,0,0.12);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
   outline: 0;
 }
-.feedback-card textarea { min-height: 110px; resize: vertical; }
+.feedback-card textarea {
+  min-height: 110px;
+  resize: vertical;
+}
 .stars {
   display: flex;
   gap: 6px;
@@ -1145,7 +1158,10 @@ dialog::backdrop {
   border-color: var(--orange);
   transform: scale(1.06);
 }
-.feedback-hint { font-size: 0.8rem; color: var(--muted); }
+.feedback-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
 .feedback-status {
   min-height: 1.2em;
   font-size: 0.88rem;
