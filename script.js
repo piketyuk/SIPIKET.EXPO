@@ -48,7 +48,8 @@ const io = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-const TEACHER_CODE = "raandki";
+const TEACHER_CODES = ["guru062026", "rajagantng"];
+const TEACHER_CODE_LEN = 10;
 
 document.querySelectorAll(".otp-boxes").forEach((g) => {
   if (g.id === "codeGroup") return;
@@ -80,7 +81,7 @@ let classBoxes = [...document.querySelectorAll(".class-code")];
 function renderClassInputs(isTeacher) {
   const g = document.getElementById("codeGroup");
   if (!g) return;
-  const n = isTeacher ? TEACHER_CODE.length : 6;
+  const n = isTeacher ? TEACHER_CODES[0].length : 6;
   g.innerHTML = "";
   for (let i = 0; i < n; i++) {
     const inp = document.createElement("input");
@@ -95,7 +96,7 @@ function renderClassInputs(isTeacher) {
     );
     if (isTeacher) {
       inp.inputMode = "text";
-      inp.pattern = "[A-Za-z]";
+      inp.pattern = "[A-Za-z0-9]";
       inp.style.textTransform = "lowercase";
     } else {
       inp.inputMode = "numeric";
@@ -106,17 +107,46 @@ function renderClassInputs(isTeacher) {
   classBoxes = [...document.querySelectorAll(".class-code")];
   attachClassHandlers();
 }
+function tryAutoVerify() {
+  if (!classEnabled && !teacherMode) return;
+  const filled = classBoxes.every((b) => b.value);
+  if (!filled) return;
+  if (teacherMode) {
+    const code = classBoxes.map((b) => b.value.toLowerCase()).join("");
+    if (
+      code.length === TEACHER_CODES[0].length &&
+      TEACHER_CODES.includes(code)
+    ) {
+      sessionStorage.setItem("sipiket_classCode", code);
+      sessionStorage.setItem("sipiket_pendingRole", "guru");
+      setClassVerified(true);
+    } else {
+      otpStatus.textContent = TEACHER_CODES.includes(code)
+        ? ""
+        : "Kode guru salah — periksa kembali";
+      otpStatus.style.color = "#d93025";
+    }
+  } else {
+    const code = classBoxes.map((b) => b.value).join("");
+    if (code.length === 6 && /^\d{6}$/.test(code)) {
+      sessionStorage.setItem("sipiket_classCode", code);
+      sessionStorage.removeItem("sipiket_pendingRole");
+      setClassVerified(true);
+    }
+  }
+}
 function attachClassHandlers() {
   classBoxes.forEach((b, i) => {
     b.addEventListener("input", () => {
       if (classVerified) resetClass();
       if (teacherMode)
         b.value = b.value
-          .replace(/[^A-Za-z]/g, "")
+          .replace(/[^A-Za-z0-9]/g, "")
           .slice(-1)
           .toLowerCase();
       else b.value = b.value.replace(/\D/g, "").slice(-1);
       if (b.value && classBoxes[i + 1]) classBoxes[i + 1].focus();
+      setTimeout(tryAutoVerify, 30);
     });
     b.addEventListener("keydown", (e) => {
       if (e.key === "Backspace" && !b.value && classBoxes[i - 1])
@@ -128,7 +158,7 @@ function attachClassHandlers() {
       const raw = e.clipboardData.getData("text") || "";
       const d = teacherMode
         ? raw
-            .replace(/[^A-Za-z]/g, "")
+            .replace(/[^A-Za-z0-9]/g, "")
             .toLowerCase()
             .slice(0, classBoxes.length)
             .split("")
@@ -137,11 +167,11 @@ function attachClassHandlers() {
         if (classBoxes[j]) classBoxes[j].value = c;
       });
       classBoxes[Math.min(d.length, classBoxes.length - 1)]?.focus();
+      setTimeout(tryAutoVerify, 30);
     });
   });
 }
 attachClassHandlers();
-
 const otpForm = $("#otpForm"),
   otpStatus = $("#otpStatus"),
   googleBtn = $("#googleBtn"),
@@ -418,13 +448,13 @@ otpForm?.addEventListener("submit", (e) => {
   }
   if (teacherMode) {
     const code = classBoxes.map((b) => b.value.toLowerCase()).join("");
-    if (code.length !== TEACHER_CODE.length) {
+    if (code.length !== TEACHER_CODES[0].length) {
       otpStatus.textContent =
-        "Lengkapi " + TEACHER_CODE.length + " huruf kode guru";
+        "Lengkapi " + TEACHER_CODES[0].length + " karakter kode guru";
       otpStatus.style.color = "#d93025";
       return;
     }
-    if (code !== TEACHER_CODE) {
+    if (!TEACHER_CODES.includes(code)) {
       otpStatus.textContent = "Kode guru salah — periksa kembali";
       otpStatus.style.color = "#d93025";
       return;
