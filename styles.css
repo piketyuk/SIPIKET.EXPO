@@ -153,6 +153,29 @@ a {
   background: #e66000;
   transform: translateY(-1px);
 }
+.is-login .btn-login {
+  display: none !important;
+}
+.nav-spacer {
+  flex: 1;
+}
+#toggleRow {
+  animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: 0.1s;
+}
+#codeFieldset {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+#codeFieldset.is-off {
+  opacity: 0.42;
+  pointer-events: none;
+  filter: grayscale(0.2);
+}
+#googleStep {
+  animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
 @media (max-width: 380px) {
   .btn-login {
     font-size: 0.76rem;
