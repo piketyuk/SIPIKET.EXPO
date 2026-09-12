@@ -49,8 +49,8 @@ const io = new IntersectionObserver(
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
 const TEACHER_CODE_HASHES = [
-  "a5452ee37e6b277985b0be575bf5dc01cc46a394a2af7f735c94b0ae8875a209",
-  "f93d3e9e2adb21ff10ea999f17cc7a52efaf9fc09b48d801117cc0c7522fad6c",
+  "ee0b1e6ad69be79bbad963014bc6324d4ddfd03f05c4c5c3c4de292b03a089bb",
+  "f245c73681ac2149feea5366dc6e4594b01d5c58dc0d299433518ff9c1b72fde",
 ];
 const TEACHER_CODE_LEN = 10;
 
@@ -419,7 +419,13 @@ function setClassVerified(v) {
   }
   updateGoogleVisibility();
   syncGoogle();
-  if (v && termsCheck?.checked) googleBtn.focus();
+  if (v) {
+    verifyBtn.textContent = "Terverifikasi ✓";
+    verifyBtn.disabled = true;
+    if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
+    else if (googleBtn) googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (termsCheck?.checked && googleBtn) googleBtn.focus();
+  }
 }
 function resetClass() {
   if (!classVerified) return;
