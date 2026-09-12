@@ -1,7 +1,7 @@
 const DRIVE_URL="https://script.google.com/macros/s/AKfycbzucW6GAtCOuXc7E5ZayRANl7D0tUQT1McFPhCeTqGJ2CfQBPe5QaD_qb31jmVro-yElw/exec";
 const DRIVE_KEY="sk_sipiket_k8Lp3qW7xY2v9R4tVb6Nm0a1c3d8";
 let supa=null;
-const SUPABASE_URL="https://__PROJECT__.supabase.co";
+const SUPABASE_URL="https://tugxbxjggicqmsihmdqj.supabase.co";
 const SUPABASE_PUBLISHABLE="sb_publishable_DoVjSmtij3SDR8HAWWQkzw_5zfoYz7R";
 if(SUPABASE_URL.includes("__PROJECT__")){
   console.log("SIPIKET publishable set — butuh SUPABASE_URL untuk real (Drive fallback aktif)");
