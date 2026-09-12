@@ -238,7 +238,7 @@ showAccountHint();
 (function saveProgress(){
   const KEY="sipiket_login_progress";
   function save(){ const data={ classCode: sessionStorage.getItem("sipiket_classCode")||"", teacherMode, classEnabled, terms: !!document.getElementById("termsCheck")?.checked, email: sessionStorage.getItem("sipiket_googleEmail")||"" }; localStorage.setItem(KEY, JSON.stringify(data)); }
-  function restore(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return; if(d.classCode) sessionStorage.setItem("sipiket_classCode", d.classCode); if(typeof d.teacherMode==="boolean" && d.teacherMode) applyTeacherMode(true); if(typeof d.classEnabled==="boolean" && !d.classEnabled) updateClassEnabled(false); if(d.terms) { const cb=document.getElementById("termsCheck"); if(cb){ cb.checked=true; }} if(d.email) sessionStorage.setItem("sipiket_googleEmail", d.email); }catch{}
+  function restore(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return; if(d.classCode) sessionStorage.setItem("sipiket_classCode", d.classCode); if(typeof d.teacherMode==="boolean") applyTeacherMode(!!d.teacherMode); if(typeof d.classEnabled==="boolean" && !d.classEnabled) updateClassEnabled(false); if(d.terms) { const cb=document.getElementById("termsCheck"); if(cb){ cb.checked=true; }} if(d.email) sessionStorage.setItem("sipiket_googleEmail", d.email); }catch{}
   }
   restore();
   ["change","input"].forEach(ev=> document.addEventListener(ev, save, true));
@@ -252,7 +252,10 @@ showAccountHint();
   }
 })();
 
-function updateClassEnabled(on) { return; // deprecated: exclusive mode
+function updateClassEnabled(on) {
+  // deprecated wrapper — delegate to exclusive
+  if(on) applyTeacherMode(false); else applyTeacherMode(true);
+  return;
 }
 function _updateClassEnabled(on) {
   classEnabled = on;
@@ -284,19 +287,17 @@ function _updateClassEnabled(on) {
 }
 function updateGoogleVisibility() {
   if (!googleStep) return;
-  if (teacherMode) {
-    googleStep.hidden = !classVerified;
-    googleStep.style.display = classVerified ? "grid" : "none";
-  } else if (!classEnabled) {
-    googleStep.hidden = false;
-    googleStep.style.display = "grid";
-  } else {
-    googleStep.hidden = !classVerified;
-    googleStep.style.display = classVerified ? "grid" : "none";
-  }
+  // exclusive: always require verifikasi, one of the codes
+  googleStep.hidden = !classVerified;
+  googleStep.style.display = classVerified ? "grid" : "none";
 }
 function applyTeacherMode(on) {
-  if(on){ classEnabled=true; if(document.getElementById('classToggle')){ document.getElementById('classToggle').setAttribute('aria-checked','false'); document.getElementById('classToggle').classList.add('is-off'); } } else { if(document.getElementById('classToggle')){ document.getElementById('classToggle').setAttribute('aria-checked','true'); document.getElementById('classToggle').classList.remove('is-off'); } }
+  // exclusive: guru vs kelas
+  classEnabled = !on;
+  const ct=document.getElementById('classToggle');
+  if(ct){ ct.setAttribute('aria-checked', String(!on)); ct.classList.toggle('is-off', on); ct.title = !on ? 'Kode kelas aktif' : 'Klik untuk kembali ke kode kelas'; }
+  const tt=document.getElementById('teacherToggle');
+  if(tt){ tt.classList.toggle('is-off', !on); }
   teacherMode = on;
   renderClassInputs(on);
   if (teacherToggle) {
@@ -322,7 +323,7 @@ function applyTeacherMode(on) {
   if (codeGroup)
     codeGroup.setAttribute(
       "aria-label",
-      on ? "Kode guru 7 huruf" : "Kode kelas 6 digit",
+      on ? "Kode guru 10 karakter" : "Kode kelas 6 digit",
     );
   if (loginDesc)
     loginDesc.textContent = on
@@ -335,15 +336,22 @@ function applyTeacherMode(on) {
   updateGoogleVisibility();
 }
 teacherToggle?.addEventListener("click", () => {
-  const next = !teacherMode;
-  applyTeacherMode(next);
+  if(teacherMode) return;
+  applyTeacherMode(true);
   if (classVerified) resetClass();
   verifyBtn.textContent = "Verifikasi Kode →";
-  otpStatus.textContent = next
-    ? "Mode kode guru aktif"
-    : "Mode kode kelas aktif";
+  verifyBtn.style.display = "";
+  otpStatus.textContent = "Mode kode guru aktif";
   otpStatus.style.color = "var(--muted)";
-  if (next) classBoxes[0]?.focus();
+  classBoxes[0]?.focus();
+});
+document.getElementById("classToggle")?.addEventListener("click", ()=>{
+  if(!teacherMode) return;
+  applyTeacherMode(false);
+  if(classVerified) resetClass();
+  verifyBtn.textContent="Verifikasi Kode →"; verifyBtn.style.display="";
+  otpStatus.textContent="Mode kode kelas aktif"; otpStatus.style.color="var(--muted)";
+  classBoxes[0]?.focus();
 });
 teacherToggle?.addEventListener("keydown", (e) => {
   if (e.key === " " || e.key === "Enter") {
@@ -351,30 +359,8 @@ teacherToggle?.addEventListener("keydown", (e) => {
     teacherToggle.click();
   }
 });
-// classToggle removed — exclusive
-if(false) classToggle?.addEventListener("click", () => {
-  if (teacherMode) return;
-  const next = !classEnabled;
-  updateClassEnabled(next);
-  if (classVerified) resetClass();
-  if (!next) {
-    sessionStorage.removeItem("sipiket_classCode");
-    otpStatus.textContent =
-      "Kode kelas dimatikan — akun lama akan auto ke kelas.";
-    otpStatus.style.color = "var(--muted)";
-  } else {
-    otpStatus.textContent = "Kode kelas diaktifkan";
-    otpStatus.style.color = "var(--muted)";
-    classBoxes[0]?.focus();
-  }
-});
-// removed
-if(false) classToggle?.addEventListener("keydown", (e) => {
-  if (e.key === " " || e.key === "Enter") {
-    e.preventDefault();
-    classToggle.click();
-  }
-});
+
+
 if (sessionStorage.getItem("sipiket_teacherMode") === "1")
   applyTeacherMode(true);
 updateClassEnabled(true);
@@ -969,6 +955,56 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
         `<article class="card reveal in"><div class="icon">✅</div><h3>${title}</h3><p>Regu: ${regu} • oleh ${email}</p><span class="badge">Tersimpan</span></article>`,
       );
   });
+})();
+
+
+// --- last account detection (no re-enter code) ---
+(function lastAccountBoot(){
+  const card = document.getElementById("lastAccountCard");
+  if(!card) return;
+  async function refresh(){
+    const lastEmail = localStorage.getItem("sipiket_last_email");
+    if(!lastEmail){ card.hidden=true; card.style.display="none"; return; }
+    let acc=null; try{ if(typeof secureGet==="function") acc = await secureGet("account_"+lastEmail.toLowerCase()); }catch{}
+    if(!acc || !acc.email){ card.hidden=true; card.style.display="none"; return; }
+    const avatar=document.getElementById("lastAccAvatar");
+    const emailEl=document.getElementById("lastAccEmail");
+    if(emailEl) emailEl.textContent=acc.email;
+    if(avatar && (acc.avatar||acc.picture)){ avatar.src=acc.avatar||acc.picture; avatar.style.display="block"; }
+    card.hidden=false; card.style.display="grid";
+    const status=document.getElementById("lastAccStatus");
+    if(status) status.textContent="Klik untuk auto-centang S&K & langsung pilih akun Google ini";
+    const btn=document.getElementById("useLastAccBtn");
+    if(btn && !btn._bound){
+      btn._bound=true;
+      btn.addEventListener("click", async()=>{
+        const lastEmail2=localStorage.getItem("sipiket_last_email");
+        if(!lastEmail2){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
+        let acc2=null; try{ if(typeof secureGet==="function") acc2=await secureGet("account_"+lastEmail2.toLowerCase()); }catch{}
+        if(!acc2 || !acc2.email){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
+        sessionStorage.setItem("sipiket_googleEmail", acc2.email);
+        if(acc2.displayName) sessionStorage.setItem("sipiket_googleName", acc2.displayName);
+        if(acc2.picture) sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
+        if(acc2.avatar) sessionStorage.setItem("sipiket_avatar", acc2.avatar);
+        sessionStorage.setItem("sipiket_classCode", acc2.classCode||"");
+        if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru");
+        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
+        // set flag for google chooser
+        sessionStorage.setItem("sipiket_use_last","1");
+        status.textContent="✓ Akun terpilih: "+acc2.email+" — sekarang klik Login dengan Google";
+        status.style.color="var(--orange)";
+        // hide card after pick
+        setTimeout(()=>{ card.hidden=true; card.style.display="none"; }, 800);
+        // if already verified, offer direct continue
+        const verifyView=document.getElementById("verifyView");
+        if(verifyView){ showLoginView("verify"); }
+      });
+    }
+  }
+  refresh();
+  window.addEventListener("storage", refresh);
+  // also refresh on load after secureGet async
+  setTimeout(refresh, 900);
 })();
 
 (function devStackBoot() {
