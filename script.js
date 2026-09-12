@@ -960,7 +960,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
 })();
 
 
-// --- last account detection (no re-enter code) ---
+// --- last account detection (no re-enter code) — fixed: selalu tampilkan picker Google ---
 (function lastAccountBoot(){
   const card = document.getElementById("lastAccountCard");
   if(!card) return;
@@ -975,7 +975,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
     if(avatar && (acc.avatar||acc.picture)){ avatar.src=acc.avatar||acc.picture; avatar.style.display="block"; }
     card.hidden=false; card.style.display="grid";
     const status=document.getElementById("lastAccStatus");
-    if(status) status.textContent="Klik untuk auto-centang S&K & langsung pilih akun Google ini";
+    if(status) status.textContent="Klik untuk gunakan akun ini — akan membuka pilihan akun Google";
     const btn=document.getElementById("useLastAccBtn");
     if(btn && !btn._bound){
       btn._bound=true;
@@ -989,23 +989,22 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
         if(acc2.picture) sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
         if(acc2.avatar) sessionStorage.setItem("sipiket_avatar", acc2.avatar);
         sessionStorage.setItem("sipiket_classCode", acc2.classCode||"");
-        if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru");
-        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
-        // set flag for google chooser
-        sessionStorage.setItem("sipiket_use_last","1");
-        status.textContent="✓ Akun terpilih: "+acc2.email+" — sekarang klik Login dengan Google";
+        if(acc2.classCode) sessionStorage.setItem("sipiket_pendingClassCode", acc2.classCode);
+        if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru"); else sessionStorage.removeItem("sipiket_pendingRole");
+        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); }
+        if(!acc2.classCode){ status.textContent="Akun ditemukan tapi kelas kosong — masukkan kode kelas/guru dulu"; status.style.color="#d93025"; return; }
+        setClassVerified(true);
+        card.hidden=true; card.style.display="none";
+        status.textContent="✓ Akun terpilih: "+acc2.email+" — membuka pilihan akun Google...";
         status.style.color="var(--orange)";
-        // hide card after pick
-        setTimeout(()=>{ card.hidden=true; card.style.display="none"; }, 800);
-        // if already verified, offer direct continue
-        const verifyView=document.getElementById("verifyView");
-        if(verifyView){ showLoginView("verify"); }
+        // simpan hint untuk picker
+        sessionStorage.setItem("sipiket_hint_email", acc2.email);
+        setTimeout(()=>{ if(typeof triggerGoogleChooser==="function") triggerGoogleChooser(); }, 300);
       });
     }
   }
   refresh();
   window.addEventListener("storage", refresh);
-  // also refresh on load after secureGet async
   setTimeout(refresh, 900);
 })();
 
