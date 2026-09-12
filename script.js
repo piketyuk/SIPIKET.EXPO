@@ -512,11 +512,7 @@ window.onGoogleCredential = async function (response) {
     const picture = payload.picture || "";
     if (!email) throw new Error("email missing");
     const _hint2 = sessionStorage.getItem("sipiket_hint_email");
-    if(_hint2 && email.toLowerCase() !== _hint2.toLowerCase()){
-      otpStatus.textContent = "Pilih akun "+_hint2+" — akun lain tidak diizinkan untuk mode akun terakhir ini";
-      otpStatus.style.color="#d93025";
-      return;
-    }
+    if(_hint2 && email.toLowerCase() !== _hint2.toLowerCase()){ otpStatus.textContent = "Pilih akun "+_hint2+" — akun lain tidak diizinkan untuk mode akun terakhir ini"; otpStatus.style.color="#d93025"; return; }
     if(_hint2) sessionStorage.removeItem("sipiket_hint_email");
     const pendingCode = sessionStorage.getItem("sipiket_classCode") || "";
     const pendingRole =
@@ -958,64 +954,92 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
 
 // --- last account detection (no re-enter code) — fixed: selalu tampilkan picker Google ---
 (function lastAccountBoot(){
+  const googleBtnEl = document.getElementById("googleBtn");
   const card = document.getElementById("lastAccountCard");
-  if(!card) return;
+  if(card){ card.hidden=true; card.style.display="none"; }
+  if(!googleBtnEl) return;
+  const defaultHtml = googleBtnEl.innerHTML;
+  const defaultLabel = googleBtnEl.getAttribute("aria-label")||"Login dengan Google";
   async function refresh(){
     const lastEmail = localStorage.getItem("sipiket_last_email");
-    if(!lastEmail){ card.hidden=true; card.style.display="none"; return; }
+    if(!lastEmail){
+      googleBtnEl.innerHTML = defaultHtml;
+      googleBtnEl.removeAttribute("data-last-email");
+      googleBtnEl.setAttribute("aria-label", defaultLabel);
+      googleBtnEl.title = "Pilih akun Google";
+      return;
+    }
     let acc=null;
-    try{
-      if(typeof secureGet==="function") acc = await secureGet("account_"+lastEmail.toLowerCase());
-      if(!acc) throw 0;
-    }catch{
-      try{ acc = JSON.parse(localStorage.getItem("enc_account_"+lastEmail.toLowerCase())||"null"); if(acc && acc.ct) acc=null; }catch{}
-      if(!acc) acc = {email:lastEmail, classCode: localStorage.getItem("sipiket_last_class")||""};
+    try{ if(typeof secureGet==="function") acc = await secureGet("account_"+lastEmail.toLowerCase()); }catch{}
+    if(!acc || !acc.email){
+      try{ const raw=localStorage.getItem("enc_account_"+lastEmail.toLowerCase()); if(raw){ const parsed=JSON.parse(raw); if(parsed && !parsed.ct) acc=parsed; } }catch{}
+      if(!acc || !acc.email) acc={email:lastEmail};
     }
-    if(!acc || !acc.email){ card.hidden=true; card.style.display="none"; return; }
-    const avatar=document.getElementById("lastAccAvatar");
-    const emailEl=document.getElementById("lastAccEmail");
-    if(emailEl) emailEl.textContent=acc.email;
-    if(avatar && (acc.avatar||acc.picture)){ avatar.src=acc.avatar||acc.picture; avatar.style.display="block"; }
-    card.hidden=false; card.style.display="grid";
-    const status=document.getElementById("lastAccStatus");
-    if(status) status.textContent="Klik untuk gunakan akun ini — akan membuka pilihan akun Google";
-    const btn=document.getElementById("useLastAccBtn");
-    if(btn && !btn._bound){
-      btn._bound=true;
-      btn.addEventListener("click", async()=>{
-        const lastEmail2=localStorage.getItem("sipiket_last_email");
-        if(!lastEmail2){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
-        let acc2=null;
-        try{ if(typeof secureGet==="function") acc2=await secureGet("account_"+lastEmail2.toLowerCase()); }catch{}
-        if(!acc2 || !acc2.email){
-          try{ acc2=JSON.parse(localStorage.getItem("enc_account_"+lastEmail2.toLowerCase())||"null"); if(acc2 && acc2.ct) acc2=null; }catch{}
-        }
-        if(!acc2) acc2={email:lastEmail2};
-        if(!acc2.email){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
-        if(!acc2.classCode){ status.textContent="Akun ditemukan tapi kelas kosong — masukkan kode kelas/guru dulu"; status.style.color="#d93025"; return; }
-        sessionStorage.setItem("sipiket_googleEmail", acc2.email);
-        if(acc2.displayName) sessionStorage.setItem("sipiket_googleName", acc2.displayName);
-        if(acc2.picture) sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
-        if(acc2.avatar) sessionStorage.setItem("sipiket_avatar", acc2.avatar);
-        sessionStorage.setItem("sipiket_classCode", acc2.classCode||"");
-        if(acc2.classCode) sessionStorage.setItem("sipiket_pendingClassCode", acc2.classCode);
-        if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru"); else sessionStorage.removeItem("sipiket_pendingRole");
-        setClassVerified(true);
-        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
-        sessionStorage.setItem("sipiket_hint_email", acc2.email);
-        status.textContent="✓ Akun terpilih: "+acc2.email+" — membuka pilihan akun Google...";
-        status.style.color="var(--orange)";
-        // buka picker Google dengan hint
-        setTimeout(()=>{
-          if(typeof triggerGoogleChooser==="function") triggerGoogleChooser();
-          else if(typeof google!=="undefined" && google.accounts?.id) try{ google.accounts.id.prompt(); }catch{}
-        }, 300);
-      });
+    if(!acc.email){
+      googleBtnEl.innerHTML = defaultHtml;
+      googleBtnEl.removeAttribute("data-last-email");
+      return;
     }
+    googleBtnEl.innerHTML = `${acc.email} <span aria-hidden="true" style="margin-left:6px;opacity:.75">^</span>`;
+    googleBtnEl.setAttribute("aria-label", `Masuk sebagai ${acc.email} — klik untuk konfirmasi`);
+    googleBtnEl.title = `Masuk sebagai ${acc.email}`;
+    googleBtnEl.dataset.lastEmail = acc.email;
+    // show inline Lanjutkan / Tidakkan prompt after first load
   }
   refresh();
   window.addEventListener("storage", refresh);
   setTimeout(refresh, 900);
+
+  // Override click: if last account exists, open picker hint, then show Lanjutkan/Tidakkan
+  googleBtnEl.addEventListener("click", async (e)=>{
+    const lastEmail = googleBtnEl.dataset.lastEmail;
+    if(!lastEmail) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    let acc=null;
+    try{ if(typeof secureGet==="function") acc = await secureGet("account_"+lastEmail.toLowerCase()); }catch{}
+    if(!acc || !acc.email){
+      try{ acc=JSON.parse(localStorage.getItem("enc_account_"+lastEmail.toLowerCase())||"null"); if(acc && acc.ct) acc=null; }catch{}
+    }
+    if(!acc) acc={email:lastEmail};
+    if(!acc.email){ const st=document.getElementById("otpStatus"); if(st){ st.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; st.style.color="#d93025"; } return; }
+    if(!acc.classCode){ const st=document.getElementById("otpStatus"); if(st){ st.textContent="Akun ditemukan tapi kelas kosong — masukkan kode kelas/guru dulu"; st.style.color="#d93025"; } return; }
+    // verify was already ok, but ensure classVerified
+    setClassVerified(true);
+    const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
+    // set hint and open picker (hanya bisa pakai akun itu)
+    sessionStorage.setItem("sipiket_hint_email", acc.email);
+    sessionStorage.setItem("sipiket_googleEmail", acc.email);
+    if(acc.displayName) sessionStorage.setItem("sipiket_googleName", acc.displayName);
+    if(acc.picture) sessionStorage.setItem("sipiket_googlePicture", acc.picture);
+    if(acc.avatar) sessionStorage.setItem("sipiket_avatar", acc.avatar);
+    sessionStorage.setItem("sipiket_classCode", acc.classCode||"");
+    if(acc.classCode) sessionStorage.setItem("sipiket_pendingClassCode", acc.classCode);
+    if(acc.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru"); else sessionStorage.removeItem("sipiket_pendingRole");
+    const st=document.getElementById("otpStatus");
+    if(st){ st.textContent="Membuka pilihan akun Google untuk "+acc.email+" — hanya akun ini yang bisa dipakai. Lanjutkan?"; st.style.color="var(--orange)"; }
+    // Inject Lanjutkan / Tidakkan buttons below googleBtn
+    let bar=document.getElementById("lastAccChoice");
+    if(!bar){
+      bar=document.createElement("div");
+      bar.id="lastAccChoice";
+      bar.style.display="flex"; bar.style.gap="8px"; bar.style.justifyContent="center"; bar.style.marginTop="8px";
+      bar.innerHTML=`<button type="button" id="accContinue" class="btn-primary" style="padding:8px 14px">Lanjutkan</button><button type="button" id="accCancel" class="teacher-toggle" style="padding:8px 14px">Tidakkan</button>`;
+      googleBtnEl.parentElement?.appendChild(bar);
+      document.getElementById("accContinue")?.addEventListener("click", ()=>{
+        bar.hidden=true; bar.style.display="none";
+        sessionStorage.setItem("sipiket_hint_email", acc.email);
+        if(typeof triggerGoogleChooser==="function") triggerGoogleChooser();
+        else if(typeof google!=="undefined" && google.accounts?.id) try{ google.accounts.id.prompt(); }catch{}
+      });
+      document.getElementById("accCancel")?.addEventListener("click", ()=>{
+        bar.hidden=true; bar.style.display="none";
+        sessionStorage.removeItem("sipiket_hint_email");
+        if(st){ st.textContent="Dibatalkan — pilih kode & akun lain"; st.style.color="var(--muted)"; }
+      });
+    }
+    bar.hidden=false; bar.style.display="flex";
+  }, true);
 })();
 
 (function devStackBoot() {
