@@ -689,5 +689,5 @@
       if (location.search.includes("email="))
         history.replaceState(null, "", location.pathname);
     </script>
-  </body>
+  <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});</script></body>
 </html>

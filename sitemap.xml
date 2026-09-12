@@ -6,4 +6,6 @@
   <url><loc>https://sipiket.my.id/syarat-ketentuan.html</loc><priority>0.5</priority></url>
   <url><loc>https://sipiket.my.id/kelas.html</loc><priority>0.6</priority></url>
   <url><loc>https://sipiket.my.id/guru-kelas.html</loc><priority>0.6</priority></url>
+  <url><loc>https://sipiket.my.id/404.html</loc><priority>0.3</priority></url>
+  <url><loc>https://sipiket.my.id/offline.html</loc><priority>0.3</priority></url>
 </urlset>
