@@ -131,7 +131,7 @@ function attachClassHandlers() {
           .toLowerCase();
       else b.value = b.value.replace(/\D/g, "").slice(-1);
       if (b.value && classBoxes[i + 1]) classBoxes[i + 1].focus();
-      setTimeout(tryAutoVerify, 30);
+      // auto-verify off
     });
     b.addEventListener("keydown", (e) => {
       if (e.key === "Backspace" && !b.value && classBoxes[i - 1])
@@ -152,7 +152,7 @@ function attachClassHandlers() {
         if (classBoxes[j]) classBoxes[j].value = c;
       });
       classBoxes[Math.min(d.length, classBoxes.length - 1)]?.focus();
-      setTimeout(tryAutoVerify, 30);
+      // auto-verify off
     });
   });
 }
@@ -1584,6 +1584,12 @@ function showLoginView(name) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || "Gagal");
+      localStorage.setItem(FEEDBACK_KEY, String(Date.now()));
+      // kunci form seminggu
+      form.querySelectorAll("input,textarea,button").forEach(el=>{ if(el.id!=="fbStatus") el.disabled=true; });
+      setTimeout(()=>{ statusEl.textContent=lockMsg(); }, 900);
+      localStorage.setItem(FEEDBACK_KEY, String(Date.now()));
+      form.querySelectorAll("input,textarea,button").forEach(el=>{ if(el.id!=="fbStatus") el.disabled=true; });
       statusEl.textContent =
         "✓ Terima kasih! Feedback terkirim ke sipiket.anchor@gmail.com — format tabel rapi sudah masuk inbox.";
       statusEl.style.color = "var(--orange)";
