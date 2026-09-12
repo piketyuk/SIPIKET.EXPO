@@ -55,8 +55,9 @@ a {
   transform: translateX(-50%);
   width: min(calc(100% - 24px), var(--max));
   z-index: 50;
-  animation: navIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  -webkit-animation: navIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
+@-webkit-keyframes navIn { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes navIn {
   from {
     opacity: 0;
@@ -160,7 +161,7 @@ a {
   flex: 1;
 }
 #toggleRow {
-  animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  -webkit-animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: 0.1s;
 }
 #codeFieldset {
@@ -174,7 +175,7 @@ a {
   filter: grayscale(0.2);
 }
 #googleStep {
-  animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  -webkit-animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 @media (max-width: 380px) {
   .btn-login {
@@ -198,8 +199,9 @@ a {
   flex-direction: column;
   gap: 18px;
   border-right: 1px solid var(--line);
-  animation: drawerIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  -webkit-animation: drawerIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+@-webkit-keyframes drawerIn { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes drawerIn {
   from {
     transform: translateX(-100%);
@@ -283,7 +285,7 @@ a {
   );
   top: -120px;
   right: -80px;
-  animation: float 8s ease-in-out infinite;
+  -webkit-animation: float 8s ease-in-out infinite;
 }
 .b2 {
   width: 460px;
@@ -296,7 +298,7 @@ a {
   );
   bottom: -140px;
   left: -100px;
-  animation: float 10s ease-in-out infinite reverse;
+  -webkit-animation: float 10s ease-in-out infinite reverse;
 }
 .b3 {
   width: 320px;
@@ -305,8 +307,9 @@ a {
   top: 40%;
   left: 50%;
   opacity: 0.35;
-  animation: float 12s ease-in-out infinite;
+  -webkit-animation: float 12s ease-in-out infinite;
 }
+@-webkit-keyframes float { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes float {
   0%,
   100% {
@@ -316,6 +319,7 @@ a {
     transform: translate(14px, -18px) scale(1.04);
   }
 }
+@-webkit-keyframes fadeUp { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -326,6 +330,7 @@ a {
     transform: none;
   }
 }
+@-webkit-keyframes shimmerMove { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes shimmerMove {
   0% {
     transform: translateX(-100%);
@@ -334,6 +339,7 @@ a {
     transform: translateX(100%);
   }
 }
+@-webkit-keyframes iconPop { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes iconPop {
   0% {
     transform: scale(0.9);
@@ -353,7 +359,7 @@ a {
   gap: 16px;
 }
 .hero-inner > * {
-  animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  -webkit-animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 .hero-inner > *:nth-child(1) {
   animation-delay: 0.05s;
@@ -443,7 +449,7 @@ h1 em {
   );
 }
 .btn-primary:hover::after {
-  animation: shimmerMove 0.7s ease;
+  -webkit-animation: shimmerMove 0.7s ease;
 }
 .btn-primary:hover {
   transform: translateY(-2px) scale(1.01);
@@ -545,7 +551,7 @@ h1 em {
   border-color: #b6d3ff;
 }
 .card:hover .icon {
-  animation: iconPop 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+  -webkit-animation: iconPop 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .card:hover::before {
   opacity: 1;
@@ -627,8 +633,9 @@ footer {
   font-size: 1.6rem;
   color: #fff;
   box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
-  animation: logoFloat 3s ease-in-out infinite;
+  -webkit-animation: logoFloat 3s ease-in-out infinite;
 }
+@-webkit-keyframes logoFloat { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes logoFloat {
   0%,
   100% {
@@ -681,12 +688,13 @@ dialog {
   padding: 0;
   width: min(480px, calc(100% - 24px));
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
-  animation: pop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  -webkit-animation: pop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 dialog::backdrop {
   background: rgba(20, 10, 0, 0.42);
   backdrop-filter: blur(4px);
 }
+@-webkit-keyframes pop { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes pop {
   from {
     opacity: 0;
@@ -943,7 +951,7 @@ dialog::backdrop {
   gap: 12px;
   text-align: center;
   box-shadow: 0 8px 24px rgba(255, 107, 0, 0.08);
-  animation: pop 0.28s ease;
+  -webkit-animation: pop 0.28s ease;
 }
 .otp-sent h3 {
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -1187,8 +1195,9 @@ dialog::backdrop {
   box-shadow:
     0 16px 48px rgba(255, 107, 0, 0.22),
     0 1px 0 rgba(255, 255, 255, 1) inset;
-  animation: loaderCard 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  -webkit-animation: loaderCard 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
+@-webkit-keyframes loaderCard { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes loaderCard {
   from {
     opacity: 0;
@@ -1211,7 +1220,7 @@ dialog::backdrop {
   font-weight: 800;
   font-size: 2rem;
   box-shadow: 0 10px 28px rgba(255, 107, 0, 0.38);
-  animation: logoFloat 2.2s ease-in-out infinite;
+  -webkit-animation: logoFloat 2.2s ease-in-out infinite;
 }
 .loader-title {
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -1313,8 +1322,7 @@ dialog::backdrop {
   padding: 4px;
   background: linear-gradient(90deg, #e01428, #ff5a5a, #e01428, #ff3b3b);
   background-size: 200% 100%;
-  animation:
-    rajaGlow 2.2s ease-in-out infinite,
+  -webkit-animation: rajaGlow 2.2s ease-in-out infinite,
     rajaPulse 1.8s ease-in-out infinite;
   box-shadow:
     0 0 0 4px rgba(255, 26, 26, 0.18),
@@ -1332,6 +1340,7 @@ dialog::backdrop {
   font-weight: 600;
   color: #1a1a1a;
 }
+@-webkit-keyframes rajaGlow { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes rajaGlow {
   0%,
   100% {
@@ -1341,6 +1350,7 @@ dialog::backdrop {
     background-position: 100% 50%;
   }
 }
+@-webkit-keyframes rajaPulse { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes rajaPulse {
   0%,
   100% {
@@ -1458,6 +1468,7 @@ dialog::backdrop {
 }
 
 /* board drop for dialogs */
+@-webkit-keyframes boardDrop { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes boardDrop {
   0% {
     transform: translateY(-140%) rotate(-1.5deg);
@@ -1478,10 +1489,10 @@ dialog::backdrop {
   }
 }
 dialog[open] {
-  animation: boardDrop 0.68s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  -webkit-animation: boardDrop 0.68s cubic-bezier(0.2, 0.9, 0.2, 1) both;
 }
 .drawer {
-  animation: boardDrop 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  -webkit-animation: boardDrop 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) both;
 }
 
 /* reveal scale */
@@ -1511,6 +1522,7 @@ dialog[open] {
 }
 
 /* login robot title */
+@-webkit-keyframes robotFloat { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes robotFloat {
   0%,
   100% {
@@ -1521,12 +1533,12 @@ dialog[open] {
   }
 }
 .robot-title {
-  animation: robotFloat 3.2s ease-in-out infinite;
+  -webkit-animation: robotFloat 3.2s ease-in-out infinite;
   display: inline-block;
 }
 .robot-title em {
   display: inline-block;
-  animation: robotFloat 3.2s ease-in-out infinite reverse;
+  -webkit-animation: robotFloat 3.2s ease-in-out infinite reverse;
 }
 
 .dev-swap {
@@ -1535,8 +1547,9 @@ dialog[open] {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: devSwap 0.52s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  -webkit-animation: devSwap 0.52s cubic-bezier(0.2, 0.9, 0.2, 1) both;
 }
+@-webkit-keyframes devSwap { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes devSwap {
   0% {
     transform: scale(0.85) rotate(-1deg);
@@ -1552,6 +1565,7 @@ dialog[open] {
     transform: scale(1) rotate(0);
   }
 }
+@-webkit-keyframes devExplode { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes devExplode {
   0% {
     transform: scale(1);
@@ -1565,7 +1579,7 @@ dialog[open] {
   }
 }
 .dev-swap.is-pop {
-  animation: devExplode 0.42s ease;
+  -webkit-animation: devExplode 0.42s ease;
 }
 
 .dev-stack {
@@ -1651,8 +1665,9 @@ dialog[open] {
 .dev-card--lead .stack-prof {
   background: linear-gradient(135deg, #e01428, #ff3b3b);
   box-shadow: 0 4px 16px rgba(225, 20, 40, 0.35);
-  animation: rajaBlaze 1.6s ease-in-out infinite alternate;
+  -webkit-animation: rajaBlaze 1.6s ease-in-out infinite alternate;
 }
+@-webkit-keyframes rajaBlaze { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes rajaBlaze {
   0% {
     filter: brightness(1) drop-shadow(0 0 6px rgba(255, 60, 60, 0.45));
@@ -1667,8 +1682,9 @@ dialog[open] {
   background-clip: text;
   color: transparent;
   filter: drop-shadow(0 0 8px rgba(255, 20, 40, 0.55));
-  animation: rajaNameBurn 1.2s ease-in-out infinite alternate;
+  -webkit-animation: rajaNameBurn 1.2s ease-in-out infinite alternate;
 }
+@-webkit-keyframes rajaNameBurn { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes rajaNameBurn {
   0% {
     filter: brightness(1) drop-shadow(0 0 6px rgba(255, 20, 40, 0.45));
@@ -1695,8 +1711,9 @@ dialog[open] {
       )
       border-box;
   opacity: 0.55;
-  animation: sitePulse 2.4s ease-in-out infinite;
+  -webkit-animation: sitePulse 2.4s ease-in-out infinite;
 }
+@-webkit-keyframes sitePulse { from { -webkit-transform: translateY(14px); transform: translateY(14px); opacity:0 } to { -webkit-transform: none; transform: none; opacity:1 } }
 @keyframes sitePulse {
   0%,
   100% {
@@ -1715,394 +1732,14 @@ dialog[open] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.in { opacity:1 !important; transform:none !important; }
+
   .loader {
     transition: none;
   }
   .loader-card,
   .loader-logo {
-    animation: none;
+    -webkit-animation: none;
   }
 }
 
-/* --- blue glass glossy enhancements --- */
-.nav {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-}
-.hero {
-  background:
-    radial-gradient(
-      1100px 700px at 18% 8%,
-      rgba(15, 91, 255, 0.08) 0%,
-      transparent 62%
-    ),
-    radial-gradient(
-      900px 600px at 92% 92%,
-      rgba(59, 130, 255, 0.1) 0%,
-      transparent 62%
-    ),
-    linear-gradient(180deg, #eef4ff 0%, #f6f9ff 52%, #fff 100%);
-  min-height: min(78vh, 720px);
-  padding: clamp(96px, 12vh, 128px) clamp(16px, 3vw, 24px)
-    clamp(36px, 6vh, 56px);
-}
-@media (max-width: 640px) {
-  .hero {
-    min-height: 560px;
-    padding: calc(88px + 18px) 16px 32px;
-  }
-  .b1,
-  .b2 {
-    width: clamp(280px, 70vw, 420px) !important;
-    height: clamp(280px, 70vw, 420px) !important;
-  }
-}
-@media (min-width: 1280px) {
-  .hero {
-    min-height: 680px;
-  }
-}
-.blob {
-  opacity: 0.42;
-  filter: blur(40px);
-}
-.b1 {
-  background: radial-gradient(
-    circle at 30% 30%,
-    #c9deff,
-    #3b82ff 58%,
-    transparent 72%
-  );
-}
-.b2 {
-  background: radial-gradient(
-    circle at 50% 50%,
-    #e6eeff,
-    #7ea8ff 62%,
-    transparent 72%
-  );
-}
-
-/* melting title */
-.melt {
-  position: relative;
-  display: inline-block;
-  background: linear-gradient(180deg, var(--orange) 0%, #0b3bd1 88%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 8px 18px rgba(15, 91, 255, 0.18));
-}
-.melt::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 68%,
-    rgba(15, 91, 255, 0.42) 92%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transform: translateY(3px) scaleY(1.22);
-  filter: blur(0.6px);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-/* glass cards */
-.card,
-.feedback-card,
-.profile-card,
-.otp-sent,
-.dev-card {
-  backdrop-filter: blur(10px) saturate(1.08);
-  -webkit-backdrop-filter: blur(10px) saturate(1.08);
-  background: rgba(255, 255, 255, 0.92);
-}
-
-/* board drop for dialogs */
-@keyframes boardDrop {
-  0% {
-    transform: translateY(-140%) rotate(-1.5deg);
-    opacity: 0;
-  }
-  55% {
-    transform: translateY(18px) rotate(0.8deg);
-    opacity: 1;
-  }
-  72% {
-    transform: translateY(-8px) rotate(-0.4deg);
-  }
-  84% {
-    transform: translateY(4px) rotate(0.2deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0);
-  }
-}
-dialog[open] {
-  animation: boardDrop 0.68s cubic-bezier(0.2, 0.9, 0.2, 1) both;
-}
-.drawer {
-  animation: boardDrop 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) both;
-}
-
-/* reveal scale */
-.reveal {
-  transform: translateY(18px) scale(0.98);
-}
-.reveal.in {
-  transform: none;
-}
-
-/* feedback professional */
-.feedback-note {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  background: #eef4ff;
-  border: 1px solid #d4e7ff;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 0.84rem;
-  color: #1e3a6b;
-  line-height: 1.5;
-}
-.feedback-note span {
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-/* login robot title */
-@keyframes robotFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-.robot-title {
-  animation: robotFloat 3.2s ease-in-out infinite;
-  display: inline-block;
-}
-.robot-title em {
-  display: inline-block;
-  animation: robotFloat 3.2s ease-in-out infinite reverse;
-}
-
-.dev-swap {
-  display: inline-block;
-  background: linear-gradient(180deg, var(--orange) 0%, #0b3bd1 92%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: devSwap 0.52s cubic-bezier(0.2, 0.9, 0.2, 1) both;
-}
-@keyframes devSwap {
-  0% {
-    transform: scale(0.85) rotate(-1deg);
-    opacity: 0;
-    filter: blur(2px);
-  }
-  55% {
-    transform: scale(1.06) rotate(0.6deg);
-    opacity: 1;
-    filter: none;
-  }
-  100% {
-    transform: scale(1) rotate(0);
-  }
-}
-@keyframes devExplode {
-  0% {
-    transform: scale(1);
-  }
-  28% {
-    transform: scale(1.12);
-    filter: brightness(1.15);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-.dev-swap.is-pop {
-  animation: devExplode 0.42s ease;
-}
-
-.dev-stack {
-  position: relative;
-  height: 420px;
-  display: grid;
-  place-items: center;
-}
-.stack-card {
-  position: absolute;
-  width: min(340px, 90vw);
-  background: rgba(255, 255, 255, 0.96);
-  border: 1.5px solid var(--line);
-  border-radius: 22px;
-  padding: 18px;
-  display: grid;
-  gap: 10px;
-  justify-items: center;
-  text-align: center;
-  box-shadow: 0 12px 32px rgba(15, 91, 255, 0.1);
-  transition:
-    transform 0.45s cubic-bezier(0.2, 0.9, 0.2, 1),
-    opacity 0.32s ease,
-    filter 0.32s;
-  will-change: transform, opacity;
-}
-.stack-card.is-active {
-  transform: translateY(0) scale(1) rotate(0deg);
-  opacity: 1;
-  z-index: 3;
-}
-.stack-card.is-next {
-  transform: translateY(18px) scale(0.96) rotate(-1deg);
-  opacity: 0.72;
-  z-index: 2;
-  filter: brightness(0.98);
-}
-.stack-card.is-behind {
-  transform: translateY(34px) scale(0.92) rotate(1deg);
-  opacity: 0.45;
-  z-index: 1;
-  filter: brightness(0.96) blur(0.2px);
-}
-.stack-card.is-out {
-  transform: translateY(-24px) scale(0.9) rotate(1deg);
-  opacity: 0;
-  pointer-events: none;
-}
-@media (max-width: 380px) {
-  .dev-stack {
-    height: 400px;
-  }
-  .stack-card {
-    width: 92vw;
-  }
-}
-
-#devHeroTitle {
-  min-height: 1.35em;
-  display: grid;
-  place-items: center;
-}
-#devDescSwap {
-  min-height: 2.8em;
-  display: grid;
-  place-items: center;
-  transition: opacity 0.22s ease;
-}
-#devStackHint {
-  min-height: 1.2em;
-}
-
-.stack-prof {
-  display: inline-block;
-  background: linear-gradient(135deg, #0f5bff, #3b82ff);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.dev-card--lead .stack-prof {
-  background: linear-gradient(135deg, #e01428, #ff3b3b);
-  box-shadow: 0 4px 16px rgba(225, 20, 40, 0.35);
-  animation: rajaBlaze 1.6s ease-in-out infinite alternate;
-}
-@keyframes rajaBlaze {
-  0% {
-    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 60, 60, 0.45));
-  }
-  100% {
-    filter: brightness(1.18) drop-shadow(0 0 14px rgba(255, 20, 40, 0.75));
-  }
-}
-.dev-card--lead h3 {
-  background: linear-gradient(180deg, #ff1a1a 0%, #ff6b00 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 8px rgba(255, 20, 40, 0.55));
-  animation: rajaNameBurn 1.2s ease-in-out infinite alternate;
-}
-@keyframes rajaNameBurn {
-  0% {
-    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 20, 40, 0.45));
-  }
-  100% {
-    filter: brightness(1.25) drop-shadow(0 0 14px rgba(255, 80, 20, 0.7));
-  }
-}
-.site-blaze {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  border: 2px solid transparent;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(
-        180deg,
-        rgba(225, 20, 40, 0) 0%,
-        rgba(255, 60, 60, 0.35) 18%,
-        rgba(255, 120, 40, 0.25) 45%,
-        rgba(225, 20, 40, 0.35) 82%,
-        rgba(255, 60, 60, 0) 100%
-      )
-      border-box;
-  opacity: 0.55;
-  animation: sitePulse 2.4s ease-in-out infinite;
-}
-@keyframes sitePulse {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 0.65;
-  }
-}
-#devHeroTitle,
-#devDescSwap {
-  display: block;
-}
-#devDescSwap {
-  min-height: 2.8em;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-  .hero-inner > * {
-    animation: none !important;
-  }
-  .dev-card--lead .dev-img-wrap {
-    animation: none !important;
-  }
-  .melt::after,
-  .robot-title,
-  dialog[open],
-  .drawer {
-    animation: none !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-}

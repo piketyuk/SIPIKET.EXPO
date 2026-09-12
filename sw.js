@@ -1,2 +1,3 @@
-self.addEventListener('install',e=>e.waitUntil(caches.open('sipiket-v1').then(c=>c.addAll(['/','/index.html','/styles.css','/script.js','/favicon.svg']))));
-self.addEventListener('fetch',e=>{ e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('/offline.html')))); });
+self.addEventListener('install',e=>e.waitUntil(caches.open('sipiket-v3').then(c=>c.addAll(['/','/index.html','/assets/css/styles.css','/assets/js/script.js','/assets/img/favicon.svg']))));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!=='sipiket-v3').map(k=>caches.delete(k))))));
+self.addEventListener('fetch',e=>{ if(e.request.method!=='GET') return; e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(net=>{ const u=new URL(e.request.url); if(u.origin===location.origin && net.ok) caches.open('sipiket-v3').then(c=>c.put(e.request, net.clone())); return net; }).catch(()=> e.request.destination==='document' ? caches.match('/offline.html') : caches.match('/assets/img/favicon.svg')))); });

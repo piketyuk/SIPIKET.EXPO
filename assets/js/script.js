@@ -36,6 +36,7 @@ closeQ?.addEventListener("click", () => qm.close());
 qm?.addEventListener("click", (e) => {
   if (e.target === qm) qm.close();
 });
+if(!("IntersectionObserver" in window)){ document.querySelectorAll(".reveal").forEach(el=>el.classList.add("in")); } else {
 const io = new IntersectionObserver(
   (es) =>
     es.forEach((e) => {
@@ -47,6 +48,7 @@ const io = new IntersectionObserver(
   { threshold: 0.14 },
 );
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+}
 
 async function sha256Hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
 async function isTeacherCode(s){return TEACHER_CODE_HASHES.includes(await sha256Hex(s.toLowerCase()));}
@@ -1138,29 +1140,29 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
     {
       name: "Raja",
       role: "Lead Developer & Full Stack Developer",
-      img: "images/raja.webp",
+      img: "/assets/img/raja.webp",
       lead: true,
     },
-    { name: "Kibi", role: "Assistant & Publisher", img: "images/kibi.jpg" },
+    { name: "Kibi", role: "Assistant & Publisher", img: "/assets/img/kibi.jpg" },
     {
       name: "Zanet",
       role: "Social Media & Content Manager",
-      img: "images/zanet.jpg",
+      img: "/assets/img/zanet.jpg",
     },
     {
       name: "Avara",
       role: "Mediator & Project Coordinator",
-      img: "images/avara.jpg",
+      img: "/assets/img/avara.jpg",
     },
     {
       name: "Surya",
       role: "Creator & Build Script Engineer",
-      img: "images/surya.jpg",
+      img: "/assets/img/surya.jpg",
     },
     {
       name: "Gabriel",
       role: "Assistant Build Script Engineer",
-      img: "images/gabriel.jpg",
+      img: "/assets/img/gabriel.jpg",
     },
   ];
   let idx = 0;
