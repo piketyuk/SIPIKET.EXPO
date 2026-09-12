@@ -16,6 +16,11 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <meta
+      property="og:title"
+      content="SIPIKET.EXPO — Piket Mudah, Transparan & Efektif"
+    />
+    <meta property="og:image" content="https://sipiket.my.id/favicon.svg" />
     <link rel="canonical" href="https://sipiket.my.id/login.html" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -59,7 +64,6 @@
 
     <main id="main">
       <section class="page-hero" aria-labelledby="login-title">
-        <p class="eyebrow">Akses Terenkripsi — AES-GCM</p>
         <h1
           id="login-title"
           class="robot-title"
@@ -265,8 +269,14 @@
             <label class="terms" for="termsCheck"
               ><input type="checkbox" id="termsCheck" required /><span
                 >Saya menyetujui
-                <a href="syarat-ketentuan.html" id="termsLink" target="_blank" rel="noopener">Syarat & Ketentuan</a> dan Kebijakan
-                Privasi SIPIKET.EXPO *wajib</span
+                <a
+                  href="syarat-ketentuan.html"
+                  id="termsLink"
+                  target="_blank"
+                  rel="noopener"
+                  >Syarat & Ketentuan</a
+                >
+                dan Kebijakan Privasi SIPIKET.EXPO *wajib</span
               ></label
             >
             <p
@@ -789,6 +799,8 @@
         </p>
       </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase.js"></script>
     <script src="secure.js"></script>
     <script src="script.js"></script>
     <script>
