@@ -531,6 +531,12 @@ window.onGoogleCredential = async function (response) {
     }
 
     if (existing && existing.classCode) {
+      // jika akun sudah ada dan mencoba buat baru dengan kode berbeda, beri notifikasi lalu hilang
+      if(pendingCode && existing.classCode !== pendingCode){
+        otpStatus.textContent="kamu sudah ada akun ini"; otpStatus.style.color="var(--orange)";
+        setTimeout(()=>{ otpStatus.textContent=""; otpStatus.style.color="var(--muted)"; }, 2200);
+        return;
+      }
       await persistAccount(email, {
         classCode: existing.classCode,
         role: existing.role || pendingRole,
@@ -953,6 +959,86 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
 
 
 // --- last account detection (no re-enter code) — fixed: selalu tampilkan picker Google ---
+
+// --- login main vs create views ---
+(function loginViews(){
+  const main=document.getElementById("loginMainView");
+  const create=document.getElementById("createAccountView");
+  const verify=document.getElementById("verifyView");
+  const profile=document.getElementById("profileView");
+  const openBtn=document.getElementById("openCreateAccount");
+  const backBtn=document.getElementById("backToLogin");
+  const googleMain=document.getElementById("googleLoginMain");
+  const mainStatus=document.getElementById("loginMainStatus");
+  if(openBtn && main && create){
+    openBtn.addEventListener("click", ()=>{ main.hidden=true; main.style.display="none"; create.hidden=false; create.style.display="grid"; create.scrollIntoView({behavior:"smooth",block:"center"}); });
+  }
+  if(backBtn && main && create){
+    backBtn.addEventListener("click", ()=>{ create.hidden=true; create.style.display="none"; main.hidden=false; main.style.display="grid"; main.scrollIntoView({behavior:"smooth",block:"center"}); });
+  }
+  // main login Google (existing users)
+  googleMain?.addEventListener("click", async ()=>{
+    const idEl=document.getElementById("g_id_onload_main");
+    const id=idEl?.getAttribute("data-client_id")||"";
+    if(id && typeof google!=="undefined" && google.accounts?.id){
+      try{ google.accounts.id.initialize({client_id:id, callback:async (r)=>{ 
+        const payload=JSON.parse(atob(r.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+        const email=payload.email; const name=payload.name||""; const picture=payload.picture||"";
+        let acc=null; try{ if(typeof secureGet==="function") acc=await secureGet("account_"+email.toLowerCase()); }catch{}
+        if(!acc || !acc.email){
+          if(mainStatus){ mainStatus.textContent="Akun belum terdaftar — klik Buat akun sekarang"; mainStatus.style.color="#d93025"; }
+          // offer to go to create
+          setTimeout(()=>{ if(openBtn) openBtn.scrollIntoView({behavior:"smooth"}); }, 400);
+          return;
+        }
+        if(acc.role==="guru" && acc.classCode && acc.classCode!==sessionStorage.getItem("sipiket_classCode")){
+          // same account check: if already exists, inform
+        }
+        sessionStorage.setItem("sipiket_googleEmail", acc.email);
+        if(acc.displayName) sessionStorage.setItem("sipiket_googleName", acc.displayName);
+        if(acc.picture) sessionStorage.setItem("sipiket_googlePicture", acc.picture);
+        if(acc.avatar) sessionStorage.setItem("sipiket_avatar", acc.avatar);
+        sessionStorage.setItem("sipiket_classCode", acc.classCode||"");
+        sessionStorage.setItem("sipiket_registered","1");
+        sessionStorage.setItem("sipiket_emailVerified","1");
+        if(acc.role==="guru") sessionStorage.setItem("sipiket_role","guru");
+        localStorage.setItem("sipiket_last_email", acc.email);
+        const target=acc.role==="guru"?"guru-kelas.html":"kelas.html";
+        if(mainStatus){ mainStatus.textContent=`✓ Selamat datang kembali ${acc.displayName||acc.email} — membuka ${target}...`; mainStatus.style.color="var(--orange)"; }
+        setTimeout(()=> location.href=target, 700);
+      }, auto_select:false}); google.accounts.id.prompt(); return; }catch(e){ if(mainStatus){ mainStatus.textContent="Gagal: "+(e.message||e); mainStatus.style.color="#d93025"; } }
+    }
+    if(mainStatus){ mainStatus.textContent="Google belum terkonfigurasi — periksa origin"; mainStatus.style.color="#d93025"; }
+  });
+  // handle email link with ?verify -> directly show profileView if token present
+  const q=new URLSearchParams(location.search);
+  if(q.has("verify") || q.get("email")){
+    const em=q.get("email") || sessionStorage.getItem("sipiket_googleEmail");
+    if(em){
+      // try to restore session and show profile
+      (async()=>{
+        let acc=null; try{ if(typeof secureGet==="function") acc=await secureGet("account_"+em.toLowerCase()); }catch{}
+        if(acc && acc.email){
+          sessionStorage.setItem("sipiket_googleEmail", acc.email);
+          if(acc.displayName) sessionStorage.setItem("sipiket_googleName", acc.displayName);
+          if(acc.classCode) sessionStorage.setItem("sipiket_classCode", acc.classCode);
+          if(acc.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru");
+          // show profile directly
+          const prof=document.getElementById("profileView");
+          if(prof){ 
+            if(main) { main.hidden=true; main.style.display="none"; }
+            const createEl=document.getElementById("createAccountView");
+            if(createEl){ createEl.hidden=true; createEl.style.display="none"; }
+            prof.hidden=false; prof.style.display="grid";
+            if(typeof refreshProfileCooldown==="function") refreshProfileCooldown();
+          }
+        }
+      })();
+      history.replaceState(null,"",location.pathname);
+    }
+  }
+})();
+
 (function lastAccountBoot(){
   const googleBtnEl = document.getElementById("googleBtn");
   const card = document.getElementById("lastAccountCard");
@@ -1181,6 +1267,64 @@ function showLoginView(name){
   if(goOtp) goOtp.addEventListener("click", (e)=>{ e.preventDefault(); showLoginView("profile"); if(typeof refreshProfileCooldown==="function") refreshProfileCooldown(); });
 })();
 
+
+// --- guru kelas code 2 huruf + 4 angka ---
+(function guruKelasGen(){
+  const btn=document.getElementById("buatKelasBtn");
+  const disp=document.getElementById("kelasCodeDisplay");
+  const codeEl=document.getElementById("generatedKelasCode");
+  const namaDisp=document.getElementById("kelasNamaDisplay");
+  const salin=document.getElementById("salinKelasCode");
+  const tingkatEl=document.getElementById("guruTingkat");
+  const namaEl=document.getElementById("guruNamaKelas");
+  if(!btn) return;
+  function genCode(){
+    const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let l=""; for(let i=0;i<2;i++) l+=letters[Math.floor(Math.random()*26)];
+    let n=""; for(let i=0;i<4;i++) n+=Math.floor(Math.random()*10);
+    return l+n;
+  }
+  btn.addEventListener("click", async ()=>{
+    const tingkat=(tingkatEl.value||"").trim();
+    const nama=(namaEl.value||"").trim();
+    if(!tingkat || !nama){
+      const st=document.getElementById("inlineProfileStatus");
+      if(st){ st.textContent="Pilih tingkat 1-12 dan isi nama kelas dulu"; st.style.color="#d93025"; }
+      return;
+    }
+    const code=genCode();
+    if(codeEl) codeEl.textContent=code;
+    if(namaDisp) namaDisp.textContent=`${tingkat}-${nama} (${code})`;
+    if(disp){ disp.hidden=false; disp.style.display="grid"; }
+    btn.textContent="Kumpulan kode untuk masuk ke kelas";
+    btn.disabled=true;
+    btn.style.opacity="0.7";
+    // store pending
+    sessionStorage.setItem("sipiket_generated_kelas", code);
+    sessionStorage.setItem("sipiket_guru_tingkat", tingkat);
+    sessionStorage.setItem("sipiket_guru_nama", nama);
+    // also store in secure classes list
+    if(typeof secureSet==="function"){
+      const list=(await secureGet("classes")||[]);
+      if(!list.find(c=>c.code===code)){
+        list.push({code, tingkat, nama, by: sessionStorage.getItem("sipiket_googleEmail")||"", at: Date.now()});
+        await secureSet("classes", list);
+      }
+    }
+    // enable salin
+    if(salin) salin.disabled=false;
+    // trigger profile validate
+    if(typeof refreshProfileCooldown==="function") refreshProfileCooldown();
+    const saveBtn=document.getElementById("inlineProfileSave");
+    if(saveBtn){ saveBtn.dispatchEvent(new Event("input",{bubbles:true})); }
+  });
+  salin?.addEventListener("click", async ()=>{
+    const code=(codeEl.textContent||"").trim();
+    if(!code) return;
+    try{ await navigator.clipboard.writeText(code); salin.textContent="Tersalin ✓"; setTimeout(()=> salin.textContent="Salin", 1200); }catch{ salin.textContent=code; }
+  });
+})();
+
 (function inlineProfileBoot(){
   const pv=document.getElementById("profileView");
   if(!pv) return;
@@ -1252,7 +1396,7 @@ function showLoginView(name){
       const tingkat=(tingkatEl.value||"").trim();
       const namaK=(namaKelasEl.value||"").trim();
       if(!tingkat || !namaK){ statusEl.textContent="Pilih tingkat 1-12 dan isi nama kelas"; statusEl.style.color="#d93025"; return; }
-      guruKelas = `${tingkat}-${namaK}`;
+      guruKelas = sessionStorage.getItem("sipiket_generated_kelas") || `${tingkat}-${namaK}`; // prefer generated 2L4N
       const existing = localStorage.getItem("sipiket_last_email") ? await (typeof secureGet==="function" ? secureGet("account_"+localStorage.getItem("sipiket_last_email").toLowerCase()) : null) : null;
       // 1 akun guru = 1 kelas: cek sudah punya kelas
       if(existing && existing.classCode && existing.classCode!==sessionStorage.getItem("sipiket_classCode")){
