@@ -121,11 +121,52 @@
             <div class="cards" id="reguGrid"></div>
             <div class="card" style="display: grid; gap: 10px">
               <h3>🎥 Upload Video Bukti</h3>
-              <p style="color: var(--muted); font-size: 0.86rem">Rekam 3–15 detik + keliling kelas. Terenkripsi sebelum upload. Butuh Supabase: isi <code>supabase.js</code>.</p>
-              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Pilih video<input id="videoInput" type="file" accept="video/*" capture="environment" style="padding: 10px; border: 1px solid var(--line); border-radius: 12px" /></label>
-              <video id="videoPreview" controls style="width: 100%; max-height: 220px; border-radius: 12px; display: none"></video>
-              <button class="btn-primary btn-full" type="button" id="uploadVideoBtn" style="justify-content: center">Upload ke Storage (real)</button>
-              <p id="videoStatus" role="status" aria-live="polite" style="font-size: 0.84rem; color: var(--muted); min-height: 1em"></p>
+              <p style="color: var(--muted); font-size: 0.86rem">
+                Rekam 3–15 detik + keliling kelas. Terenkripsi sebelum upload.
+                Butuh Supabase: isi <code>supabase.js</code>.
+              </p>
+              <label
+                style="
+                  font-weight: 600;
+                  font-size: 0.88rem;
+                  display: grid;
+                  gap: 6px;
+                "
+                >Pilih video<input
+                  id="videoInput"
+                  type="file"
+                  accept="video/*"
+                  capture="environment"
+                  style="
+                    padding: 10px;
+                    border: 1px solid var(--line);
+                    border-radius: 12px;
+                  "
+              /></label>
+              <video
+                id="videoPreview"
+                controls
+                style="
+                  width: 100%;
+                  max-height: 220px;
+                  border-radius: 12px;
+                  display: none;
+                "
+              ></video>
+              <button
+                class="btn-primary btn-full"
+                type="button"
+                id="uploadVideoBtn"
+                style="justify-content: center"
+              >
+                Upload ke Storage (real)
+              </button>
+              <p
+                id="videoStatus"
+                role="status"
+                aria-live="polite"
+                style="font-size: 0.84rem; color: var(--muted); min-height: 1em"
+              ></p>
             </div>
           </section>
 
