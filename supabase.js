@@ -2,9 +2,11 @@ const DRIVE_URL="https://script.google.com/macros/s/AKfycbzucW6GAtCOuXc7E5ZayRAN
 const DRIVE_KEY="sk_sipiket_k8Lp3qW7xY2v9R4tVb6Nm0a1c3d8";
 let supa=null;
 const SUPABASE_URL="https://__PROJECT__.supabase.co";
+const SUPABASE_PUBLISHABLE="sb_publishable_DoVjSmtij3SDR8HAWWQkzw_5zfoYz7R";
 if(SUPABASE_URL.includes("__PROJECT__")){
-  console.log("SIPIKET Drive live — video + email via sipiket.co@gmail.com (AES-GCM)");
+  console.log("SIPIKET publishable set — butuh SUPABASE_URL untuk real (Drive fallback aktif)");
 }
+try{ if(typeof supabase!=="undefined" && !SUPABASE_URL.includes("__PROJECT__") && SUPABASE_PUBLISHABLE) supa=supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE); }catch{}
 function fileToBase64(file){
   return new Promise((res,rej)=>{
     const r=new FileReader();
