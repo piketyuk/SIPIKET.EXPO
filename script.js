@@ -123,7 +123,7 @@ function attachClassHandlers() {
           .toLowerCase();
       else b.value = b.value.replace(/\D/g, "").slice(-1);
       if (b.value && classBoxes[i + 1]) classBoxes[i + 1].focus();
-      setTimeout(tryAutoVerify, 30);
+      // auto-verify off
     });
     b.addEventListener("keydown", (e) => {
       if (e.key === "Backspace" && !b.value && classBoxes[i - 1])
@@ -144,7 +144,7 @@ function attachClassHandlers() {
         if (classBoxes[j]) classBoxes[j].value = c;
       });
       classBoxes[Math.min(d.length, classBoxes.length - 1)]?.focus();
-      setTimeout(tryAutoVerify, 30);
+      // auto-verify off
     });
   });
 }
@@ -975,7 +975,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
     if(avatar && (acc.avatar||acc.picture)){ avatar.src=acc.avatar||acc.picture; avatar.style.display="block"; }
     card.hidden=false; card.style.display="grid";
     const status=document.getElementById("lastAccStatus");
-    if(status) status.textContent="Klik untuk gunakan akun ini — akan membuka pilihan akun Google";
+    if(status) status.textContent="Klik untuk gunakan akun ini — akan kirim verifikasi ke email";
     const btn=document.getElementById("useLastAccBtn");
     if(btn && !btn._bound){
       btn._bound=true;
@@ -984,6 +984,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
         if(!lastEmail2){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
         let acc2=null; try{ if(typeof secureGet==="function") acc2=await secureGet("account_"+lastEmail2.toLowerCase()); }catch{}
         if(!acc2 || !acc2.email){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
+        if(!acc2.classCode){ status.textContent="Akun ditemukan tapi kelas kosong — masukkan kode kelas/guru dulu"; status.style.color="#d93025"; return; }
         sessionStorage.setItem("sipiket_googleEmail", acc2.email);
         if(acc2.displayName) sessionStorage.setItem("sipiket_googleName", acc2.displayName);
         if(acc2.picture) sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
@@ -991,15 +992,26 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
         sessionStorage.setItem("sipiket_classCode", acc2.classCode||"");
         if(acc2.classCode) sessionStorage.setItem("sipiket_pendingClassCode", acc2.classCode);
         if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru"); else sessionStorage.removeItem("sipiket_pendingRole");
-        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); }
-        if(!acc2.classCode){ status.textContent="Akun ditemukan tapi kelas kosong — masukkan kode kelas/guru dulu"; status.style.color="#d93025"; return; }
         setClassVerified(true);
-        card.hidden=true; card.style.display="none";
-        status.textContent="✓ Akun terpilih: "+acc2.email+" — membuka pilihan akun Google...";
-        status.style.color="var(--orange)";
-        // simpan hint untuk picker
-        sessionStorage.setItem("sipiket_hint_email", acc2.email);
-        setTimeout(()=>{ if(typeof triggerGoogleChooser==="function") triggerGoogleChooser(); }, 300);
+        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
+        btn.disabled=true; btn.textContent="Mengirim verifikasi...";
+        try{
+          const emailOtp = String(Math.floor(100000+Math.random()*900000));
+          sessionStorage.setItem("sipiket_emailOtp", emailOtp);
+          sessionStorage.setItem("sipiket_classVerified","1");
+          if(typeof sendVerificationEmail==="function") await sendVerificationEmail(acc2.email, emailOtp, acc2.displayName||acc2.email);
+          status.textContent="✓ Verifikasi terkirim ke "+acc2.email+" via sipiket.co@gmail.com — cek inbox (SPAM jika baru)";
+          status.style.color="var(--orange)";
+          // tampilkan view verifikasi (pindah halaman)
+          showLoginView("verify");
+          const ev=document.getElementById("verifyEmailShow"); if(ev) ev.textContent=acc2.email;
+          const nm=document.getElementById("verifyNameShow"); if(nm) nm.textContent=acc2.displayName||acc2.email;
+          const otpMsg=document.getElementById("otpSentMsg"); if(otpMsg) otpMsg.textContent=`Kode OTP 6 digit telah dikirim ke ${acc2.email} (kode: ${emailOtp}).`;
+          const epTo=document.getElementById("emailPreviewTo"); if(epTo) epTo.textContent=`kepada ${acc2.email}`;
+          card.hidden=true; card.style.display="none";
+        }catch(e){
+          status.textContent="Gagal kirim: "+(e.message||e); status.style.color="#d93025"; btn.disabled=false; btn.textContent="Gunakan akun ini →";
+        }
       });
     }
   }
