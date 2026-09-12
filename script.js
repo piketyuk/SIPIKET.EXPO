@@ -48,20 +48,9 @@ const io = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-async function sha256Hex(s) {
-  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return [...new Uint8Array(b)]
-    .map((x) => x.toString(16).padStart(2, "0"))
-    .join("");
-}
-async function isTeacherCode(s) {
-  const h = await sha256Hex(s.toLowerCase());
-  return TEACHER_CODE_HASHES.includes(h);
-}
-const TEACHER_CODE_HASHES = [
-  "ee0b1e6ad69be79bbad963014bc6324d4ddfd03f05c4c5c3c4de292b03a089bb",
-  "f245c73681ac2149feea5366dc6e4594b01d5c58dc0d299433518ff9c1b72fde",
-];
+async function sha256Hex(s){ const b=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
+async function isTeacherCode(s){ const h=await sha256Hex(s.toLowerCase()); return TEACHER_CODE_HASHES.includes(h); }
+const TEACHER_CODE_HASHES = ["ee0b1e6ad69be79bbad963014bc6324d4ddfd03f05c4c5c3c4de292b03a089bb","f245c73681ac2149feea5366dc6e4594b01d5c58dc0d299433518ff9c1b72fde"];
 const TEACHER_CODE_LEN = 10;
 
 document.querySelectorAll(".otp-boxes").forEach((g) => {
@@ -131,7 +120,7 @@ function attachClassHandlers() {
           .toLowerCase();
       else b.value = b.value.replace(/\D/g, "").slice(-1);
       if (b.value && classBoxes[i + 1]) classBoxes[i + 1].focus();
-      // auto-verify off
+      setTimeout(tryAutoVerify, 30);
     });
     b.addEventListener("keydown", (e) => {
       if (e.key === "Backspace" && !b.value && classBoxes[i - 1])
@@ -152,7 +141,7 @@ function attachClassHandlers() {
         if (classBoxes[j]) classBoxes[j].value = c;
       });
       classBoxes[Math.min(d.length, classBoxes.length - 1)]?.focus();
-      // auto-verify off
+      setTimeout(tryAutoVerify, 30);
     });
   });
 }
@@ -244,46 +233,16 @@ showAccountHint();
                 JSON.stringify(acc),
               );
               showAccountHint();
-              // --- simpan progres login (tidak reset) ---
-              (function saveProgress() {
-                const KEY = "sipiket_login_progress";
-                function save() {
-                  const data = {
-                    classCode:
-                      sessionStorage.getItem("sipiket_classCode") || "",
-                    teacherMode,
-                    classEnabled,
-                    terms: !!document.getElementById("termsCheck")?.checked,
-                    email: sessionStorage.getItem("sipiket_googleEmail") || "",
-                  };
-                  localStorage.setItem(KEY, JSON.stringify(data));
-                }
-                function restore() {
-                  try {
-                    const d = JSON.parse(localStorage.getItem(KEY) || "null");
-                    if (!d) return;
-                    if (d.classCode)
-                      sessionStorage.setItem("sipiket_classCode", d.classCode);
-                    if (typeof d.teacherMode === "boolean")
-                      applyTeacherMode(!!d.teacherMode);
-                    if (typeof d.classEnabled === "boolean" && !d.classEnabled)
-                      updateClassEnabled(false);
-                    if (d.terms) {
-                      const cb = document.getElementById("termsCheck");
-                      if (cb) {
-                        cb.checked = true;
-                      }
-                    }
-                    if (d.email)
-                      sessionStorage.setItem("sipiket_googleEmail", d.email);
-                  } catch {}
-                }
-                restore();
-                ["change", "input"].forEach((ev) =>
-                  document.addEventListener(ev, save, true),
-                );
-                setInterval(save, 1200);
-              })();
+// --- simpan progres login (tidak reset) ---
+(function saveProgress(){
+  const KEY="sipiket_login_progress";
+  function save(){ const data={ classCode: sessionStorage.getItem("sipiket_classCode")||"", teacherMode, classEnabled, terms: !!document.getElementById("termsCheck")?.checked, email: sessionStorage.getItem("sipiket_googleEmail")||"" }; localStorage.setItem(KEY, JSON.stringify(data)); }
+  function restore(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return; if(d.classCode) sessionStorage.setItem("sipiket_classCode", d.classCode); if(typeof d.teacherMode==="boolean") applyTeacherMode(!!d.teacherMode); if(typeof d.classEnabled==="boolean" && !d.classEnabled) updateClassEnabled(false); if(d.terms) { const cb=document.getElementById("termsCheck"); if(cb){ cb.checked=true; }} if(d.email) sessionStorage.setItem("sipiket_googleEmail", d.email); }catch{}
+  }
+  restore();
+  ["change","input"].forEach(ev=> document.addEventListener(ev, save, true));
+  setInterval(save, 1200);
+})();
             }
           });
         }
@@ -294,8 +253,7 @@ showAccountHint();
 
 function updateClassEnabled(on) {
   // deprecated wrapper — delegate to exclusive
-  if (on) applyTeacherMode(false);
-  else applyTeacherMode(true);
+  if(on) applyTeacherMode(false); else applyTeacherMode(true);
   return;
 }
 function _updateClassEnabled(on) {
@@ -335,16 +293,10 @@ function updateGoogleVisibility() {
 function applyTeacherMode(on) {
   // exclusive: guru vs kelas
   classEnabled = !on;
-  const ct = document.getElementById("classToggle");
-  if (ct) {
-    ct.setAttribute("aria-checked", String(!on));
-    ct.classList.toggle("is-off", on);
-    ct.title = !on ? "Kode kelas aktif" : "Klik untuk kembali ke kode kelas";
-  }
-  const tt = document.getElementById("teacherToggle");
-  if (tt) {
-    tt.classList.toggle("is-off", !on);
-  }
+  const ct=document.getElementById('classToggle');
+  if(ct){ ct.setAttribute('aria-checked', String(!on)); ct.classList.toggle('is-off', on); ct.title = !on ? 'Kode kelas aktif' : 'Klik untuk kembali ke kode kelas'; }
+  const tt=document.getElementById('teacherToggle');
+  if(tt){ tt.classList.toggle('is-off', !on); }
   teacherMode = on;
   renderClassInputs(on);
   if (teacherToggle) {
@@ -383,7 +335,7 @@ function applyTeacherMode(on) {
   updateGoogleVisibility();
 }
 teacherToggle?.addEventListener("click", () => {
-  if (teacherMode) return;
+  if(teacherMode) return;
   applyTeacherMode(true);
   if (classVerified) resetClass();
   verifyBtn.textContent = "Verifikasi Kode →";
@@ -392,14 +344,12 @@ teacherToggle?.addEventListener("click", () => {
   otpStatus.style.color = "var(--muted)";
   classBoxes[0]?.focus();
 });
-document.getElementById("classToggle")?.addEventListener("click", () => {
-  if (!teacherMode) return;
+document.getElementById("classToggle")?.addEventListener("click", ()=>{
+  if(!teacherMode) return;
   applyTeacherMode(false);
-  if (classVerified) resetClass();
-  verifyBtn.textContent = "Verifikasi Kode →";
-  verifyBtn.style.display = "";
-  otpStatus.textContent = "Mode kode kelas aktif";
-  otpStatus.style.color = "var(--muted)";
+  if(classVerified) resetClass();
+  verifyBtn.textContent="Verifikasi Kode →"; verifyBtn.style.display="";
+  otpStatus.textContent="Mode kode kelas aktif"; otpStatus.style.color="var(--muted)";
   classBoxes[0]?.focus();
 });
 teacherToggle?.addEventListener("keydown", (e) => {
@@ -408,6 +358,7 @@ teacherToggle?.addEventListener("keydown", (e) => {
     teacherToggle.click();
   }
 });
+
 
 if (sessionStorage.getItem("sipiket_teacherMode") === "1")
   applyTeacherMode(true);
@@ -452,10 +403,8 @@ function setClassVerified(v) {
   if (v) {
     verifyBtn.style.display = "none";
     verifyBtn.disabled = true;
-    if (termsCheck)
-      termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
-    else if (googleBtn)
-      googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
+    else if (googleBtn) googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
     if (termsCheck?.checked && googleBtn) googleBtn.focus();
   }
 }
@@ -639,32 +588,21 @@ window.onGoogleCredential = async function (response) {
       sessionStorage.setItem("sipiket_pendingRole", "guru");
     localStorage.setItem("sipiket_last_email", email);
     // real send via sipiket.co@gmail.com (Drive GmailApp) — khas sipiket.my.id
-    if (typeof sendVerificationEmail === "function") {
-      try {
-        await sendVerificationEmail(email, emailOtp, name);
-        otpStatus.textContent = `✓ Verifikasi terkirim ke ${email} via sipiket.co@gmail.com — cek inbox (SPAM jika baru)`;
-        otpStatus.style.color = "var(--orange)";
-      } catch (e) {
-        otpStatus.textContent =
-          "Email gagal: " + (e.message || e) + " — coba Kirim Ulang";
-        otpStatus.style.color = "#d93025";
-      }
-    }
+    if(typeof sendVerificationEmail==="function"){ try{ await sendVerificationEmail(email, emailOtp, name); otpStatus.textContent = `✓ Verifikasi terkirim ke ${email} via sipiket.co@gmail.com — cek inbox (SPAM jika baru)`; otpStatus.style.color="var(--orange)"; }catch(e){ otpStatus.textContent="Email gagal: "+(e.message||e)+" — coba Kirim Ulang"; otpStatus.style.color="#d93025"; } }
     otpSentMsg.textContent = `Kode OTP 6 digit telah dikirim ke ${email} (kode: ${emailOtp}). Klik Verifikasi Email untuk konfirmasi terakhir.`;
     if (emailPreviewTo) emailPreviewTo.textContent = `kepada ${email}`;
-    if (otpSentCard) otpSentCard.hidden = true;
+    if(otpSentCard) otpSentCard.hidden = true;
     if (emailVerifyBtn) emailVerifyBtn.href = `otp.html`;
     otpSentCard.scrollIntoView({ behavior: "smooth", block: "center" });
     googleBtn.textContent = "Terkirim ✓";
     googleBtn.disabled = true;
 
     const mailHtml = `<!doctype html><meta charset="utf-8"><div style="font-family:Inter,system-ui;padding:24px;max-width:520px;margin:auto;border:1px solid #ffe0c2;border-radius:16px"><div style="display:flex;align-items:center;gap:10px"><div style="width:44px;height:44px;border-radius:50%;background:#ff6b00;color:#fff;display:grid;place-items:center;font-weight:800">S</div><b>SIPIKET.EXPO</b><span style="margin-left:auto;color:#6b6b6b;font-size:12px">${new Date().toLocaleString("id-ID")}</span></div><h2 style="margin:16px 0 8px">Verifikasi email kamu</h2><p style="color:#6b6b6b">Hai ${name || email}, kode OTP: <b style="font-size:18px;color:#ff6b00">${emailOtp}</b></p><a href="${location.origin}/otp.html" style="display:inline-block;background:#ff6b00;color:#fff;padding:12px 20px;border-radius:100px;text-decoration:none;font-weight:700;margin-top:12px">Verifikasi Email Sekarang →</a><p style="font-size:12px;color:#6b6b6b;margin-top:14px">Link berlaku 10 menit. Data terenkripsi AES-GCM.</p></div>`;
-    if (location.hostname === "localhost")
-      console.log(
-        "%c[Email preview — dev only]",
-        "color:#ff6b00;font-weight:bold",
-        mailHtml,
-      );
+    if(location.hostname==="localhost") console.log(
+      "%c[Email preview — dev only]",
+      "color:#ff6b00;font-weight:bold",
+      mailHtml,
+    );
   } catch (err) {
     otpStatus.textContent = "Gagal memproses akun Google — coba lagi";
     otpStatus.style.color = "#d93025";
@@ -1018,94 +956,47 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
   });
 })();
 
+
 // --- last account detection (no re-enter code) ---
-(function lastAccountBoot() {
+(function lastAccountBoot(){
   const card = document.getElementById("lastAccountCard");
-  if (!card) return;
-  async function refresh() {
+  if(!card) return;
+  async function refresh(){
     const lastEmail = localStorage.getItem("sipiket_last_email");
-    if (!lastEmail) {
-      card.hidden = true;
-      card.style.display = "none";
-      return;
-    }
-    let acc = null;
-    try {
-      if (typeof secureGet === "function")
-        acc = await secureGet("account_" + lastEmail.toLowerCase());
-    } catch {}
-    if (!acc || !acc.email) {
-      card.hidden = true;
-      card.style.display = "none";
-      return;
-    }
-    const avatar = document.getElementById("lastAccAvatar");
-    const emailEl = document.getElementById("lastAccEmail");
-    if (emailEl) emailEl.textContent = acc.email;
-    if (avatar && (acc.avatar || acc.picture)) {
-      avatar.src = acc.avatar || acc.picture;
-      avatar.style.display = "block";
-    }
-    card.hidden = false;
-    card.style.display = "grid";
-    const status = document.getElementById("lastAccStatus");
-    if (status)
-      status.textContent =
-        "Klik untuk auto-centang S&K & langsung pilih akun Google ini";
-    const btn = document.getElementById("useLastAccBtn");
-    if (btn && !btn._bound) {
-      btn._bound = true;
-      btn.addEventListener("click", async () => {
-        const lastEmail2 = localStorage.getItem("sipiket_last_email");
-        if (!lastEmail2) {
-          status.textContent =
-            "Email tidak terdeteksi — tambahkan akun atau buat akun lagi";
-          status.style.color = "#d93025";
-          return;
-        }
-        let acc2 = null;
-        try {
-          if (typeof secureGet === "function")
-            acc2 = await secureGet("account_" + lastEmail2.toLowerCase());
-        } catch {}
-        if (!acc2 || !acc2.email) {
-          status.textContent =
-            "Email tidak terdeteksi — tambahkan akun atau buat akun lagi";
-          status.style.color = "#d93025";
-          return;
-        }
+    if(!lastEmail){ card.hidden=true; card.style.display="none"; return; }
+    let acc=null; try{ if(typeof secureGet==="function") acc = await secureGet("account_"+lastEmail.toLowerCase()); }catch{}
+    if(!acc || !acc.email){ card.hidden=true; card.style.display="none"; return; }
+    const avatar=document.getElementById("lastAccAvatar");
+    const emailEl=document.getElementById("lastAccEmail");
+    if(emailEl) emailEl.textContent=acc.email;
+    if(avatar && (acc.avatar||acc.picture)){ avatar.src=acc.avatar||acc.picture; avatar.style.display="block"; }
+    card.hidden=false; card.style.display="grid";
+    const status=document.getElementById("lastAccStatus");
+    if(status) status.textContent="Klik untuk auto-centang S&K & langsung pilih akun Google ini";
+    const btn=document.getElementById("useLastAccBtn");
+    if(btn && !btn._bound){
+      btn._bound=true;
+      btn.addEventListener("click", async()=>{
+        const lastEmail2=localStorage.getItem("sipiket_last_email");
+        if(!lastEmail2){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
+        let acc2=null; try{ if(typeof secureGet==="function") acc2=await secureGet("account_"+lastEmail2.toLowerCase()); }catch{}
+        if(!acc2 || !acc2.email){ status.textContent="Email tidak terdeteksi — tambahkan akun atau buat akun lagi"; status.style.color="#d93025"; return; }
         sessionStorage.setItem("sipiket_googleEmail", acc2.email);
-        if (acc2.displayName)
-          sessionStorage.setItem("sipiket_googleName", acc2.displayName);
-        if (acc2.picture)
-          sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
-        if (acc2.avatar) sessionStorage.setItem("sipiket_avatar", acc2.avatar);
-        sessionStorage.setItem("sipiket_classCode", acc2.classCode || "");
-        if (acc2.role === "guru")
-          sessionStorage.setItem("sipiket_pendingRole", "guru");
-        const cb = document.getElementById("termsCheck");
-        if (cb && !cb.checked) {
-          cb.checked = true;
-          cb.dispatchEvent(new Event("change", { bubbles: true }));
-          if (typeof syncGoogle === "function") syncGoogle();
-        }
+        if(acc2.displayName) sessionStorage.setItem("sipiket_googleName", acc2.displayName);
+        if(acc2.picture) sessionStorage.setItem("sipiket_googlePicture", acc2.picture);
+        if(acc2.avatar) sessionStorage.setItem("sipiket_avatar", acc2.avatar);
+        sessionStorage.setItem("sipiket_classCode", acc2.classCode||"");
+        if(acc2.role==="guru") sessionStorage.setItem("sipiket_pendingRole","guru");
+        const cb=document.getElementById("termsCheck"); if(cb && !cb.checked){ cb.checked=true; cb.dispatchEvent(new Event("change",{bubbles:true})); if(typeof syncGoogle==="function") syncGoogle(); }
         // set flag for google chooser
-        sessionStorage.setItem("sipiket_use_last", "1");
-        status.textContent =
-          "✓ Akun terpilih: " +
-          acc2.email +
-          " — sekarang klik Login dengan Google";
-        status.style.color = "var(--orange)";
+        sessionStorage.setItem("sipiket_use_last","1");
+        status.textContent="✓ Akun terpilih: "+acc2.email+" — sekarang klik Login dengan Google";
+        status.style.color="var(--orange)";
         // hide card after pick
-        setTimeout(() => {
-          card.hidden = true;
-          card.style.display = "none";
-        }, 800);
+        setTimeout(()=>{ card.hidden=true; card.style.display="none"; }, 800);
         // if already verified, offer direct continue
-        const verifyView = document.getElementById("verifyView");
-        if (verifyView) {
-          showLoginView("verify");
-        }
+        const verifyView=document.getElementById("verifyView");
+        if(verifyView){ showLoginView("verify"); }
       });
     }
   }
@@ -1180,285 +1071,162 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
   render();
 })();
 
+
 // --- login verify/profile views (pindah halaman) ---
-function showLoginView(name) {
-  const form = document.getElementById("otpForm");
-  const verifyView = document.getElementById("verifyView");
-  const profileView = document.getElementById("profileView");
-  const otpCard = document.getElementById("otpSentCard");
-  [verifyView, profileView, otpCard].forEach((v) => {
-    if (v) {
-      v.hidden = true;
-      v.style.display = "none";
-    }
-  });
-  if (form) form.style.display = name === "form" ? "grid" : "none";
-  const target =
-    name === "verify" ? verifyView : name === "profile" ? profileView : null;
-  if (target) {
-    target.hidden = false;
-    target.style.display = "grid";
+function showLoginView(name){
+  const form=document.getElementById("otpForm");
+  const verifyView=document.getElementById("verifyView");
+  const profileView=document.getElementById("profileView");
+  const otpCard=document.getElementById("otpSentCard");
+  [verifyView,profileView,otpCard].forEach(v=>{ if(v){ v.hidden=true; v.style.display="none"; }});
+  if(form) form.style.display=name==="form"?"grid":"none";
+  const target=name==="verify"?verifyView:name==="profile"?profileView:null;
+  if(target){
+    target.hidden=false; target.style.display="grid";
     // guru fields visibility
-    const guruFields = document.getElementById("guruClassFields");
-    if (guruFields) {
-      const isGuru =
-        sessionStorage.getItem("sipiket_pendingRole") === "guru" ||
-        (typeof teacherMode !== "undefined" && teacherMode);
+    const guruFields=document.getElementById("guruClassFields");
+    if(guruFields){
+      const isGuru = sessionStorage.getItem("sipiket_pendingRole")==="guru" || (typeof teacherMode!=="undefined" && teacherMode);
       guruFields.hidden = !isGuru;
       guruFields.style.display = isGuru ? "grid" : "none";
       // toggle required
-      const t = document.getElementById("guruTingkat"),
-        n = document.getElementById("guruNamaKelas");
-      if (t) t.required = isGuru;
-      if (n) n.required = isGuru;
+      const t=document.getElementById("guruTingkat"), n=document.getElementById("guruNamaKelas");
+      if(t) t.required = isGuru;
+      if(n) n.required = isGuru;
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({top:0, behavior:"smooth"});
   }
 }
 
-(function verifyViewBoot() {
-  const view = document.getElementById("verifyView");
-  if (!view) return;
-  const emailShow = document.getElementById("verifyEmailShow");
-  const nameShow = document.getElementById("verifyNameShow");
-  const sendBtn = document.getElementById("sendVerifyBtn");
-  const sentBox = document.getElementById("verifySentBox");
-  const continueBtn = document.getElementById("verifyContinueBtn");
-  const goOtp = document.getElementById("verifyGoOtp");
-  function update() {
-    const email = sessionStorage.getItem("sipiket_googleEmail") || "";
-    const name =
-      sessionStorage.getItem("sipiket_googleName") ||
-      email.split("@")[0] ||
-      "kamu";
-    if (emailShow) emailShow.textContent = email || "— belum dipilih";
-    if (nameShow) nameShow.textContent = name || "kamu";
-    const desc = document.getElementById("verifyDesc");
-    if (desc && email)
-      desc.textContent = `Tekan tombol di bawah untuk mengirim verifikasi ke ${email}. Email terdeteksi otomatis & terenkripsi.`;
+(function verifyViewBoot(){
+  const view=document.getElementById("verifyView");
+  if(!view) return;
+  const emailShow=document.getElementById("verifyEmailShow");
+  const nameShow=document.getElementById("verifyNameShow");
+  const sendBtn=document.getElementById("sendVerifyBtn");
+  const sentBox=document.getElementById("verifySentBox");
+  const continueBtn=document.getElementById("verifyContinueBtn");
+  const goOtp=document.getElementById("verifyGoOtp");
+  function update(){
+    const email=sessionStorage.getItem("sipiket_googleEmail")||"";
+    const name=sessionStorage.getItem("sipiket_googleName")||email.split("@")[0]||"kamu";
+    if(emailShow) emailShow.textContent=email||"— belum dipilih";
+    if(nameShow) nameShow.textContent=name||"kamu";
+    const desc=document.getElementById("verifyDesc");
+    if(desc && email) desc.textContent=`Tekan tombol di bawah untuk mengirim verifikasi ke ${email}. Email terdeteksi otomatis & terenkripsi.`;
   }
   update();
   // after Google credential, trigger view
   const orig = window.onGoogleCredential;
-  if (orig && !orig._wrapped) {
-    const wrapped = async function (r) {
-      await orig.call(this, r);
-      if (
-        !sessionStorage.getItem("sipiket_registered") ||
-        !sessionStorage.getItem("sipiket_emailVerified")
-      ) {
-        showLoginView("verify");
-        update();
-      }
-    };
-    wrapped._wrapped = true;
+  if(orig && !orig._wrapped){
+    const wrapped = async function(r){ await orig.call(this,r); if(!sessionStorage.getItem("sipiket_registered") || !sessionStorage.getItem("sipiket_emailVerified")){ showLoginView("verify"); update(); } };
+    wrapped._wrapped=true;
     window.onGoogleCredential = wrapped;
   }
-  sendBtn?.addEventListener("click", async () => {
-    const email = sessionStorage.getItem("sipiket_googleEmail");
-    if (!email) {
-      const s = document.getElementById("otpStatus");
-      if (s) {
-        s.textContent = "Pilih akun Google dulu";
-        s.style.color = "#d93025";
-      }
-      return;
-    }
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Mengirim...";
-    try {
-      const name = sessionStorage.getItem("sipiket_googleName") || email;
-      if (typeof sendVerificationEmail === "function")
-        await sendVerificationEmail(
-          email,
-          sessionStorage.getItem("sipiket_emailOtp") || "000000",
-          name,
-        );
-      if (sentBox) {
-        sentBox.hidden = false;
-        sentBox.style.display = "grid";
-      }
-      sendBtn.textContent = "Terkirim — cek email";
-      setTimeout(() => {
-        sendBtn.hidden = true;
-        if (continueBtn) {
-          continueBtn.hidden = false;
-          continueBtn.style.display = "grid";
-        }
-      }, 700);
-    } catch (e) {
-      sendBtn.disabled = false;
-      sendBtn.textContent = "Kirim Verifikasi ke Email →";
-      const s = document.getElementById("verifyDesc");
-      if (s) s.textContent = "Gagal kirim: " + (e.message || e);
+  sendBtn?.addEventListener("click", async ()=>{
+    const email=sessionStorage.getItem("sipiket_googleEmail");
+    if(!email){ const s=document.getElementById("otpStatus"); if(s){s.textContent="Pilih akun Google dulu"; s.style.color="#d93025";} return; }
+    sendBtn.disabled=true; sendBtn.textContent="Mengirim...";
+    try{
+      const name=sessionStorage.getItem("sipiket_googleName")||email;
+      if(typeof sendVerificationEmail==="function") await sendVerificationEmail(email, sessionStorage.getItem("sipiket_emailOtp")||"000000", name);
+      if(sentBox){ sentBox.hidden=false; sentBox.style.display="grid"; }
+      sendBtn.textContent="Terkirim — cek email";
+      setTimeout(()=>{ sendBtn.hidden=true; if(continueBtn){ continueBtn.hidden=false; continueBtn.style.display="grid"; } }, 700);
+    }catch(e){
+      sendBtn.disabled=false; sendBtn.textContent="Kirim Verifikasi ke Email →";
+      const s=document.getElementById("verifyDesc"); if(s) s.textContent="Gagal kirim: "+(e.message||e);
     }
   });
-  continueBtn?.addEventListener("click", () => {
+  continueBtn?.addEventListener("click", ()=>{
     showLoginView("profile");
-    if (typeof refreshProfileCooldown === "function") refreshProfileCooldown();
+    if(typeof refreshProfileCooldown==="function") refreshProfileCooldown();
   });
-  if (goOtp)
-    goOtp.addEventListener("click", (e) => {
-      e.preventDefault();
-      showLoginView("profile");
-      if (typeof refreshProfileCooldown === "function")
-        refreshProfileCooldown();
-    });
+  if(goOtp) goOtp.addEventListener("click", (e)=>{ e.preventDefault(); showLoginView("profile"); if(typeof refreshProfileCooldown==="function") refreshProfileCooldown(); });
 })();
 
-(function inlineProfileBoot() {
-  const pv = document.getElementById("profileView");
-  if (!pv) return;
-  const nameEl = document.getElementById("inlineName");
-  const avatarEl = document.getElementById("inlineAvatar");
-  const prevEl = document.getElementById("inlineAvatarPrev");
-  const saveBtn = document.getElementById("inlineProfileSave");
-  const statusEl = document.getElementById("inlineProfileStatus");
-  const cooldownEl = document.getElementById("profileCooldown");
-  const tingkatEl = document.getElementById("guruTingkat");
-  const namaKelasEl = document.getElementById("guruNamaKelas");
-  function isGuru() {
-    return (
-      sessionStorage.getItem("sipiket_pendingRole") === "guru" ||
-      (typeof teacherMode !== "undefined" && teacherMode)
-    );
-  }
-  function validate() {
-    const name = (nameEl.value || "").trim();
-    const hasAvatar = !!(
-      avatarEl.files[0] || sessionStorage.getItem("sipiket_avatar")
-    );
-    let ok = name.length >= 3 && hasAvatar;
-    if (isGuru()) {
-      const t = (tingkatEl.value || "").trim();
-      const n = (namaKelasEl.value || "").trim();
+(function inlineProfileBoot(){
+  const pv=document.getElementById("profileView");
+  if(!pv) return;
+  const nameEl=document.getElementById("inlineName");
+  const avatarEl=document.getElementById("inlineAvatar");
+  const prevEl=document.getElementById("inlineAvatarPrev");
+  const saveBtn=document.getElementById("inlineProfileSave");
+  const statusEl=document.getElementById("inlineProfileStatus");
+  const cooldownEl=document.getElementById("profileCooldown");
+  const tingkatEl=document.getElementById("guruTingkat");
+  const namaKelasEl=document.getElementById("guruNamaKelas");
+  function isGuru(){ return sessionStorage.getItem("sipiket_pendingRole")==="guru" || (typeof teacherMode!=="undefined" && teacherMode); }
+  function validate(){
+    const name=(nameEl.value||"").trim();
+    const hasAvatar = !!(avatarEl.files[0] || sessionStorage.getItem("sipiket_avatar"));
+    let ok = name.length>=3 && hasAvatar;
+    if(isGuru()){
+      const t=(tingkatEl.value||"").trim();
+      const n=(namaKelasEl.value||"").trim();
       ok = ok && t && n;
     }
     saveBtn.disabled = !ok;
     saveBtn.setAttribute("aria-disabled", String(!ok));
     saveBtn.style.opacity = ok ? "1" : "0.5";
   }
-  ["input", "change"].forEach((ev) => {
+  ["input","change"].forEach(ev=>{
     nameEl?.addEventListener(ev, validate);
     tingkatEl?.addEventListener(ev, validate);
     namaKelasEl?.addEventListener(ev, validate);
   });
-  avatarEl?.addEventListener("change", () => {
-    const f = avatarEl.files[0];
-    if (!f) {
-      prevEl.innerHTML = "👤";
-      return;
-    }
-    if (!f.type.startsWith("image/")) {
-      statusEl.textContent = "File harus gambar";
-      statusEl.style.color = "#d93025";
-      return;
-    }
-    const r = new FileReader();
-    r.onload = () => {
-      prevEl.innerHTML =
-        '<img src="' +
-        r.result +
-        '" alt="Foto profil" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
-      sessionStorage.setItem("sipiket_avatar", r.result);
-      validate();
-    };
+  avatarEl?.addEventListener("change", ()=>{
+    const f=avatarEl.files[0];
+    if(!f){ prevEl.innerHTML="👤"; return; }
+    if(!f.type.startsWith("image/")){ statusEl.textContent="File harus gambar"; statusEl.style.color="#d93025"; return; }
+    const r=new FileReader();
+    r.onload=()=>{ prevEl.innerHTML='<img src="'+r.result+'" alt="Foto profil" style="width:100%;height:100%;object-fit:cover;border-radius:50%">'; sessionStorage.setItem("sipiket_avatar", r.result); validate(); };
     r.readAsDataURL(f);
   });
-  prevEl?.addEventListener("click", () => avatarEl?.click());
+  prevEl?.addEventListener("click", ()=> avatarEl?.click());
   // prefill
-  const savedName =
-    sessionStorage.getItem("sipiket_fullName") ||
-    sessionStorage.getItem("sipiket_googleName") ||
-    "";
-  if (savedName && nameEl) nameEl.value = savedName;
-  const av =
-    sessionStorage.getItem("sipiket_avatar") ||
-    sessionStorage.getItem("sipiket_googlePicture");
-  if (av && prevEl)
-    prevEl.innerHTML =
-      '<img src="' +
-      av +
-      '" alt="Foto profil" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  const savedName=sessionStorage.getItem("sipiket_fullName") || sessionStorage.getItem("sipiket_googleName") || "";
+  if(savedName && nameEl) nameEl.value=savedName;
+  const av=sessionStorage.getItem("sipiket_avatar") || sessionStorage.getItem("sipiket_googlePicture");
+  if(av && prevEl) prevEl.innerHTML='<img src="'+av+'" alt="Foto profil" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
 
-  window.refreshProfileCooldown = function () {
-    const last = localStorage.getItem("sipiket_profile_updated_at");
-    if (!last) {
-      if (cooldownEl)
-        cooldownEl.textContent =
-          "Bisa diganti kapan saja — setelah simpan, cooldown 14 hari.";
-      return;
-    }
-    const diff = Date.now() - Number(last);
-    const twoWeeks = 14 * 24 * 60 * 60 * 1000;
-    if (diff < twoWeeks) {
-      const left = Math.ceil((twoWeeks - diff) / (24 * 60 * 60 * 1000));
-      if (cooldownEl)
-        cooldownEl.textContent = `Nama & foto terkunci — bisa diganti lagi dalam ${left} hari.`;
-    } else {
-      if (cooldownEl)
-        cooldownEl.textContent = "Bisa diganti — cooldown telah lewat.";
-    }
+  window.refreshProfileCooldown = function(){
+    const last=localStorage.getItem("sipiket_profile_updated_at");
+    if(!last){ if(cooldownEl) cooldownEl.textContent="Bisa diganti kapan saja — setelah simpan, cooldown 14 hari."; return; }
+    const diff=Date.now()-Number(last);
+    const twoWeeks=14*24*60*60*1000;
+    if(diff < twoWeeks){ const left=Math.ceil((twoWeeks-diff)/(24*60*60*1000)); if(cooldownEl) cooldownEl.textContent=`Nama & foto terkunci — bisa diganti lagi dalam ${left} hari.`; }
+    else { if(cooldownEl) cooldownEl.textContent="Bisa diganti — cooldown telah lewat."; }
   };
   refreshProfileCooldown();
   validate();
 
   // observer for view shown
-  const obs = new MutationObserver(() => {
-    if (!pv.hidden) validate();
+  const obs=new MutationObserver(()=>{
+    if(!pv.hidden) validate();
   });
-  obs.observe(pv, { attributes: true, attributeFilter: ["hidden"] });
+  obs.observe(pv, {attributes:true, attributeFilter:["hidden"]});
 
-  saveBtn?.addEventListener("click", async () => {
-    const name = (nameEl.value || "").trim();
-    if (name.length < 3) {
-      statusEl.textContent = "Nama minimal 3 huruf";
-      statusEl.style.color = "#d93025";
-      nameEl.focus();
-      return;
-    }
-    if (!avatarEl.files[0] && !sessionStorage.getItem("sipiket_avatar")) {
-      statusEl.textContent = "Foto profil wajib";
-      statusEl.style.color = "#d93025";
-      return;
-    }
-    let guruKelas = null;
-    if (isGuru()) {
-      const tingkat = (tingkatEl.value || "").trim();
-      const namaK = (namaKelasEl.value || "").trim();
-      if (!tingkat || !namaK) {
-        statusEl.textContent = "Pilih tingkat 1-12 dan isi nama kelas";
-        statusEl.style.color = "#d93025";
-        return;
-      }
+  saveBtn?.addEventListener("click", async ()=>{
+    const name=(nameEl.value||"").trim();
+    if(name.length<3){ statusEl.textContent="Nama minimal 3 huruf"; statusEl.style.color="#d93025"; nameEl.focus(); return; }
+    if(!avatarEl.files[0] && !sessionStorage.getItem("sipiket_avatar")){ statusEl.textContent="Foto profil wajib"; statusEl.style.color="#d93025"; return; }
+    let guruKelas=null;
+    if(isGuru()){
+      const tingkat=(tingkatEl.value||"").trim();
+      const namaK=(namaKelasEl.value||"").trim();
+      if(!tingkat || !namaK){ statusEl.textContent="Pilih tingkat 1-12 dan isi nama kelas"; statusEl.style.color="#d93025"; return; }
       guruKelas = `${tingkat}-${namaK}`;
-      const existing = localStorage.getItem("sipiket_last_email")
-        ? await (typeof secureGet === "function"
-            ? secureGet(
-                "account_" +
-                  localStorage.getItem("sipiket_last_email").toLowerCase(),
-              )
-            : null)
-        : null;
+      const existing = localStorage.getItem("sipiket_last_email") ? await (typeof secureGet==="function" ? secureGet("account_"+localStorage.getItem("sipiket_last_email").toLowerCase()) : null) : null;
       // 1 akun guru = 1 kelas: cek sudah punya kelas
-      if (
-        existing &&
-        existing.classCode &&
-        existing.classCode !== sessionStorage.getItem("sipiket_classCode")
-      ) {
+      if(existing && existing.classCode && existing.classCode!==sessionStorage.getItem("sipiket_classCode")){
         // still allow but warn overwrite? For now replace
       }
       // simpan kelas master
-      if (typeof secureSet === "function") {
-        const list = (await secureGet("classes")) || [];
-        if (!list.find((c) => c.code === guruKelas)) {
-          list.push({
-            code: guruKelas,
-            tingkat,
-            nama: namaK,
-            by: sessionStorage.getItem("sipiket_googleEmail") || "",
-            at: Date.now(),
-          });
+      if(typeof secureSet==="function"){
+        const list=(await secureGet("classes")||[]);
+        if(!list.find(c=>c.code===guruKelas)){
+          list.push({code:guruKelas, tingkat, nama:namaK, by: sessionStorage.getItem("sipiket_googleEmail")||"", at: Date.now()});
           await secureSet("classes", list);
         }
       }
@@ -1467,57 +1235,29 @@ function showLoginView(name) {
       sessionStorage.setItem("sipiket_classCode", guruKelas);
       sessionStorage.setItem("sipiket_pendingClassCode", guruKelas);
     }
-    const last = localStorage.getItem("sipiket_profile_updated_at");
-    if (last && Date.now() - Number(last) < 14 * 24 * 60 * 60 * 1000) {
-      const left = Math.ceil(
-        (14 * 24 * 60 * 60 * 1000 - (Date.now() - Number(last))) /
-          (24 * 60 * 60 * 1000),
-      );
-      if (
-        !confirm(
-          `Profil baru diganti ${left} hari lalu. Tetap ganti? (Cooldown 14 hari)`,
-        )
-      )
-        return;
+    const last=localStorage.getItem("sipiket_profile_updated_at");
+    if(last && Date.now()-Number(last) < 14*24*60*60*1000){
+      const left=Math.ceil((14*24*60*60*1000 - (Date.now()-Number(last)))/(24*60*60*1000));
+      if(!confirm(`Profil baru diganti ${left} hari lalu. Tetap ganti? (Cooldown 14 hari)`)) return;
     }
-    const email = sessionStorage.getItem("sipiket_googleEmail");
-    const cls =
-      sessionStorage.getItem("sipiket_classCode") ||
-      sessionStorage.getItem("sipiket_pendingClassCode") ||
-      guruKelas;
-    const role =
-      sessionStorage.getItem("sipiket_pendingRole") ||
-      sessionStorage.getItem("sipiket_role") ||
-      (isGuru() ? "guru" : "siswa");
+    const email=sessionStorage.getItem("sipiket_googleEmail");
+    const cls=sessionStorage.getItem("sipiket_classCode")||sessionStorage.getItem("sipiket_pendingClassCode")||guruKelas;
+    const role=sessionStorage.getItem("sipiket_pendingRole")||sessionStorage.getItem("sipiket_role")|| (isGuru()?"guru":"siswa");
     sessionStorage.setItem("sipiket_fullName", name);
-    sessionStorage.setItem("sipiket_registered", "1");
-    sessionStorage.setItem("sipiket_emailVerified", "1");
-    if (email && typeof secureSet === "function") {
-      const existing =
-        (await secureGet("account_" + email.toLowerCase())) || {};
-      await secureSet("account_" + email.toLowerCase(), {
-        ...existing,
-        email,
-        classCode: cls || existing.classCode,
-        role,
-        displayName: name,
-        picture: sessionStorage.getItem("sipiket_googlePicture") || "",
-        avatar: sessionStorage.getItem("sipiket_avatar") || "",
-        registeredAt: Date.now(),
-        guruKelas: guruKelas || existing.guruKelas,
-      });
+    sessionStorage.setItem("sipiket_registered","1");
+    sessionStorage.setItem("sipiket_emailVerified","1");
+    if(email && typeof secureSet==="function"){
+      const existing=(await secureGet("account_"+email.toLowerCase()))||{};
+      await secureSet("account_"+email.toLowerCase(), {...existing, email, classCode: cls||existing.classCode, role, displayName:name, picture: sessionStorage.getItem("sipiket_googlePicture")||"", avatar: sessionStorage.getItem("sipiket_avatar")||"", registeredAt: Date.now(), guruKelas: guruKelas||existing.guruKelas});
       localStorage.setItem("sipiket_last_email", email);
     }
     localStorage.setItem("sipiket_profile_updated_at", String(Date.now()));
-    if (role === "guru") sessionStorage.setItem("sipiket_role", "guru");
-    const target = role === "guru" ? "guru-kelas.html" : "kelas.html";
-    statusEl.textContent =
-      role === "guru"
-        ? `✓ Kelas ${guruKelas} terbuat — membuka ${target}...`
-        : `✓ Selamat kamu masuk sebagai siswa kelas ${cls} — membuka ${target}...`;
-    statusEl.style.color = "var(--orange)";
+    if(role==="guru") sessionStorage.setItem("sipiket_role","guru");
+    const target= role==="guru" ? "guru-kelas.html" : "kelas.html";
+    statusEl.textContent = role==="guru" ? `✓ Kelas ${guruKelas} terbuat — membuka ${target}...` : `✓ Selamat kamu masuk sebagai siswa kelas ${cls} — membuka ${target}...`;
+    statusEl.style.color="var(--orange)";
     refreshProfileCooldown();
-    setTimeout(() => (location.href = target), 800);
+    setTimeout(()=> location.href=target, 800);
   });
 })();
 
@@ -1584,12 +1324,6 @@ function showLoginView(name) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || "Gagal");
-      localStorage.setItem(FEEDBACK_KEY, String(Date.now()));
-      // kunci form seminggu
-      form.querySelectorAll("input,textarea,button").forEach(el=>{ if(el.id!=="fbStatus") el.disabled=true; });
-      setTimeout(()=>{ statusEl.textContent=lockMsg(); }, 900);
-      localStorage.setItem(FEEDBACK_KEY, String(Date.now()));
-      form.querySelectorAll("input,textarea,button").forEach(el=>{ if(el.id!=="fbStatus") el.disabled=true; });
       statusEl.textContent =
         "✓ Terima kasih! Feedback terkirim ke sipiket.anchor@gmail.com — format tabel rapi sudah masuk inbox.";
       statusEl.style.color = "var(--orange)";
@@ -1608,84 +1342,39 @@ function showLoginView(name) {
 })();
 
 // video storage real (supabase storage videos bucket)
-(function videoBoot() {
-  const inp = document.getElementById("videoInput"),
-    prev = document.getElementById("videoPreview"),
-    btn = document.getElementById("uploadVideoBtn"),
-    st = document.getElementById("videoStatus");
-  if (!inp || !btn) return;
-  inp.addEventListener("change", () => {
-    const f = inp.files[0];
-    if (!f) {
-      prev.hidden = true;
-      return;
-    }
-    if (!f.type.startsWith("video/")) {
-      st.textContent = "File harus video";
-      st.style.color = "#d93025";
-      return;
-    }
-    if (f.size > 50 * 1024 * 1024) {
-      st.textContent = "Maks 50MB";
-      st.style.color = "#d93025";
-      return;
-    }
-    prev.src = URL.createObjectURL(f);
-    prev.style.display = "block";
-    prev.hidden = false;
-    st.textContent = `Siap upload: ${f.name} ${(f.size / 1024 / 1024).toFixed(1)}MB — terenkripsi`;
-    st.style.color = "var(--muted)";
+(function videoBoot(){
+  const inp=document.getElementById("videoInput"), prev=document.getElementById("videoPreview"), btn=document.getElementById("uploadVideoBtn"), st=document.getElementById("videoStatus");
+  if(!inp||!btn) return;
+  inp.addEventListener("change",()=>{
+    const f=inp.files[0];
+    if(!f){ prev.hidden=true; return; }
+    if(!f.type.startsWith("video/")){ st.textContent="File harus video"; st.style.color="#d93025"; return; }
+    if(f.size>50*1024*1024){ st.textContent="Maks 50MB"; st.style.color="#d93025"; return; }
+    prev.src=URL.createObjectURL(f); prev.style.display="block"; prev.hidden=false;
+    st.textContent=`Siap upload: ${f.name} ${(f.size/1024/1024).toFixed(1)}MB — terenkripsi`;
+    st.style.color="var(--muted)";
   });
-  btn.addEventListener("click", async () => {
-    const f = inp.files[0];
-    if (!f) {
-      st.textContent = "Pilih video dulu";
-      st.style.color = "#d93025";
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = "Mengupload...";
-    try {
-      const code = sessionStorage.getItem("sipiket_classCode") || "";
-      const email = sessionStorage.getItem("sipiket_googleEmail") || "";
-      if (
-        typeof uploadVideo === "function" &&
-        typeof supa !== "undefined" &&
-        supa
-      ) {
-        const path = await uploadVideo(f, {
-          class_code: code,
-          email,
-          duration: Math.round(prev.duration || 5),
-        });
-        st.textContent = "✓ Terupload: " + path + " — tersimpan terenkripsi";
-        st.style.color = "var(--orange)";
+  btn.addEventListener("click", async()=>{
+    const f=inp.files[0];
+    if(!f){ st.textContent="Pilih video dulu"; st.style.color="#d93025"; return; }
+    btn.disabled=true; btn.textContent="Mengupload...";
+    try{
+      const code=sessionStorage.getItem("sipiket_classCode")||"";
+      const email=sessionStorage.getItem("sipiket_googleEmail")||"";
+      if(typeof uploadVideo==="function" && typeof supa!=="undefined" && supa){
+        const path=await uploadVideo(f,{class_code:code,email, duration:Math.round(prev.duration||5)});
+        st.textContent="✓ Terupload: "+path+" — tersimpan terenkripsi";
+        st.style.color="var(--orange)";
       } else {
         // fallback local encrypted
-        const r = new FileReader();
-        await new Promise((res, rej) => {
-          r.onload = () => res(r.result);
-          r.onerror = rej;
-          r.readAsDataURL(f);
-        });
-        const key = "video_" + Date.now();
-        if (typeof secureSet === "function")
-          await secureSet(key, {
-            name: f.name,
-            data: r.result,
-            class_code: code,
-            at: Date.now(),
-          });
-        st.textContent =
-          "✓ Tersimpan lokal terenkripsi (supabase.js belum diisi) — ponytail: isi SUPABASE_URL/ANON";
-        st.style.color = "var(--orange)";
+        const r=new FileReader();
+        await new Promise((res,rej)=>{ r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
+        const key="video_"+Date.now();
+        if(typeof secureSet==="function") await secureSet(key, {name:f.name, data:r.result, class_code:code, at:Date.now()});
+        st.textContent="✓ Tersimpan lokal terenkripsi (supabase.js belum diisi) — ponytail: isi SUPABASE_URL/ANON";
+        st.style.color="var(--orange)";
       }
-    } catch (e) {
-      st.textContent = "Gagal: " + (e.message || e);
-      st.style.color = "#d93025";
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Upload ke Storage (real)";
-    }
+    }catch(e){ st.textContent="Gagal: "+(e.message||e); st.style.color="#d93025"; }
+    finally{ btn.disabled=false; btn.textContent="Upload ke Storage (real)"; }
   });
 })();
