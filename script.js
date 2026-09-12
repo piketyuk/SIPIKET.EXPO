@@ -191,22 +191,7 @@ async function countSavedAccounts() {
   return n;
 }
 async function showAccountHint() {
-  if (!accountHint) return;
-  const n = await countSavedAccounts();
-  const lastEmail = localStorage.getItem("sipiket_last_email");
-  if (n > 0) {
-    accountHint.style.display = "block";
-    accountHint.innerHTML = lastEmail
-      ? `Terdeteksi <b>${n} akun</b> tersimpan. Email terakhir: <b>${lastEmail}</b> — matikan <b>Kode kelas</b> untuk login langsung tanpa kode (auto ke kelas). <a href="#" id="hintReuse" style="color:var(--orange);font-weight:700">Gunakan email ini →</a>`
-      : `Terdeteksi <b>${n} akun</b> tersimpan — matikan <b>Kode kelas</b> untuk login langsung tanpa kode (auto ke kelas).`;
-    document.getElementById("hintReuse")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      updateClassEnabled(false);
-      document
-        .getElementById("googleStep")
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-  } else accountHint.style.display = "none";
+  if (accountHint) accountHint.style.display = "none";
 }
 showAccountHint();
 (function autoRestoreSession() {
