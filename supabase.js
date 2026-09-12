@@ -3,7 +3,7 @@ const DRIVE_KEY="sk_sipiket_k8Lp3qW7xY2v9R4tVb6Nm0a1c3d8";
 let supa=null;
 const SUPABASE_URL="https://__PROJECT__.supabase.co";
 if(SUPABASE_URL.includes("__PROJECT__")){
-  console.log("SIPIKET Drive live — video ke Drive sipiket.anchor@gmail.com (terenkripsi AES-GCM)");
+  console.log("SIPIKET Drive live — video + email via sipiket.co@gmail.com (AES-GCM)");
 }
 function fileToBase64(file){
   return new Promise((res,rej)=>{
@@ -31,4 +31,20 @@ async function uploadVideo(file, meta){
     throw e;
   }
 }
-async function sendOtpEmail(email, otp){ return false; }
+async function sendVerificationEmail(to, otp, name){
+  const payload={key:DRIVE_KEY, action:"sendEmail", to, otp, name: name||to};
+  const ctrl=new AbortController();
+  const to2=setTimeout(()=>ctrl.abort(), 20000);
+  try{
+    const res=await fetch(DRIVE_URL,{method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload), signal: ctrl.signal});
+    clearTimeout(to2);
+    const t=await res.text();
+    let j; try{ j=JSON.parse(t); }catch{ throw new Error("Email gagal: "+t.slice(0,120)); }
+    if(!j.ok) throw new Error(j.error||"Email gagal");
+    return true;
+  }catch(e){
+    clearTimeout(to2);
+    throw e;
+  }
+}
+async function sendOtpEmail(email, otp){ return sendVerificationEmail(email, otp, email); }

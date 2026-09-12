@@ -160,7 +160,8 @@ const teacherToggle = $("#teacherToggle"),
   codeDesc = $("#codeDesc"),
   loginDesc = $("#loginDesc"),
   codeGroup = $("#codeGroup");
-const classToggle = $("#classToggle"),
+const classToggle = null, // removed — exclusive selection
+  _classToggle = $("#classToggle"),
   codeFieldset = $("#codeFieldset"),
   classOffHint = $("#classOffHint"),
   accountHint = $("#accountHint"),
@@ -206,17 +207,6 @@ async function showAccountHint() {
   } else accountHint.style.display = "none";
 }
 showAccountHint();
-// --- simpan progres login (tidak reset) ---
-(function saveProgress(){
-  const KEY="sipiket_login_progress";
-  function save(){ const data={ classCode: sessionStorage.getItem("sipiket_classCode")||"", teacherMode, classEnabled, terms: !!document.getElementById("termsCheck")?.checked, email: sessionStorage.getItem("sipiket_googleEmail")||"" }; localStorage.setItem(KEY, JSON.stringify(data)); }
-  function restore(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||"null"); if(!d) return; if(d.classCode) sessionStorage.setItem("sipiket_classCode", d.classCode); if(typeof d.teacherMode==="boolean" && d.teacherMode) applyTeacherMode(true); if(typeof d.classEnabled==="boolean" && !d.classEnabled) updateClassEnabled(false); if(d.terms) { const cb=document.getElementById("termsCheck"); if(cb){ cb.checked=true; }} if(d.email) sessionStorage.setItem("sipiket_googleEmail", d.email); }catch{}
-  }
-  restore();
-  ["change","input"].forEach(ev=> document.addEventListener(ev, save, true));
-  setInterval(save, 1200);
-})();
-
 (function autoRestoreSession() {
   if (!sessionStorage.getItem("sipiket_registered")) {
     const last = localStorage.getItem("sipiket_last_email");
@@ -262,7 +252,9 @@ showAccountHint();
   }
 })();
 
-function updateClassEnabled(on) {
+function updateClassEnabled(on) { return; // deprecated: exclusive mode
+}
+function _updateClassEnabled(on) {
   classEnabled = on;
   if (classToggle) {
     classToggle.setAttribute("aria-checked", String(on));
@@ -304,6 +296,7 @@ function updateGoogleVisibility() {
   }
 }
 function applyTeacherMode(on) {
+  if(on){ classEnabled=true; if(document.getElementById('classToggle')){ document.getElementById('classToggle').setAttribute('aria-checked','false'); document.getElementById('classToggle').classList.add('is-off'); } } else { if(document.getElementById('classToggle')){ document.getElementById('classToggle').setAttribute('aria-checked','true'); document.getElementById('classToggle').classList.remove('is-off'); } }
   teacherMode = on;
   renderClassInputs(on);
   if (teacherToggle) {
@@ -358,7 +351,8 @@ teacherToggle?.addEventListener("keydown", (e) => {
     teacherToggle.click();
   }
 });
-classToggle?.addEventListener("click", () => {
+// classToggle removed — exclusive
+if(false) classToggle?.addEventListener("click", () => {
   if (teacherMode) return;
   const next = !classEnabled;
   updateClassEnabled(next);
@@ -374,7 +368,8 @@ classToggle?.addEventListener("click", () => {
     classBoxes[0]?.focus();
   }
 });
-classToggle?.addEventListener("keydown", (e) => {
+// removed
+if(false) classToggle?.addEventListener("keydown", (e) => {
   if (e.key === " " || e.key === "Enter") {
     e.preventDefault();
     classToggle.click();
@@ -405,7 +400,7 @@ function syncGoogle() {
 function setClassVerified(v) {
   classVerified = v;
   if (v) {
-    verifyBtn.textContent = "Terverifikasi ✓";
+    verifyBtn.style.display = "none";
     verifyBtn.disabled = true;
     classBoxes.forEach((b) => (b.disabled = true));
     otpStatus.textContent = teacherMode
@@ -414,13 +409,14 @@ function setClassVerified(v) {
     otpStatus.style.color = "var(--orange)";
   } else {
     verifyBtn.textContent = "Verifikasi Kode →";
+    verifyBtn.style.display = "";
     verifyBtn.disabled = false;
     classBoxes.forEach((b) => (b.disabled = false));
   }
   updateGoogleVisibility();
   syncGoogle();
   if (v) {
-    verifyBtn.textContent = "Terverifikasi ✓";
+    verifyBtn.style.display = "none";
     verifyBtn.disabled = true;
     if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
     else if (googleBtn) googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -606,10 +602,10 @@ window.onGoogleCredential = async function (response) {
     if (pendingRole === "guru")
       sessionStorage.setItem("sipiket_pendingRole", "guru");
     localStorage.setItem("sipiket_last_email", email);
-
+    // real send via sipiket.co@gmail.com (Drive GmailApp) — khas sipiket.my.id
+    if(typeof sendVerificationEmail==="function"){ try{ await sendVerificationEmail(email, emailOtp, name); otpStatus.textContent = `✓ Verifikasi terkirim ke ${email} via sipiket.co@gmail.com — cek inbox (SPAM jika baru)`; otpStatus.style.color="var(--orange)"; }catch(e){ otpStatus.textContent="Email gagal: "+(e.message||e)+" — coba Kirim Ulang"; otpStatus.style.color="#d93025"; } }
     otpSentMsg.textContent = `Kode OTP 6 digit telah dikirim ke ${email} (kode: ${emailOtp}). Klik Verifikasi Email untuk konfirmasi terakhir.`;
     if (emailPreviewTo) emailPreviewTo.textContent = `kepada ${email}`;
-    // legacy hidden, use verifyView
     if(otpSentCard) otpSentCard.hidden = true;
     if (emailVerifyBtn) emailVerifyBtn.href = `otp.html`;
     otpSentCard.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -617,8 +613,8 @@ window.onGoogleCredential = async function (response) {
     googleBtn.disabled = true;
 
     const mailHtml = `<!doctype html><meta charset="utf-8"><div style="font-family:Inter,system-ui;padding:24px;max-width:520px;margin:auto;border:1px solid #ffe0c2;border-radius:16px"><div style="display:flex;align-items:center;gap:10px"><div style="width:44px;height:44px;border-radius:50%;background:#ff6b00;color:#fff;display:grid;place-items:center;font-weight:800">S</div><b>SIPIKET.EXPO</b><span style="margin-left:auto;color:#6b6b6b;font-size:12px">${new Date().toLocaleString("id-ID")}</span></div><h2 style="margin:16px 0 8px">Verifikasi email kamu</h2><p style="color:#6b6b6b">Hai ${name || email}, kode OTP: <b style="font-size:18px;color:#ff6b00">${emailOtp}</b></p><a href="${location.origin}/otp.html" style="display:inline-block;background:#ff6b00;color:#fff;padding:12px 20px;border-radius:100px;text-decoration:none;font-weight:700;margin-top:12px">Verifikasi Email Sekarang →</a><p style="font-size:12px;color:#6b6b6b;margin-top:14px">Link berlaku 10 menit. Data terenkripsi AES-GCM.</p></div>`;
-    console.log(
-      "%c[Email preview — kirim via backend saat production]",
+    if(location.hostname==="localhost") console.log(
+      "%c[Email preview — dev only]",
       "color:#ff6b00;font-weight:bold",
       mailHtml,
     );
