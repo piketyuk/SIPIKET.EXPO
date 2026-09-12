@@ -487,16 +487,16 @@
                   width: 96px;
                   height: 96px;
                   border-radius: 50%;
-                  background: var(--orange3);
-                  border: 2px dashed var(--line);
+                  background: #0b1220;
+                  border: 2px solid #0b1220;
                   display: grid;
                   place-items: center;
                   overflow: hidden;
-                  font-size: 32px;
-                  color: var(--orange);
+                  font-size: 42px;
+                  color: #fff;
                 "
               >
-                📷
+                👤
               </div>
               <span
                 style="
@@ -539,6 +539,28 @@
                 font: inherit;
               "
           /></label>
+          <div
+            id="guruClassFields"
+            hidden
+            style="display: grid; gap: 10px; background: #f6f9ff; border: 1px solid var(--line); border-radius: 12px; padding: 12px"
+          >
+            <label for="guruTingkat" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px"
+              >Pilih Kelas (1-12)<select
+                id="guruTingkat"
+                style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: #fff"
+                ><option value="" disabled selected>Pilih tingkat</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select
+              ></label
+            >
+            <label for="guruNamaKelas" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px"
+              >Nama Kelas<input
+                id="guruNamaKelas"
+                type="text"
+                placeholder="misal IX-F"
+                maxlength="20"
+                style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit"
+            /></label>
+            <p style="font-size: 0.76rem; color: var(--muted); margin: 0">1 akun guru = 1 kelas. Kelas akan otomatis terbuat.</p>
+          </div>
           <p
             id="inlineProfileStatus"
             role="status"
@@ -554,7 +576,9 @@
             type="button"
             id="inlineProfileSave"
             class="btn-primary btn-full"
-            style="justify-content: center"
+            disabled
+            aria-disabled="true"
+            style="justify-content: center; opacity: 0.5"
           >
             Simpan & Masuk Kelas →
           </button>
