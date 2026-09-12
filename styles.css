@@ -1638,6 +1638,82 @@ dialog[open] {
   min-height: 1.2em;
 }
 
+.stack-prof {
+  display: inline-block;
+  background: linear-gradient(135deg, #0f5bff, #3b82ff);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.dev-card--lead .stack-prof {
+  background: linear-gradient(135deg, #e01428, #ff3b3b);
+  box-shadow: 0 4px 16px rgba(225, 20, 40, 0.35);
+  animation: rajaBlaze 1.6s ease-in-out infinite alternate;
+}
+@keyframes rajaBlaze {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 60, 60, 0.45));
+  }
+  100% {
+    filter: brightness(1.18) drop-shadow(0 0 14px rgba(255, 20, 40, 0.75));
+  }
+}
+.dev-card--lead h3 {
+  background: linear-gradient(180deg, #ff1a1a 0%, #ff6b00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 20, 40, 0.55));
+  animation: rajaNameBurn 1.2s ease-in-out infinite alternate;
+}
+@keyframes rajaNameBurn {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 20, 40, 0.45));
+  }
+  100% {
+    filter: brightness(1.25) drop-shadow(0 0 14px rgba(255, 80, 20, 0.7));
+  }
+}
+.site-blaze {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(
+        180deg,
+        rgba(225, 20, 40, 0) 0%,
+        rgba(255, 60, 60, 0.35) 18%,
+        rgba(255, 120, 40, 0.25) 45%,
+        rgba(225, 20, 40, 0.35) 82%,
+        rgba(255, 60, 60, 0) 100%
+      )
+      border-box;
+  opacity: 0.55;
+  animation: sitePulse 2.4s ease-in-out infinite;
+}
+@keyframes sitePulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+#devHeroTitle,
+#devDescSwap {
+  display: block;
+}
+#devDescSwap {
+  min-height: 2.8em;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loader {
     transition: none;
@@ -1927,6 +2003,82 @@ dialog[open] {
 }
 #devStackHint {
   min-height: 1.2em;
+}
+
+.stack-prof {
+  display: inline-block;
+  background: linear-gradient(135deg, #0f5bff, #3b82ff);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.dev-card--lead .stack-prof {
+  background: linear-gradient(135deg, #e01428, #ff3b3b);
+  box-shadow: 0 4px 16px rgba(225, 20, 40, 0.35);
+  animation: rajaBlaze 1.6s ease-in-out infinite alternate;
+}
+@keyframes rajaBlaze {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 60, 60, 0.45));
+  }
+  100% {
+    filter: brightness(1.18) drop-shadow(0 0 14px rgba(255, 20, 40, 0.75));
+  }
+}
+.dev-card--lead h3 {
+  background: linear-gradient(180deg, #ff1a1a 0%, #ff6b00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 20, 40, 0.55));
+  animation: rajaNameBurn 1.2s ease-in-out infinite alternate;
+}
+@keyframes rajaNameBurn {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 20, 40, 0.45));
+  }
+  100% {
+    filter: brightness(1.25) drop-shadow(0 0 14px rgba(255, 80, 20, 0.7));
+  }
+}
+.site-blaze {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(
+        180deg,
+        rgba(225, 20, 40, 0) 0%,
+        rgba(255, 60, 60, 0.35) 18%,
+        rgba(255, 120, 40, 0.25) 45%,
+        rgba(225, 20, 40, 0.35) 82%,
+        rgba(255, 60, 60, 0) 100%
+      )
+      border-box;
+  opacity: 0.55;
+  animation: sitePulse 2.4s ease-in-out infinite;
+}
+@keyframes sitePulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+#devHeroTitle,
+#devDescSwap {
+  display: block;
+}
+#devDescSwap {
+  min-height: 2.8em;
 }
 
 @media (prefers-reduced-motion: reduce) {

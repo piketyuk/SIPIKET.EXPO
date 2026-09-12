@@ -7,7 +7,7 @@
       name="description"
       content="SIPIKET.EXPO - Sistem piket transparan dan membangun karakter siswa. Dibuat oleh Kelompok 4 | IX-F"
     />
-    <meta name="theme-color" content="#ff6b00" />
+    <meta name="theme-color" content="#0f5bff" />
     <title>SIPIKET.EXPO — Piket Transparan, Karakter Berkembang</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -19,6 +19,43 @@
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="canonical" href="https://sipiket.my.id/" />
+    <meta
+      property="og:title"
+      content="SIPIKET.EXPO — Piket Mudah, Transparan & Efektif"
+    />
+    <meta
+      property="og:description"
+      content="Platform piket kelas Kelompok 4 | IX-F — adil, terpantau, membanggakan. Semua siswa mudah pakai."
+    />
+    <meta property="og:url" content="https://sipiket.my.id/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://sipiket.my.id/favicon.svg" />
+    <meta property="og:site_name" content="SIPIKET.EXPO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SIPIKET.EXPO" />
+    <meta
+      name="twitter:description"
+      content="Piket mudah untuk semua siswa — transparan & efektif."
+    />
+    <meta name="twitter:image" content="https://sipiket.my.id/favicon.svg" />
+    <meta
+      name="keywords"
+      content="SIPIKET.EXPO, piket kelas transparan efektif, Kelompok 4 IX-F"
+    />
+    <meta
+      name="author"
+      content="Kelompok 4 | IX-F — Rachmatullah Rajasyah M.S."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "SIPIKET.EXPO",
+        "url": "https://sipiket.my.id/",
+        "description": "Piket mudah untuk semua siswa — transparan & efektif",
+        "publisher": { "@type": "Organization", "name": "Kelompok 4 | IX-F" }
+      }
+    </script>
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   </head>
@@ -158,9 +195,6 @@
           <div class="blob b3"></div>
         </div>
         <div class="hero-inner reveal">
-          <p class="eyebrow">
-            ✦ Kelompok 4 | IX-F — Karya Pelajar Untuk Kelas Lebih Tertib
-          </p>
           <h1 id="hero-title">
             <span class="melt" data-text="Piket Mudah">Piket Mudah</span> untuk
             Semua Siswa — <br /><em
@@ -252,6 +286,47 @@
         </div>
       </section>
 
+      <section
+        class="about-web"
+        id="tentang"
+        aria-labelledby="tentang-title"
+        style="
+          padding: 44px 20px;
+          background: linear-gradient(180deg, #fff 0%, #f6f9ff 100%);
+        "
+      >
+        <div
+          class="container"
+          style="
+            max-width: 760px;
+            margin: 0 auto;
+            display: grid;
+            gap: 14px;
+            text-align: center;
+          "
+        >
+          <p class="eyebrow">Tentang Website</p>
+          <h2
+            id="tentang-title"
+            style="
+              font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
+              letter-spacing: -0.04em;
+              font-size: clamp(1.5rem, 4vw, 2.2rem);
+            "
+          >
+            Dibuat untuk <span style="color: var(--orange)">Dikenang</span>
+          </h2>
+          <p style="color: var(--muted); max-width: 640px; margin: 0 auto">
+            SIPIKET.EXPO lahir agar
+            <b style="color: #24344f">semua siswa mudah menggunakannya</b> tanpa
+            ribet. Kami mengutamakan <b>transparansi penuh</b> — siapa piket,
+            kapan, bukti video di dalam regu — dan
+            <b>efektivitas tinggi</b> agar piket bukan beban tapi kebanggaan
+            yang dikenang. Tema biru glossy glass, animasi selamanya di setiap
+            kunjungan.
+          </p>
+        </div>
+      </section>
       <section class="feedback" id="feedback" aria-labelledby="feedback-title">
         <div class="feedback-inner">
           <div class="feedback-head reveal">
@@ -285,27 +360,6 @@
               value="[SIPIKET.EXPO] Feedback Landing Page"
             />
             <input type="hidden" name="_template" value="table" />
-            <div class="feedback-grid">
-              <label for="fbName"
-                >Nama (opsional)<input
-                  id="fbName"
-                  name="nama"
-                  type="text"
-                  placeholder="Aisyah — IX-F"
-                  autocomplete="name"
-                  maxlength="60"
-              /></label>
-              <label for="fbEmail"
-                >Email <span aria-hidden="true" style="color: #d93025">*</span
-                ><input
-                  id="fbEmail"
-                  name="email"
-                  type="email"
-                  placeholder="kamu@email.com"
-                  required
-                  autocomplete="email"
-              /></label>
-            </div>
             <div class="feedback-grid">
               <label for="fbKategori"
                 >Kategori<input
@@ -403,16 +457,7 @@
               role="status"
               aria-live="polite"
             ></p>
-            <p class="feedback-hint" style="text-align: center">
-              Langsung ke
-              <a
-                href="mailto:sipiket.anchor@gmail.com"
-                style="color: var(--orange); font-weight: 700"
-                >sipiket.anchor@gmail.com</a
-              >
-              — format rapi, mudah dibaca oleh tim.
-            </p>
-          </form>
+            </form>
         </div>
       </section>
     </main>
@@ -606,11 +651,6 @@
           loader.setAttribute("aria-hidden", "true");
           return;
         }
-        if (sessionStorage.getItem("sipiket_loader_done") === "1") {
-          loader.classList.add("is-hide");
-          loader.setAttribute("aria-hidden", "true");
-          return;
-        }
         let p = 0;
         const timer = setInterval(() => {
           p += Math.random() * 3 + 1.8;
@@ -623,7 +663,6 @@
             setTimeout(() => {
               loader.classList.add("is-hide");
               loader.setAttribute("aria-hidden", "true");
-              sessionStorage.setItem("sipiket_loader_done", "1");
             }, 260);
           } else {
             fill.style.width = p + "%";

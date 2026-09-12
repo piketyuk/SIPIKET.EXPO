@@ -12,9 +12,38 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="canonical" href="https://sipiket.my.id/" />
+    <meta
+      property="og:title"
+      content="SIPIKET.EXPO — Piket Mudah, Transparan & Efektif"
+    />
+    <meta property="og:image" content="https://sipiket.my.id/favicon.svg" />
+    <link rel="canonical" href="https://sipiket.my.id/pengembang.html" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Rachmatullah Rajasyah M.S",
+        "jobTitle": "Lead Developer & Full Stack Developer",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "SIPIKET.EXPO — Kelompok 4 | IX-F"
+        },
+        "image": "https://sipiket.my.id/images/raja.webp",
+        "url": "https://sipiket.my.id/pengembang.html"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ImageObject",
+        "contentUrl": "https://sipiket.my.id/images/raja.webp",
+        "caption": "Rachmatullah Rajasyah M.S — Lead Developer SIPIKET.EXPO",
+        "creator": { "@type": "Person", "name": "Rachmatullah Rajasyah M.S" }
+      }
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">Lewati ke konten</a>
@@ -55,6 +84,7 @@
     </div>
     <div class="overlay" id="overlay" hidden></div>
     <main id="main">
+      <div class="site-blaze" id="siteBlaze" aria-hidden="true" hidden></div>
       <section
         class="page-hero"
         aria-labelledby="devHeroTitle"
@@ -126,87 +156,6 @@
             Kolaborasi, tanggung jawab, dan semangat belajar — nilai yang kami
             bawa ke setiap baris kode.
           </p>
-          <div class="dev-grid">
-            <article class="dev-card dev-card--lead">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/raja.webp"
-                  alt="Foto Raja"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Raja</h3>
-              <p>Lead Developer & Full Stack Developer</p>
-            </article>
-            <article class="dev-card">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/kibi.jpg"
-                  alt="Foto Kibi"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Kibi</h3>
-              <p>Assistant & Publisher</p>
-            </article>
-            <article class="dev-card">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/zanet.jpg"
-                  alt="Foto Zanet"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Zanet</h3>
-              <p>Social Media & Content Manager</p>
-            </article>
-            <article class="dev-card">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/avara.jpg"
-                  alt="Foto Avara"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Avara</h3>
-              <p>Mediator & Project Coordinator</p>
-            </article>
-            <article class="dev-card">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/surya.jpg"
-                  alt="Foto Surya"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Surya</h3>
-              <p>Creator & Build Script Engineer</p>
-            </article>
-            <article class="dev-card">
-              <div class="dev-img-wrap">
-                <img
-                  src="images/gabriel.jpg"
-                  alt="Foto Gabriel"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                />
-              </div>
-              <h3>Gabriel</h3>
-              <p>Assistant Build Script Engineer</p>
-            </article>
-          </div>
-
           <section
             aria-labelledby="devStackTitle"
             style="padding: 18px 20px 32px"
@@ -215,16 +164,6 @@
               class="container"
               style="max-width: 560px; margin: 0 auto; display: grid; gap: 16px"
             >
-              <h2
-                id="devStackTitle"
-                style="
-                  font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
-                  letter-spacing: -0.03em;
-                  text-align: center;
-                "
-              >
-                Tim Pengembang — Kartu Bertumpuk
-              </h2>
               <div
                 id="devStack"
                 class="dev-stack"

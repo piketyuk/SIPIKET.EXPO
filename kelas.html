@@ -12,7 +12,12 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="canonical" href="https://sipiket.my.id/" />
+    <meta
+      property="og:title"
+      content="SIPIKET.EXPO — Piket Mudah, Transparan & Efektif"
+    />
+    <meta property="og:image" content="https://sipiket.my.id/favicon.svg" />
+    <link rel="canonical" href="https://sipiket.my.id/kelas.html" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   </head>
@@ -114,6 +119,14 @@
               Regu Piket — Tugas &amp; Bukti dalam Satu Tempat
             </h2>
             <div class="cards" id="reguGrid"></div>
+            <div class="card" style="display: grid; gap: 10px">
+              <h3>🎥 Upload Video Bukti</h3>
+              <p style="color: var(--muted); font-size: 0.86rem">Rekam 3–15 detik + keliling kelas. Terenkripsi sebelum upload. Butuh Supabase: isi <code>supabase.js</code>.</p>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Pilih video<input id="videoInput" type="file" accept="video/*" capture="environment" style="padding: 10px; border: 1px solid var(--line); border-radius: 12px" /></label>
+              <video id="videoPreview" controls style="width: 100%; max-height: 220px; border-radius: 12px; display: none"></video>
+              <button class="btn-primary btn-full" type="button" id="uploadVideoBtn" style="justify-content: center">Upload ke Storage (real)</button>
+              <p id="videoStatus" role="status" aria-live="polite" style="font-size: 0.84rem; color: var(--muted); min-height: 1em"></p>
+            </div>
           </section>
 
           <section
@@ -152,17 +165,102 @@
     </main>
     <footer role="contentinfo">
       <div class="container footer-inner">
-        <div class="footer-logo"><span>S</span></div>
+        <div
+          class="footer-logo"
+          aria-hidden="true"
+          title="SIPIKET.EXPO — kebersihan"
+        >
+          <svg
+            width="44"
+            height="44"
+            viewBox="0 0 44 44"
+            fill="none"
+            aria-hidden="true"
+          >
+            <rect width="44" height="44" rx="12" fill="url(#g)" />
+            <g
+              stroke="#fff"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M14 28 L24 18 M21 18 L24 18 L24 21" />
+              <rect
+                x="12"
+                y="26"
+                width="14"
+                height="4"
+                rx="1.2"
+                fill="#fff"
+                stroke="none"
+                opacity="0.9"
+              />
+              <rect
+                x="9"
+                y="30"
+                width="20"
+                height="3"
+                rx="1"
+                fill="#fff"
+                stroke="none"
+                opacity="0.9"
+              />
+              <circle
+                cx="32"
+                cy="14"
+                r="2.2"
+                fill="#fff"
+                stroke="none"
+                opacity="0.9"
+              />
+              <path
+                d="M29 11 L30.5 8 M32 9 L33.2 6.5 M35 10 L36.5 7.2"
+                stroke="#fff"
+                opacity="0.9"
+              />
+            </g>
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="44" y2="44">
+                <stop stop-color="#0f5bff" />
+                <stop offset="1" stop-color="#3b82ff" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h2
+          style="
+            font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-top: 4px;
+          "
+        >
+          About Us
+        </h2>
         <p class="footer-about">
-          <strong>About Us</strong> — SIPIKET.EXPO Kelompok 4 | IX-F.
+          Kami dari <strong>Kelompok 4 Kelas 9-F</strong> dan saya ketua:
+          <strong>Rachmatullah Rajasyah M.S.</strong>
+          <a
+            href="pengembang.html"
+            style="
+              color: #93b8ff;
+              text-decoration: underline;
+              text-underline-offset: 2px;
+            "
+            >(Lihat selengkapnya)</a
+          >
+          — membangun SIPIKET.EXPO agar piket adil, terpantau, dan membanggakan.
         </p>
-        <h2 class="footer-soc-title">Media Sosial</h2>
+        <h2 class="footer-soc-title" style="margin-top: 8px">Media Sosial</h2>
         <a
           class="ig"
           href="https://instagram.com/sipiket.expo"
           target="_blank"
           rel="noopener noreferrer"
-          ><svg
+          aria-label="Instagram SIPIKET.EXPO"
+        >
+          <svg
             width="22"
             height="22"
             viewBox="0 0 24 24"
@@ -179,10 +277,37 @@
               r="1.2"
               fill="currentColor"
               stroke="none"
-            /></svg
-          >@sipiket.expo</a
+            />
+          </svg>
+          @sipiket.expo
+        </a>
+        <p style="font-size: 0.82rem; color: #9bb4e0; margin-top: 2px">
+          Tutorial penggunaan dan perkembangan.
+        </p>
+        <a
+          class="ig"
+          href="mailto:sipiket.anchor@gmail.com"
+          aria-label="Email SIPIKET.EXPO"
+          style="margin-top: 6px"
         >
-        <p class="copy">© 2026 SIPIKET.EXPO</p>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7 L12 13 L21 7" />
+          </svg>
+          sipiket.anchor@gmail.com
+        </a>
+        <p class="copy">
+          © 2026 SIPIKET.EXPO — Kelompok 4 | IX-F. Dibuat dengan semangat
+          kolaborasi.
+        </p>
       </div>
     </footer>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -214,5 +339,11 @@
         }
       })();
     </script>
-  <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');if(location.search.includes('email='))history.replaceState(null,'',location.pathname);</script></body>
+    <script>
+      if (location.pathname === "/index.html")
+        history.replaceState(null, "", "/");
+      if (location.search.includes("email="))
+        history.replaceState(null, "", location.pathname);
+    </script>
+  </body>
 </html>
