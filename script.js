@@ -1066,7 +1066,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
       googleBtnEl.removeAttribute("data-last-email");
       return;
     }
-    googleBtnEl.innerHTML = `${acc.email} <span aria-hidden="true" style="margin-left:6px;opacity:.75">^</span>`;
+    googleBtnEl.innerHTML = `<span class="ge" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${acc.email}</span><button type="button" class="gc" aria-label="Pilih akun lain" style="margin-left:10px;width:32px;height:32px;border-radius:50%;border:1px solid #dadce0;background:#f8f9fa;display:grid;place-items:center">^</button>`;
     googleBtnEl.setAttribute("aria-label", `Masuk sebagai ${acc.email} — klik untuk konfirmasi`);
     googleBtnEl.title = `Masuk sebagai ${acc.email}`;
     googleBtnEl.dataset.lastEmail = acc.email;
