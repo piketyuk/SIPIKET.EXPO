@@ -619,7 +619,7 @@ footer {
   width: 64px;
   height: 64px;
   border-radius: 18px;
-  background: linear-gradient(135deg, var(--orange), #ff8c2f);
+  background: linear-gradient(135deg, var(--orange), #3b82ff);
   display: grid;
   place-items: center;
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -762,7 +762,7 @@ dialog::backdrop {
 }
 .page-hero {
   padding: calc(88px + 18px) 20px 28px;
-  background: linear-gradient(180deg, #fff7ed, #fff);
+  background: linear-gradient(180deg, #eef4ff, #fff);
   text-align: center;
 }
 .dev-card {
@@ -1040,7 +1040,7 @@ dialog::backdrop {
 
 .feedback {
   padding: 48px 20px 56px;
-  background: linear-gradient(180deg, #fff 0%, #fff7ed 100%);
+  background: linear-gradient(180deg, #fff 0%, #eef4ff 100%);
   border-top: 1px solid var(--line);
 }
 .feedback-inner {
@@ -1203,7 +1203,7 @@ dialog::backdrop {
   width: 72px;
   height: 72px;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--orange), #ff8c2f);
+  background: linear-gradient(135deg, var(--orange), #3b82ff);
   display: grid;
   place-items: center;
   color: #fff;
@@ -1302,7 +1302,7 @@ dialog::backdrop {
   max-width: 420px;
   width: 100%;
   margin: 0 auto;
-  background: linear-gradient(135deg, #fff 0%, #fff7ed 100%);
+  background: linear-gradient(135deg, #fff 0%, #eef4ff 100%);
   border-width: 2px;
   position: relative;
 }

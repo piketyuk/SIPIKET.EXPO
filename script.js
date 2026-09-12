@@ -48,9 +48,12 @@ const io = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-async function sha256Hex(s){ const b=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
-async function isTeacherCode(s){ const h=await sha256Hex(s.toLowerCase()); return TEACHER_CODE_HASHES.includes(h); }
-const TEACHER_CODE_HASHES = ["ee0b1e6ad69be79bbad963014bc6324d4ddfd03f05c4c5c3c4de292b03a089bb","f245c73681ac2149feea5366dc6e4594b01d5c58dc0d299433518ff9c1b72fde"];
+async function sha256Hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
+async function isTeacherCode(s){return TEACHER_CODE_HASHES.includes(await sha256Hex(s.toLowerCase()));}
+const TEACHER_CODE_HASHES = [
+  "ee0b1e6ad69be79bbad963014bc6324d4ddfd03f05c4c5c3c4de292b03a089bb",
+  "f245c73681ac2149feea5366dc6e4594b01d5c58dc0d299433518ff9c1b72fde",
+];
 const TEACHER_CODE_LEN = 10;
 
 document.querySelectorAll(".otp-boxes").forEach((g) => {
