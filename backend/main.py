@@ -67,11 +67,11 @@ app = FastAPI(title="SIPIKET API", version="1.0.0", lifespan=lifespan)
 
 init_db()
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["sipiket.my.id", "*.sipiket.my.id", "localhost", "127.0.0.1", "testserver"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["sipiket.my.id", "*.sipiket.my.id", "localhost", "127.0.0.1", "testserver", "piket.pythonanywhere.com", "*.vercel.app"])
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=settings.CORS_ORIGINS+["https://sipiketexpo-lyart.vercel.app","https://sipiket.my.id","https://piket.pythonanywhere.com"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],

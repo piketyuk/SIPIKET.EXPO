@@ -1,1 +1,53 @@
-{"cleanUrls": true, "trailingSlash": false, "headers": [{"source": "/(.*)", "headers": [{"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}, {"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Permissions-Policy", "value": "camera=(self), microphone=(self)"}, {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload"}]}], "rewrites": [{"source": "/login/hgfy-kode", "destination": "/login/hgfy-kode.html"}, {"source": "/register/hgfy-kode", "destination": "/register/hgfy-kode.html"}], "redirects": [{"source": "/hgfy-kode.html", "destination": "/404.html", "permanent": false}, {"source": "/hgfy-kode", "destination": "/404.html", "permanent": false}]}
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self), microphone=(self)"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://piket.pythonanywhere.com/api/$1"
+    },
+    {
+      "source": "/login/hgfy-kode",
+      "destination": "/login/hgfy-kode.html"
+    },
+    {
+      "source": "/register/hgfy-kode",
+      "destination": "/register/hgfy-kode.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/hgfy-kode.html",
+      "destination": "/404.html",
+      "permanent": false
+    },
+    {
+      "source": "/hgfy-kode",
+      "destination": "/404.html",
+      "permanent": false
+    }
+  ]
+}
