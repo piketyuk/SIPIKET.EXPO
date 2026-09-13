@@ -6,7 +6,11 @@ from backend.utils.security import hash_password, verify_password, create_access
 from backend.utils.cache import rate_limiter, login_lockout, session_cache
 from backend.utils.email import email_service
 from backend.config import settings
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+try:
+    from pydantic import EmailStr
+except ImportError:
+    EmailStr=str
 from datetime import datetime, timedelta
 import httpx
 
