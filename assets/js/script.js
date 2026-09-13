@@ -1540,7 +1540,7 @@ function showLoginView(name){
         "_subject",
         `[SIPIKET.EXPO] ${kategori || "Feedback"} — Rating ${rating || "-"}/5`,
       );
-      const res = await fetch(form.action, {
+      const backend=(window.__SIPIKET_API||"/api"); const res = await fetch(backend+"/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({kategori: kategori, rating: rating, pesan: pesan})}) || await fetch(form.action, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
