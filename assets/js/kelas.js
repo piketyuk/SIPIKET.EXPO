@@ -11,7 +11,8 @@ async function init(){
   if(token){try{const payload=JSON.parse(atob(token.split('.')[1]));role=payload.role||'siswa';}catch{}}
   // Try get user to know class_code
   try{const me=await api('/users/me');if(me.class_code) code=me.class_code;role=me.role;}catch{}
-  if(!code){
+  // Buka semua akses setelah login: jangan blok by kode
+  if(!code && !localStorage.getItem('sipiket_last_email')){
     document.getElementById('previewBox').style.display='block';
     document.getElementById('btnPreview').onclick=async()=>{
       const c=document.getElementById('previewCode').value.trim().toUpperCase();
@@ -71,6 +72,7 @@ function showHistory(code){
 }
 function mulaiPiket(code,day){
   const now=new Date();const h=now.getHours();
-  if(h<10 || h>=17){toast('Piket hanya jam 10.00–17.00','error');return;}
+  // Demo: allow any hour, toast only info
+  if(h<10 || h>=17){toast('Piket ideal 10-17 (demo allow)','info');}
   location.href='tugas.html?code='+encodeURIComponent(code)+'&day='+encodeURIComponent(day);
 }

@@ -59,6 +59,10 @@
               <button type="button" id="guruToggle" role="switch" aria-checked="false" aria-label="Guru on/off" style="width:52px; height:28px; border-radius:100px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.1); position:relative; cursor:pointer; transition:0.2s;"><span id="guruKnob" style="position:absolute; top:2px; left:2px; width:22px; height:22px; border-radius:50%; background:#fff; transition:0.2s; display:block;"></span></button>
             </div>
             <p id="roleHint" style="text-align:center; font-size:0.78rem; color:rgba(155,161,170,0.9); min-height:1em;">Saat ini: <b id="roleLabel" style="color:#fff;">Siswa</b> — geser untuk jadi Guru</p>
+            <div id="kelasCodeWrap" style="display:grid; gap:6px;">
+              <label for="kelasCodeInput" style="font-weight:600; font-size:0.88rem; display:grid; gap:6px; color:#fff;">Kode Kelas (10 karakter acak) <span style="display:flex; gap:8px;"><input id="kelasCodeInput" type="text" maxlength="10" placeholder="contoh: A2L4N9X7Q1" style="flex:1; padding:12px 14px; border-radius:12px; border:1.5px solid rgba(255,255,255,0.15); font:inherit; background:rgba(255,255,255,0.08); color:#fff; text-transform:uppercase; letter-spacing:0.08em;"/><button type="button" id="acakKelasBtn" style="padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.08); color:#fff; font-weight:700; cursor:pointer;">Acak 10</button></span></label>
+              <p style="font-size:0.72rem; color:rgba(155,161,170,0.9); text-align:center;">Siswa WAJIB isi kode kelas 10 acak sebelum masuk — tanya guru.</p>
+            </div>
             <button type="submit" class="btn-primary btn-full" style="justify-content:center;">Daftar Sekarang →</button>
             <p id="formStatus" role="status" aria-live="polite" style="text-align:center; font-size:0.84rem; min-height:1.2em; color:rgba(155,161,170,0.9);"></p>
           </form>
@@ -93,6 +97,11 @@
           const inp=document.getElementById('regPassword');
           inp.type=inp.type==='password'?'text':'password';
         });
+        const kodeInput=document.getElementById('kelasCodeInput');
+        const acakBtn=document.getElementById('acakKelasBtn');
+        function acak10(){ const c='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let s=''; for(let i=0;i<10;i++) s+=c[Math.floor(Math.random()*36)]; return s; }
+        acakBtn?.addEventListener('click',()=>{ kodeInput.value=acak10(); kodeInput.focus(); });
+        kodeInput?.addEventListener('input',()=>{ kodeInput.value=kodeInput.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,10); });
         const ham=document.getElementById('hamburger'),drawer=document.getElementById('drawer'),ov=document.getElementById('overlay'),cl=document.getElementById('closeDrawer');
         ham?.addEventListener('click',()=>{drawer.hidden=false;ov.hidden=false}); cl?.addEventListener('click',()=>{drawer.hidden=true;ov.hidden=true}); ov?.addEventListener('click',()=>{drawer.hidden=true;ov.hidden=true});
         const form=document.getElementById('registerForm');
@@ -101,29 +110,30 @@
           const email=document.getElementById('regEmail').value.trim();
           const username=document.getElementById('regUsername').value.trim();
           const password=document.getElementById('regPassword').value;
+          const kodeKelas=(kodeInput?.value||'').trim().toUpperCase();
           const status=document.getElementById('formStatus');
           if(!username||!email||!password){ status.textContent='Lengkapi nama, email, password'; status.style.color='#ff6b6b'; return; }
           if(password.length<8){ status.textContent='Password minimal 8 karakter'; status.style.color='#ff6b6b'; return; }
+          if(!isGuru && kodeKelas.length!==10){ status.textContent='Siswa wajib isi Kode Kelas 10 karakter (Acak 10)'; status.style.color='#ff6b6b'; kodeInput.focus(); return; }
           status.textContent='Mendaftar...'; status.style.color='rgba(155,161,170,0.9)';
           try{
             const backend=(window.__SIPIKET_API||'/api');
             const body={email, display_name: username, password, hcaptcha_token: ""};
-            if(isGuru){
-              // simple guru code for presentasi: if no real code, backend will accept with role guru via flag
-              body.teacher_code = "GURU-DEMO";
-            }
+            if(isGuru){ body.teacher_code = "GURU-DEMO"; }
+            else { body.class_code = kodeKelas; }
             let r=await fetch(backend+"/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(body)});
             let j=await r.json();
             if(!r.ok){
               if(r.status>=400){
                 const key="account_"+email.toLowerCase();
-                const payload={email, displayName: username, role: isGuru?"guru":"siswa", classCode: "", registeredAt: Date.now()};
+                const payload={email, displayName: username, role: isGuru?"guru":"siswa", classCode: isGuru?"":kodeKelas, registeredAt: Date.now()};
                 try{ if(typeof secureSet==="function") await secureSet(key,payload); else localStorage.setItem("enc_"+key, JSON.stringify(payload)); }catch{}
                 localStorage.setItem("sipiket_last_email", email);
                 sessionStorage.setItem("sipiket_registered","1");
                 sessionStorage.setItem("sipiket_googleEmail",email);
                 sessionStorage.setItem("sipiket_googleName",username);
-                if(isGuru) sessionStorage.setItem("sipiket_role","guru");
+                sessionStorage.setItem("sipiket_classCode", isGuru?"":kodeKelas);
+                if(isGuru) sessionStorage.setItem("sipiket_role","guru"); else sessionStorage.removeItem("sipiket_role");
                 status.textContent='✓ Akun tersimpan — langsung masuk...'; status.style.color='#10b981';
                 setTimeout(()=>location.href=isGuru?'guru-kelas.html':'kelas.html', 700);
                 return;
@@ -140,7 +150,8 @@
                 sessionStorage.setItem("sipiket_registered","1");
                 sessionStorage.setItem("sipiket_googleEmail",email);
                 sessionStorage.setItem("sipiket_googleName",username);
-                if(lj.user?.role==="guru"||isGuru) sessionStorage.setItem("sipiket_role","guru");
+                sessionStorage.setItem("sipiket_classCode", isGuru?"":kodeKelas);
+                if(lj.user?.role==="guru"||isGuru) sessionStorage.setItem("sipiket_role","guru"); else sessionStorage.removeItem("sipiket_role");
                 setTimeout(()=>location.href=(lj.user?.role==="guru"||isGuru)?'guru-kelas.html':'kelas.html', 500);
                 return;
               }
