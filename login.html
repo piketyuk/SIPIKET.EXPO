@@ -34,38 +34,25 @@
 
     <main id="main">
       <section class="page-hero" aria-labelledby="login-title">
-        <div style="display:grid;justify-items:center;gap:6px;margin-bottom:8px" aria-hidden="true">
-          <svg width="88" height="56" viewBox="0 0 120 72" fill="none" aria-hidden="true" style="filter: drop-shadow(0 8px 18px rgba(15,91,255,0.18)); animation: fishFloat 3.2s ease-in-out infinite">
-            <ellipse cx="72" cy="36" rx="28" ry="16" fill="#3b82ff" stroke="#0f5bff" stroke-width="1.8"/>
-            <ellipse cx="72" cy="36" rx="18" ry="10" fill="#eaf2ff" opacity="0.85"/>
-            <ellipse cx="76" cy="32" rx="4.5" ry="3.2" fill="#0b1220"/><circle cx="77" cy="31" r="1.4" fill="#fff"/>
-            <path d="M94 36 L110 20 L110 52 L94 36Z" fill="#0f5bff" stroke="#0b1220" stroke-width="1.2" stroke-linejoin="round"/>
-            <path d="M42 24 L72 36 L42 48" fill="none" stroke="#0f5bff" stroke-width="1" opacity="0.25"/>
-            <circle cx="64" cy="40" r="1.2" fill="#0b1220" opacity="0.7"/><circle cx="58" cy="38" r="0.9" fill="#0b1220" opacity="0.5"/>
-            <ellipse cx="28" cy="36" rx="3" ry="1.2" fill="#0b1220" opacity="0.15"/>
-            <style>@keyframes fishFloat{0%,100%{transform:translateY(0) rotate(-0.3deg)}50%{transform:translateY(-5px) rotate(0.6deg)}}</style>
-          </svg>
-          <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:700">SIPIKET • Transparan & Efektif</span>
-        </div>
-        <h1 id="login-title" class="robot-title" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.04em; font-size: clamp(1.8rem, 5vw, 2.6rem)">Login <em style="color: var(--orange); font-style: normal">Sekarang</em></h1>
-        <p id="loginDesc" style="color: #24344f; max-width: 560px; margin: 10px auto 0; font-weight: 500">Kode kelas untuk masuk kelas, Google untuk akun. Belum terdaftar? Otomatis didaftarkan.</p>
+        <h1 id="login-title" class="robot-title" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.04em; font-size: clamp(1.8rem, 5vw, 2.6rem); color: #fff">Login <em style="color: rgba(255,255,255,0.8); font-style: normal">Sekarang</em></h1>
+        <p id="loginDesc" style="color: rgba(155,161,170,0.9); max-width: 560px; margin: 10px auto 0; font-weight: 500">Kode kelas untuk masuk kelas, Google untuk akun. Belum terdaftar? Otomatis didaftarkan.</p>
 
         <div id="loginMainView" style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px">
           <div id="g_id_onload_main" data-client_id="1083803959228-th3sneo3458ok49o7v4l47gufpnoqtqq.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="onGoogleCredential" data-auto_prompt="false"></div>
           <button class="btn-google" type="button" id="googleLoginMain" style="justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09A6.97 6.97 0 015.48 12s.04-1.52.36-2.09V7.07H2.18A11 11 0 001 12c0 1.78.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Login dengan Google</button>
-          <div style="display: grid; gap: 10px; text-align: center; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 4px">
-            <p style="font-size: 0.88rem; color: var(--muted)">Belum punya akun? <button id="openCreateAccount" type="button" style="background: none; border: 0; color: var(--orange); font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 2px">Buat akun sekarang</button></p>
+          <div style="display: grid; gap: 10px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-top: 4px">
+            <p style="font-size: 0.88rem; color: rgba(155,161,170,0.9)">Belum punya akun? <button id="openCreateAccount" type="button" style="background: none; border: 0; color: rgba(255,255,255,0.9); font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 2px">Buat akun sekarang</button></p>
           </div>
-          <p id="loginMainStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.84rem; min-height: 1em; color: var(--muted)"></p>
+          <p id="loginMainStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.84rem; min-height: 1em; color: rgba(155,161,170,0.9)"></p>
         </div>
 
-        <div id="createAccountView" hidden style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: rgba(255,255,255,0.96); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(15,91,255,0.08)">
-          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; text-align: center; font-size: 1.3rem">Buat Akun</h2>
-          <p style="text-align: center; color: var(--muted); font-size: 0.88rem">Pilihlah sesuai kebutuhan dan pastikan punya kodenya</p>
+        <div id="createAccountView" hidden style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: rgba(18,18,20,0.96); border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(0,0,0,0.3)">
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; text-align: center; font-size: 1.3rem; color: #fff">Buat Akun</h2>
+          <p style="text-align: center; color: rgba(155,161,170,0.9); font-size: 0.88rem">Pilihlah sesuai kebutuhan dan pastikan punya kodenya</p>
           <form class="otp-wrap" id="otpForm" novalidate style="margin: 0">
             <fieldset class="otp-field" id="codeFieldset">
               <legend id="codeLegend">Masukkan Kode Kelas</legend>
-              <p id="codeDesc" style="text-align: center; color: var(--muted); font-size: 0.82rem; margin-top: -4px">Hanya kode untuk menentukan kelas (6 digit)</p>
+              <p id="codeDesc" style="text-align: center; color: rgba(155,161,170,0.9); font-size: 0.82rem; margin-top: -4px">Hanya kode untuk menentukan kelas (6 digit)</p>
               <div class="otp-boxes" role="group" aria-label="Kode kelas 6 digit" id="codeGroup">
                 <input class="otp-box class-code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1" required />
                 <input class="otp-box class-code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Digit 2" required />
@@ -79,62 +66,67 @@
               <button type="button" id="teacherToggle" class="teacher-toggle" role="switch" aria-checked="false" aria-label="Aktifkan kode guru" title="Kode guru"><span class="toggle-icon" aria-hidden="true">⟳</span><span class="toggle-text">Kode guru</span></button>
               <button type="button" id="classToggle" class="teacher-toggle" role="switch" aria-checked="true" aria-label="Aktifkan kode kelas" title="Kode kelas"><span class="toggle-icon" aria-hidden="true">🎓</span><span class="toggle-text">Kode kelas</span></button>
             </div>
-            <p id="classOffHint" style="text-align: center; font-size: 0.78rem; color: var(--muted); min-height: 1em">Masukkan kode yang diberikan guru</p>
+            <p id="classOffHint" style="text-align: center; font-size: 0.78rem; color: rgba(155,161,170,0.9); min-height: 1em">Masukkan kode yang diberikan guru</p>
             <button class="btn-primary btn-full" type="submit" id="verifyBtn">Verifikasi Kode →</button>
-            <p id="otpStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.88rem; min-height: 1.2em; color: var(--muted)"></p>
-            <div id="googleStep" hidden style="display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 4px">
-              <label class="terms" for="termsCheck"><input type="checkbox" id="termsCheck" required /><span>Saya menyetujui <a href="syarat-ketentuan.html" id="termsLink" target="_blank" rel="noopener">Syarat & Ketentuan</a> dan Kebijakan Privasi *wajib</span></label>
-              <p id="termsHint" role="status" aria-live="polite" style="text-align: center; font-size: 0.8rem; color: #d93025; min-height: 1em"></p>
+            <p id="otpStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.88rem; min-height: 1.2em; color: rgba(155,161,170,0.9)"></p>
+            <div id="nameField" hidden style="display: grid; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-top: 4px">
+              <label for="fullName" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px; color: #fff">Nama Lengkap<input id="fullName" type="text" placeholder="Masukkan nama lengkap kamu" maxlength="80" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); font: inherit; background: rgba(255,255,255,0.08); color: #fff" required /></label>
+              <p id="nameHint" style="text-align: center; font-size: 0.78rem; color: rgba(155,161,170,0.9); min-height: 1em"></p>
+              <button type="button" id="nameConfirmBtn" class="btn-primary btn-full" style="justify-content: center">Lanjut ke Google →</button>
+            </div>
+            <div id="googleStep" hidden style="display: grid; gap: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-top: 4px">
+              <label class="terms" for="termsCheck"><input type="checkbox" id="termsCheck" required /><span style="color: rgba(255,255,255,0.85)">Saya menyetujui <a href="syarat-ketentuan.html" id="termsLink" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.9)">Syarat & Ketentuan</a> dan Kebijakan Privasi *wajib</span></label>
+              <p id="termsHint" role="status" aria-live="polite" style="text-align: center; font-size: 0.8rem; color: #ff6b6b; min-height: 1em"></p>
               <div id="g_id_onload" data-client_id="1083803959228-th3sneo3458ok49o7v4l47gufpnoqtqq.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="onGoogleCredential" data-auto_prompt="false"></div>
               <button class="btn-google" type="button" id="googleBtn" disabled aria-disabled="true" title="Centang S&K dulu"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09A6.97 6.97 0 015.48 12s.04-1.52.36-2.09V7.07H2.18A11 11 0 001 12c0 1.78.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Login dengan Google</button>
               <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-size="large" data-logo_alignment="left" style="display: none"></div>
             </div>
           </form>
-          <button type="button" id="backToLogin" style="background: none; border: 0; color: var(--muted); font-size: 0.84rem; cursor: pointer; text-decoration: underline; text-align: center">← Kembali ke Login</button>
+          <button type="button" id="backToLogin" style="background: none; border: 0; color: rgba(155,161,170,0.9); font-size: 0.84rem; cursor: pointer; text-decoration: underline; text-align: center">← Kembali ke Login</button>
         </div>
 
-        <section id="verifyView" hidden aria-labelledby="verifyTitle" style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: rgba(255,255,255,0.96); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(15,91,255,0.08)">
-          <h2 id="verifyTitle" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; text-align: center">Verifikasi</h2>
-          <p style="text-align: center; color: var(--muted); font-size: 0.88rem">Kamu telah kami kirimin pesan di email. segera cek kami hanya memberi waktu hanya 10 menit segera verifikasi</p>
-          <p id="verifyEmailShow" style="text-align: center; font-weight: 700; word-break: break-all"></p>
+        <section id="verifyView" hidden aria-labelledby="verifyTitle" style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: rgba(18,18,20,0.96); border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(0,0,0,0.3)">
+          <h2 id="verifyTitle" style="font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; text-align: center; color: #fff">Verifikasi</h2>
+          <p style="text-align: center; color: rgba(155,161,170,0.9); font-size: 0.88rem">Kamu telah kami kirimin pesan di email. segera cek kami hanya memberi waktu hanya 10 menit segera verifikasi</p>
+          <p id="verifyEmailShow" style="text-align: center; font-weight: 700; word-break: break-all; color: #fff"></p>
           <div style="display: grid; gap: 10px">
             <button type="button" id="sendVerifyBtn" class="btn-primary btn-full" style="justify-content: center">Kirim Verifikasi ke Email →</button>
-            <div id="verifySentBox" hidden style="display: grid; gap: 10px; text-align: center">
-              <p style="color: var(--muted); font-size: 0.86rem">Halo <span id="verifyNameShow" style="font-weight: 700; color: var(--dark)">kamu</span> — ini email verifikasi dari <b>sipiket.my.id</b>. Segera klik untuk mengaktifkan akunmu!</p>
-              <p style="font-size: 0.76rem; color: var(--muted)">Cek email dari <b>sipiket.co@gmail.com</b> — klik tombol verifikasi di email untuk lanjut</p>
-            </div>
+             <div id="verifySentBox" hidden style="display: grid; gap: 10px; text-align: center">
+               <p style="color: rgba(155,161,170,0.9); font-size: 0.86rem">Halo <span id="verifyNameShow" style="font-weight: 700; color: #fff">kamu</span> — ini email verifikasi dari <b>sipiket.my.id</b>. Segera klik untuk mengaktifkan akunmu!</p>
+               <p style="font-size: 0.76rem; color: rgba(155,161,170,0.9)">Cek email dari <b>sipiket.co@gmail.com</b> — klik tombol verifikasi di email untuk lanjut</p>
+             </div>
             <button type="button" id="verifyContinueBtn" hidden class="btn-primary btn-full" style="justify-content: center">Lanjut →</button>
           </div>
         </section>
 
-        <section id="profileView" hidden aria-labelledby="profileViewTitle" style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: #fff; border: 2px solid #0b1220; border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(15,91,255,0.08)">
-          <h2 id="profileViewTitle" style="font-family: 'Plus Jakarta Sans', sans-serif; text-align: center">Lengkapi <span style="color: var(--orange)">Profil</span></h2>
+        <section id="profileView" hidden aria-labelledby="profileViewTitle" style="max-width: 420px; margin: 22px auto; display: grid; gap: 16px; background: rgba(18,18,20,0.96); border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; box-shadow: 0 12px 32px rgba(0,0,0,0.3)">
+          <h2 id="profileViewTitle" style="font-family: 'Plus Jakarta Sans', sans-serif; text-align: center; color: #fff">Lengkapi <span style="color: rgba(255,255,255,0.8)">Profil</span></h2>
           <div style="display: grid; justify-items: center; gap: 10px">
-            <label for="inlineAvatar" style="cursor: pointer"><div id="inlineAvatarPrev" style="width: 96px; height: 96px; border-radius: 50%; background: #0b1220; border: 2px solid #0b1220; display: grid; place-items: center; overflow: hidden; font-size: 42px; color: #fff">👤</div><span style="font-size: 0.82rem; color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; display: block; text-align: center; margin-top: 6px">Ganti foto</span></label>
+            <label for="inlineAvatar" style="cursor: pointer"><div id="inlineAvatarPrev" style="width: 96px; height: 96px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.1); display: grid; place-items: center; overflow: hidden; font-size: 42px; color: #fff">👤</div><span style="font-size: 0.82rem; color: rgba(255,255,255,0.8); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; display: block; text-align: center; margin-top: 6px">Ganti foto</span></label>
             <input id="inlineAvatar" type="file" accept="image/*" hidden />
-            <p id="inlineAvatarName" style="font-size: 0.78rem; color: var(--muted)"></p>
+            <p id="inlineAvatarName" style="font-size: 0.78rem; color: rgba(155,161,170,0.9)"></p>
           </div>
-          <label for="inlineName" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Nama lengkap<input id="inlineName" type="text" placeholder="Rachmatullah Rajasyah M.S." autocomplete="name" maxlength="60" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit" /></label>
-          <div id="guruClassFields" hidden style="display: grid; gap: 10px; background: #f6f9ff; border: 1px solid var(--line); border-radius: 12px; padding: 12px">
-            <label for="guruTingkat" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Pilih Kelas (1-12)<select id="guruTingkat" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: #fff"><option value="" disabled selected>Pilih tingkat</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></label>
-            <label for="guruNamaKelas" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Nama Kelas<input id="guruNamaKelas" type="text" placeholder="misal IX-F" maxlength="20" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit" /></label>
+          <label for="inlineName" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px; color: #fff">Nama lengkap<input id="inlineName" type="text" placeholder="Rachmatullah Rajasyah M.S." autocomplete="name" maxlength="60" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); font: inherit; background: rgba(255,255,255,0.08); color: #fff" /></label>
+          <div id="guruClassFields" hidden style="display: grid; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px">
+            <label for="guruTingkat" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px; color: #fff">Pilih Kelas (1-12)<select id="guruTingkat" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.15); font: inherit; background: rgba(255,255,255,0.08); color: #fff"><option value="" disabled selected>Pilih tingkat</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></label>
+            <label for="guruNamaKelas" style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px; color: #fff">Nama Kelas<input id="guruNamaKelas" type="text" placeholder="misal IX-F" maxlength="20" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.15); font: inherit; background: rgba(255,255,255,0.08); color: #fff" /></label>
             <button type="button" id="buatKelasBtn" class="btn-primary btn-full" style="justify-content: center">Buat Kelas →</button>
-            <div id="kelasCodeDisplay" hidden style="background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; text-align: center">
-              <p style="font-size: 0.84rem; color: var(--muted)">Kumpulan kode untuk masuk ke kelas</p>
+            <div id="kelasCodeDisplay" hidden style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; display: grid; gap: 8px; text-align: center">
+              <p style="font-size: 0.84rem; color: rgba(155,161,170,0.9)">Kumpulan kode untuk masuk ke kelas</p>
               <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap">
-                <code id="generatedKelasCode" style="font-size: 1.2rem; font-weight: 800; letter-spacing: 0.08em; background: #0b1220; color: #fff; padding: 8px 14px; border-radius: 10px"></code>
+                <code id="generatedKelasCode" style="font-size: 1.2rem; font-weight: 800; letter-spacing: 0.08em; background: rgba(255,255,255,0.1); color: #fff; padding: 8px 14px; border-radius: 10px"></code>
                 <button type="button" id="salinKelasCode" class="teacher-toggle" style="padding: 8px 12px">Salin</button>
               </div>
-              <p style="font-size: 0.76rem; color: var(--muted)">Bagikan kode ini ke siswa untuk masuk ke kelas <span id="kelasNamaDisplay"></span></p>
+              <p style="font-size: 0.76rem; color: rgba(155,161,170,0.9)">Bagikan kode ini ke siswa untuk masuk ke kelas <span id="kelasNamaDisplay"></span></p>
             </div>
           </div>
-          <div id="siswaKelasBadge" hidden style="background: #eef4ff; border: 1px solid #d4e7ff; border-radius: 12px; padding: 12px; text-align: center">
-            <p style="font-size: 0.82rem; color: var(--muted)">Lencana Kelas</p>
-            <p id="siswaKelasCode" style="font-weight: 800; font-size: 1.1rem; letter-spacing: 0.06em"></p>
+          <div id="siswaKelasBadge" hidden style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; text-align: center">
+            <p style="font-size: 0.82rem; color: rgba(155,161,170,0.9)">Lencana Kelas</p>
+            <p id="siswaKelasCode" style="font-weight: 800; font-size: 1.1rem; letter-spacing: 0.06em; color: #fff"></p>
           </div>
-          <p id="inlineProfileStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.84rem; min-height: 1em; color: var(--muted)"></p>
+          <p id="inlineProfileStatus" role="status" aria-live="polite" style="text-align: center; font-size: 0.84rem; min-height: 1em; color: rgba(155,161,170,0.9)"></p>
           <button type="button" id="inlineProfileSave" class="btn-primary btn-full" disabled aria-disabled="true" style="justify-content: center; opacity: 0.5">Simpan & Masuk Kelas →</button>
-          <p id="profileCooldown" style="text-align: center; font-size: 0.76rem; color: var(--muted)"></p>
+          <p id="profileCooldown" style="text-align: center; font-size: 0.76rem; color: rgba(155,161,170,0.9)"></p>
         </section>
 
         <div id="otpSentCard" hidden class="otp-sent" role="status" aria-live="polite"></div>

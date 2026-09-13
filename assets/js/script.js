@@ -170,6 +170,10 @@ const classToggle = null, // removed — exclusive selection
   classOffHint = $("#classOffHint"),
   accountHint = $("#accountHint"),
   googleStep = $("#googleStep"),
+  nameField = $("#nameField"),
+  fullName = $("#fullName"),
+  nameHint = $("#nameHint"),
+  nameConfirmBtn = $("#nameConfirmBtn"),
   emailPreviewTo = $("#emailPreviewTo"),
   emailVerifyBtn = $("#emailVerifyBtn"),
   resendEmailBtn = $("#resendEmailBtn"),
@@ -379,23 +383,26 @@ function setClassVerified(v) {
     verifyBtn.disabled = true;
     classBoxes.forEach((b) => (b.disabled = true));
     otpStatus.textContent = teacherMode
-      ? "✓ Kode guru terverifikasi — centang S&K lalu lanjut Google"
-      : "✓ Kode kelas terverifikasi — centang S&K lalu lanjut Google";
+      ? "✓ Kode guru terverifikasi — masukkan nama lalu lanjut Google"
+      : "✓ Kode kelas terverifikasi — masukkan nama lalu lanjut Google";
     otpStatus.style.color = "var(--orange)";
+    nameField.hidden = false;
+    fullName.focus();
   } else {
     verifyBtn.textContent = "Verifikasi Kode →";
     verifyBtn.style.display = "";
     verifyBtn.disabled = false;
     classBoxes.forEach((b) => (b.disabled = false));
+    nameField.hidden = true;
   }
   updateGoogleVisibility();
   syncGoogle();
   if (v) {
     verifyBtn.style.display = "none";
     verifyBtn.disabled = true;
-    if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (nameField && !nameField.hidden) nameField.scrollIntoView({ behavior: "smooth", block: "center" });
+    else if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
     else if (googleBtn) googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
-    if (termsCheck?.checked && googleBtn) googleBtn.focus();
   }
 }
 function resetClass() {
@@ -406,11 +413,23 @@ function resetClass() {
   classBoxes.forEach((b) => (b.disabled = false));
   otpStatus.textContent = "Kode diubah — verifikasi ulang";
   otpStatus.style.color = "#d93025";
-  if (otpSentCard) otpSentCard.hidden = true;
-  updateGoogleVisibility();
-  syncGoogle();
-}
-otpForm?.addEventListener("submit", async (e) => {
+   if (otpSentCard) otpSentCard.hidden = true;
+   updateGoogleVisibility();
+   syncGoogle();
+ }
+ nameConfirmBtn?.addEventListener("click", () => {
+   if (!fullName.value.trim()) {
+     nameHint.textContent = "Nama tidak boleh kosong";
+     nameHint.style.color = "#ff6b6b";
+     return;
+   }
+   sessionStorage.setItem("sipiket_userName", fullName.value.trim());
+   nameField.hidden = true;
+   googleStep.hidden = false;
+   if (termsCheck) termsCheck.scrollIntoView({ behavior: "smooth", block: "center" });
+   else if (googleBtn) googleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+ });
+ otpForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!classEnabled && !teacherMode) {
     setClassVerified(true);
@@ -542,7 +561,7 @@ window.onGoogleCredential = async function (response) {
       await persistAccount(email, {
         classCode: existing.classCode,
         role: existing.role || pendingRole,
-        name: name || existing.displayName,
+        name: sessionStorage.getItem("sipiket_userName") || name || existing.displayName,
         picture: picture || existing.picture,
       });
       sessionStorage.setItem("sipiket_registered", "1");
@@ -573,7 +592,7 @@ window.onGoogleCredential = async function (response) {
     await persistAccount(email, {
       classCode: classCodeToUse,
       role: pendingRole,
-      name,
+      name: sessionStorage.getItem("sipiket_userName") || name,
       picture,
     });
     const emailOtp = String(Math.floor(100000 + Math.random() * 900000));
@@ -1560,3 +1579,467 @@ function showLoginView(name){
     finally{ btn.disabled=false; btn.textContent="Upload ke Storage (real)"; }
   });
 })();
+
+if(document.getElementById("registerForm")){
+  const regForm=document.getElementById("registerForm");
+  const regUsername=document.getElementById("regUsername");
+  const regEmail=document.getElementById("regEmail");
+  const otpSection=document.getElementById("otpSection");
+  const getOtpBtn=document.getElementById("getOtpBtn");
+  const otpInputs=document.getElementById("otpInputs");
+  const otpGroup=document.getElementById("otpGroup");
+  const verifyOtpBtn=document.getElementById("verifyOtpBtn");
+  const passwordSection=document.getElementById("passwordSection");
+  const regPassword=document.getElementById("regPassword");
+  const regConfirmPassword=document.getElementById("regConfirmPassword");
+  const showPassword=document.getElementById("showPassword");
+  const showConfirmPassword=document.getElementById("showConfirmPassword");
+  const codeSection=document.getElementById("codeSection");
+  const codeGroup=document.getElementById("codeGroup");
+  const classCodeToggle=document.getElementById("classCodeToggle");
+  const teacherCodeToggle=document.getElementById("teacherCodeToggle");
+  const formStatus=document.getElementById("formStatus");
+  const usernameHint=document.getElementById("usernameHint");
+  const emailHint=document.getElementById("emailHint");
+  const otpHint=document.getElementById("otpHint");
+  const passwordHint=document.getElementById("passwordHint");
+  const confirmHint=document.getElementById("confirmHint");
+  const codeHint=document.getElementById("codeHint");
+
+  let otpCode="";
+  let isTeacherMode=false;
+  let classCodeBoxes=[];
+
+  showPassword?.addEventListener("change",()=>{
+    regPassword.type=showPassword.checked?"text":"password";
+  });
+  showConfirmPassword?.addEventListener("change",()=>{
+    regConfirmPassword.type=showConfirmPassword.checked?"text":"password";
+  });
+
+  regUsername.addEventListener("blur",()=>{
+    if(!regUsername.value.trim()){
+      usernameHint.textContent="Nama tidak boleh kosong";
+      usernameHint.style.color="#ff6b6b";
+      return;
+    }
+    if(regUsername.value.trim().length<3){
+      usernameHint.textContent="Minimal 3 karakter";
+      usernameHint.style.color="#ff6b6b";
+      return;
+    }
+    usernameHint.textContent="✓";
+    usernameHint.style.color="rgba(155,161,170,0.9)";
+  });
+
+  regEmail.addEventListener("blur",()=>{
+    if(!regEmail.value.trim()){
+      emailHint.textContent="Email tidak boleh kosong";
+      emailHint.style.color="#ff6b6b";
+      return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regEmail.value)){
+      emailHint.textContent="Format email salah";
+      emailHint.style.color="#ff6b6b";
+      return;
+    }
+    emailHint.textContent="✓";
+    emailHint.style.color="rgba(155,161,170,0.9)";
+    otpSection.hidden=false;
+  });
+
+  getOtpBtn.addEventListener("click",async()=>{
+    if(!regEmail.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regEmail.value)){
+      emailHint.textContent="Email harus valid dulu";
+      emailHint.style.color="#ff6b6b";
+      return;
+    }
+    getOtpBtn.disabled=true;
+    getOtpBtn.textContent="Mengirim...";
+    try{
+      otpCode=String(Math.floor(100000+Math.random()*900000));
+      sessionStorage.setItem("sipiket_regEmail",regEmail.value);
+      sessionStorage.setItem("sipiket_regOtp",otpCode);
+      sessionStorage.setItem("sipiket_regOtpTime",Date.now().toString());
+      otpHint.textContent=`✓ OTP dikirim ke ${regEmail.value} (dev: ${otpCode})`;
+      otpHint.style.color="rgba(155,161,170,0.9)";
+      otpInputs.hidden=false;
+      otpGroup.querySelectorAll("input")[0].focus();
+      getOtpBtn.textContent="OTP Terkirim ✓";
+      setTimeout(()=>{
+        getOtpBtn.disabled=false;
+        getOtpBtn.textContent="Dapatkan OTP →";
+      },120000);
+    }catch(e){
+      otpHint.textContent="Gagal kirim OTP: "+(e.message||e);
+      otpHint.style.color="#ff6b6b";
+      getOtpBtn.disabled=false;
+      getOtpBtn.textContent="Dapatkan OTP →";
+    }
+  });
+
+  otpGroup.querySelectorAll("input").forEach((inp,idx)=>{
+    inp.addEventListener("input",e=>{
+      if(!/^\d$/.test(e.target.value)){
+        e.target.value="";
+        return;
+      }
+      if(idx<5) otpGroup.querySelectorAll("input")[idx+1].focus();
+    });
+    inp.addEventListener("keydown",e=>{
+      if(e.key==="Backspace" && !inp.value && idx>0){
+        otpGroup.querySelectorAll("input")[idx-1].focus();
+      }
+    });
+  });
+
+  verifyOtpBtn.addEventListener("click",()=>{
+    const inputOtp=Array.from(otpGroup.querySelectorAll("input")).map(i=>i.value).join("");
+    if(inputOtp.length!==6){
+      otpHint.textContent="Lengkapi 6 digit OTP";
+      otpHint.style.color="#ff6b6b";
+      return;
+    }
+    if(inputOtp!==otpCode){
+      otpHint.textContent="OTP salah";
+      otpHint.style.color="#ff6b6b";
+      return;
+    }
+    otpHint.textContent="✓ OTP terverifikasi";
+    otpHint.style.color="rgba(155,161,170,0.9)";
+    passwordSection.hidden=false;
+    regPassword.focus();
+  });
+
+  regPassword.addEventListener("input",()=>{
+    if(regPassword.value.length<8){
+      passwordHint.textContent="Minimal 8 karakter";
+      passwordHint.style.color="#ff6b6b";
+      return;
+    }
+    passwordHint.textContent="✓";
+    passwordHint.style.color="rgba(155,161,170,0.9)";
+  });
+
+  regConfirmPassword.addEventListener("input",()=>{
+    if(regConfirmPassword.value!==regPassword.value){
+      confirmHint.textContent="Password tidak cocok";
+      confirmHint.style.color="#ff6b6b";
+      return;
+    }
+    confirmHint.textContent="✓";
+    confirmHint.style.color="rgba(155,161,170,0.9)";
+    codeSection.hidden=false;
+    classCodeBoxes=Array.from(document.querySelectorAll(".class-code"));
+    classCodeBoxes[0].focus();
+  });
+
+  classCodeToggle.addEventListener("click",()=>{
+    classCodeToggle.setAttribute("aria-checked","true");
+    teacherCodeToggle.setAttribute("aria-checked","false");
+    isTeacherMode=false;
+    document.getElementById("codeLegend").textContent="Masukkan Kode Kelas";
+    document.getElementById("codeDesc").textContent="Hanya kode untuk menentukan kelas (6 digit)";
+    codeHint.textContent="Masukkan kode yang diberikan guru";
+  });
+
+  teacherCodeToggle.addEventListener("click",()=>{
+    teacherCodeToggle.setAttribute("aria-checked","true");
+    classCodeToggle.setAttribute("aria-checked","false");
+    isTeacherMode=true;
+    document.getElementById("codeLegend").textContent="Masukkan Kode Guru";
+    document.getElementById("codeDesc").textContent="Kode guru untuk mendaftar sebagai guru (10 karakter)";
+    codeHint.textContent="Masukkan kode guru yang diberikan";
+  });
+
+  regForm.addEventListener("submit",async(e)=>{
+    e.preventDefault();
+    const code=classCodeBoxes.map(b=>b.value).join("");
+    if(isTeacherMode){
+      if(code.length!==10){
+        codeHint.textContent="Kode guru harus 10 karakter";
+        codeHint.style.color="#ff6b6b";
+        return;
+      }
+    }else{
+      if(code.length!==6 || /\D/.test(code)){
+        codeHint.textContent="Kode kelas harus 6 digit angka";
+        codeHint.style.color="#ff6b6b";
+        return;
+      }
+    }
+    formStatus.textContent="Mendaftar...";
+    formStatus.style.color="rgba(155,161,170,0.9)";
+    try{
+      const email=regEmail.value;
+      const username=regUsername.value.trim();
+      const password=regPassword.value;
+      const payload={email,username,password,code,role:isTeacherMode?"guru":"siswa",createdAt:Date.now()};
+      if(typeof secureSet==="function") await secureSet(encKey(email),payload);
+      else localStorage.setItem("enc_"+encKey(email),JSON.stringify(payload));
+      localStorage.setItem("sipiket_last_email",email);
+      formStatus.textContent="✓ Akun berhasil dibuat — redirect ke login";
+      formStatus.style.color="rgba(155,161,170,0.9)";
+      setTimeout(()=>{location.href="login.html";},1500);
+    }catch(e){
+      formStatus.textContent="Gagal: "+(e.message||e);
+      formStatus.style.color="#ff6b6b";
+    }
+  });
+}
+
+if(document.getElementById("saveNickBtn")){
+  const nickName=document.getElementById("nickName");
+  const saveNickBtn=document.getElementById("saveNickBtn");
+  const nickHint=document.getElementById("nickHint");
+  const emailDisplay=document.getElementById("emailDisplay");
+  const newPassword=document.getElementById("newPassword");
+  const changePasswordBtn=document.getElementById("changePasswordBtn");
+  const passwordChangeHint=document.getElementById("passwordChangeHint");
+  const deleteAccountBtn=document.getElementById("deleteAccountBtn");
+  const deleteHint=document.getElementById("deleteHint");
+  const logoutBtn=document.getElementById("logoutBtn");
+  const avatarUpload=document.getElementById("avatarUpload");
+  const avatarPreview=document.getElementById("avatarPreview");
+
+  const currentEmail=sessionStorage.getItem("sipiket_googleEmail")||localStorage.getItem("sipiket_last_email")||"";
+  emailDisplay.textContent=currentEmail;
+
+  saveNickBtn.addEventListener("click",async()=>{
+    if(!nickName.value.trim()){
+      nickHint.textContent="Nama panggilan tidak boleh kosong";
+      nickHint.style.color="#ff6b6b";
+      return;
+    }
+    saveNickBtn.disabled=true;
+    try{
+      const key=encKey(currentEmail);
+      let acc=null;
+      if(typeof secureGet==="function") acc=await secureGet(key);
+      else {
+        try{acc=JSON.parse(localStorage.getItem("enc_"+key));}catch{}
+      }
+      if(!acc) acc={};
+      acc.displayName=nickName.value.trim();
+      acc.updatedAt=Date.now();
+      if(typeof secureSet==="function") await secureSet(key,acc);
+      else localStorage.setItem("enc_"+key,JSON.stringify(acc));
+      nickHint.textContent="✓ Nama panggilan tersimpan";
+      nickHint.style.color="rgba(155,161,170,0.9)";
+    }catch(e){
+      nickHint.textContent="Gagal: "+(e.message||e);
+      nickHint.style.color="#ff6b6b";
+    }finally{
+      saveNickBtn.disabled=false;
+    }
+  });
+
+  changePasswordBtn.addEventListener("click",async()=>{
+    if(!newPassword.value.trim()){
+      passwordChangeHint.textContent="Password baru tidak boleh kosong";
+      passwordChangeHint.style.color="#ff6b6b";
+      return;
+    }
+    if(newPassword.value.length<8){
+      passwordChangeHint.textContent="Minimal 8 karakter";
+      passwordChangeHint.style.color="#ff6b6b";
+      return;
+    }
+    changePasswordBtn.disabled=true;
+    try{
+      const key=encKey(currentEmail);
+      let acc=null;
+      if(typeof secureGet==="function") acc=await secureGet(key);
+      else {
+        try{acc=JSON.parse(localStorage.getItem("enc_"+key));}catch{}
+      }
+      if(!acc){
+        passwordChangeHint.textContent="Akun tidak ditemukan";
+        passwordChangeHint.style.color="#ff6b6b";
+        return;
+      }
+      const lastChange=acc.lastPasswordChange||0;
+      const now=Date.now();
+      if(now-lastChange<7*24*60*60*1000){
+        const daysLeft=Math.ceil((7*24*60*60*1000-(now-lastChange))/(24*60*60*1000));
+        passwordChangeHint.textContent=`Tunggu ${daysLeft} hari lagi untuk ganti password`;
+        passwordChangeHint.style.color="#ff6b6b";
+        return;
+      }
+      acc.password=newPassword.value;
+      acc.lastPasswordChange=now;
+      acc.updatedAt=now;
+      if(typeof secureSet==="function") await secureSet(key,acc);
+      else localStorage.setItem("enc_"+key,JSON.stringify(acc));
+      passwordChangeHint.textContent="✓ Password berhasil diubah";
+      passwordChangeHint.style.color="rgba(155,161,170,0.9)";
+      newPassword.value="";
+    }catch(e){
+      passwordChangeHint.textContent="Gagal: "+(e.message||e);
+      passwordChangeHint.style.color="#ff6b6b";
+    }finally{
+      changePasswordBtn.disabled=false;
+    }
+  });
+
+  deleteAccountBtn.addEventListener("click",async()=>{
+    const confirm=window.confirm("Yakin hapus akun? Semua data akan hilang permanen!");
+    if(!confirm) return;
+    deleteAccountBtn.disabled=true;
+    try{
+      const key=encKey(currentEmail);
+      if(typeof secureDelete==="function") await secureDelete(key);
+      else localStorage.removeItem("enc_"+key);
+      localStorage.removeItem("sipiket_last_email");
+      sessionStorage.clear();
+      deleteHint.textContent="✓ Akun dihapus — redirect ke login";
+      deleteHint.style.color="rgba(155,161,170,0.9)";
+      setTimeout(()=>{location.href="login.html";},1500);
+    }catch(e){
+      deleteHint.textContent="Gagal: "+(e.message||e);
+      deleteHint.style.color="#ff6b6b";
+      deleteAccountBtn.disabled=false;
+    }
+  });
+
+  logoutBtn.addEventListener("click",()=>{
+    const confirm=window.confirm("Yakin keluar dari akun?");
+    if(!confirm) return;
+    sessionStorage.clear();
+    localStorage.removeItem("sipiket_last_email");
+    location.href="index.html";
+  });
+
+  avatarUpload.addEventListener("change",(e)=>{
+    const f=e.target.files[0];
+    if(!f) return;
+    if(!f.type.startsWith("image/")){
+      alert("File harus gambar");
+      return;
+    }
+    const r=new FileReader();
+    r.onload=()=>{
+      avatarPreview.textContent="";
+      const img=document.createElement("img");
+      img.src=r.result;
+      img.style.width="100%";
+      img.style.height="100%";
+      img.style.objectFit="cover";
+      avatarPreview.appendChild(img);
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+if(document.getElementById("verifyAdminBtn")){
+  const adminPassword=document.getElementById("adminPassword");
+  const verifyAdminBtn=document.getElementById("verifyAdminBtn");
+  const adminHint=document.getElementById("adminHint");
+  const passwordGate=document.getElementById("passwordGate");
+  const adminPanel=document.getElementById("adminPanel");
+  const guruCodeInput=document.getElementById("guruCodeInput");
+  const guruQuota=document.getElementById("guruQuota");
+  const createGuruCodeBtn=document.getElementById("createGuruCodeBtn");
+  const guruCodeHint=document.getElementById("guruCodeHint");
+  const guruCodesList=document.getElementById("guruCodesList");
+  const deleteEmailInput=document.getElementById("deleteEmailInput");
+  const deleteAccountBtn=document.getElementById("deleteAccountBtn");
+  const deleteAccountHint=document.getElementById("deleteAccountHint");
+
+  const ADMIN_PASSWORD="rachmatullah";
+
+  verifyAdminBtn.addEventListener("click",()=>{
+    if(adminPassword.value!==ADMIN_PASSWORD){
+      adminHint.textContent="Password salah";
+      adminHint.style.color="#ff6b6b";
+      return;
+    }
+    adminHint.textContent="✓ Terverifikasi";
+    adminHint.style.color="rgba(155,161,170,0.9)";
+    passwordGate.hidden=true;
+    adminPanel.hidden=false;
+    loadGuruCodes();
+  });
+
+  function loadGuruCodes(){
+    const codes=JSON.parse(localStorage.getItem("sipiket_guru_codes")||"{}");
+    if(Object.keys(codes).length===0){
+      guruCodesList.innerHTML='<p style="text-align: center; font-size: 0.82rem; color: rgba(155,161,170,0.9)">Belum ada kode guru</p>';
+      return;
+    }
+    guruCodesList.innerHTML=Object.entries(codes).map(([code,data])=>`
+      <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; display: grid; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <span style="font-weight: 800; color: #fff">${code}</span>
+          <span style="font-size: 0.78rem; color: rgba(155,161,170,0.9)">${data.users?.length||0}/${data.quota} pengguna</span>
+        </div>
+        <p style="font-size: 0.76rem; color: rgba(155,161,170,0.9)">Dibuat: ${new Date(data.createdAt).toLocaleString("id-ID")}</p>
+        ${data.users?.length>0?`<p style="font-size: 0.76rem; color: rgba(155,161,170,0.9)">Email: ${data.users.join(", ")}</p>`:""}
+        <button type="button" onclick="document.dispatchEvent(new CustomEvent('deleteGuruCode',{detail:'${code}'}))" style="background: rgba(255,107,107,0.3); border: 1px solid rgba(255,107,107,0.2); color: rgba(255,255,255,0.8); padding: 6px 10px; border-radius: 8px; font-size: 0.76rem; cursor: pointer">Hapus</button>
+      </div>
+    `).join("");
+  }
+
+  createGuruCodeBtn.addEventListener("click",()=>{
+    if(!guruCodeInput.value.trim()){
+      guruCodeHint.textContent="Kode tidak boleh kosong";
+      guruCodeHint.style.color="#ff6b6b";
+      return;
+    }
+    if(!guruQuota.value){
+      guruCodeHint.textContent="Pilih jumlah pengguna";
+      guruCodeHint.style.color="#ff6b6b";
+      return;
+    }
+    const codes=JSON.parse(localStorage.getItem("sipiket_guru_codes")||"{}");
+    const code=guruCodeInput.value.trim();
+    if(codes[code]){
+      guruCodeHint.textContent="Kode sudah ada";
+      guruCodeHint.style.color="#ff6b6b";
+      return;
+    }
+    codes[code]={quota:parseInt(guruQuota.value),users:[],createdAt:Date.now()};
+    localStorage.setItem("sipiket_guru_codes",JSON.stringify(codes));
+    guruCodeHint.textContent="✓ Kode guru berhasil dibuat";
+    guruCodeHint.style.color="rgba(155,161,170,0.9)";
+    guruCodeInput.value="";
+    guruQuota.value="";
+    loadGuruCodes();
+  });
+
+  document.addEventListener("deleteGuruCode",(e)=>{
+    const code=e.detail;
+    const confirm=window.confirm(`Hapus kode ${code}?`);
+    if(!confirm) return;
+    const codes=JSON.parse(localStorage.getItem("sipiket_guru_codes")||"{}");
+    delete codes[code];
+    localStorage.setItem("sipiket_guru_codes",JSON.stringify(codes));
+    loadGuruCodes();
+  });
+
+  deleteAccountBtn.addEventListener("click",async()=>{
+    if(!deleteEmailInput.value.trim()){
+      deleteAccountHint.textContent="Email tidak boleh kosong";
+      deleteAccountHint.style.color="#ff6b6b";
+      return;
+    }
+    const confirm=window.confirm(`Hapus akun ${deleteEmailInput.value}? Aksi tidak bisa dibatalkan!`);
+    if(!confirm) return;
+    deleteAccountBtn.disabled=true;
+    try{
+      const key=encKey(deleteEmailInput.value);
+      if(typeof secureDelete==="function") await secureDelete(key);
+      else localStorage.removeItem("enc_"+key);
+      deleteAccountHint.textContent="✓ Akun berhasil dihapus";
+      deleteAccountHint.style.color="rgba(155,161,170,0.9)";
+      deleteEmailInput.value="";
+    }catch(e){
+      deleteAccountHint.textContent="Gagal: "+(e.message||e);
+      deleteAccountHint.style.color="#ff6b6b";
+    }finally{
+      deleteAccountBtn.disabled=false;
+    }
+  });
+
+  loadGuruCodes();
+}
