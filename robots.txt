@@ -1,3 +1,12 @@
 User-agent: *
 Allow: /
+Allow: /login
+Allow: /register
+Allow: /pengembang
+Disallow: /guru-kelas
+Disallow: /kelas
+Disallow: /tugas
+Disallow: /profile
+Disallow: /pengaturan-akun
+Disallow: /hgfy-kode
 Sitemap: https://sipiket.my.id/sitemap.xml

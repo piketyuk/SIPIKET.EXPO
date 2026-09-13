@@ -1,3 +1,13 @@
 --staged delete
 .vercel
 watch-push.sh
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+venv/
