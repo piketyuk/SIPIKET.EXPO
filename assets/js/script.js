@@ -1668,7 +1668,12 @@ if(document.getElementById("registerForm")){
     }
     emailHint.textContent="✓";
     emailHint.style.color="rgba(155,161,170,0.9)";
-    otpSection.hidden=false;
+    // PRESENTASI: skip OTP
+    passwordSection.hidden=false;
+    codeSection.hidden=false;
+    otpSection.hidden=true;
+    classCodeBoxes=Array.from(document.querySelectorAll(".class-code"));
+    classCodeBoxes[0]?.focus();
   });
 
   getOtpBtn.addEventListener("click",async()=>{
