@@ -1789,3 +1789,6 @@ dialog[open] {
 
 section{margin-block: 0;}
 main > section + section{margin-top: 0; border-top: 1px solid rgba(255,255,255,0.06);}
+
+@media(max-width:900px){ #hariGrid{grid-template-columns:repeat(2,1fr) !important} }
+@media(max-width:480px){ #hariGrid{grid-template-columns:1fr !important} }

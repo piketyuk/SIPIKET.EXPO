@@ -40,7 +40,7 @@ async function loadGuru(code){
 }
 async function loadSiswa(code){
   const grid=document.getElementById('hariGrid');
-  const days=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const days=['Senin','Selasa','Rabu','Kamis','Jumat']; // prototype 5 grid Senin-Jumat
   if(!code){grid.innerHTML='<p style="color:var(--text-muted);">Belum ada kelas. Masukkan kode kelas di pengaturan.</p>';return;}
   try{
     try{ const cc=await api('/classes/'+code); document.documentElement.setAttribute('data-theme', cc.theme==='biru'?'blue':'dark'); }catch{}
