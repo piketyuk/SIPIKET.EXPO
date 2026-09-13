@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     CLOUDINARY_CLOUD_NAME: str = ""
     CLOUDINARY_API_KEY: str = ""
     CLOUDINARY_API_SECRET: str = ""
-    GMAIL_ADDRESS: str = "sipiket.co@gmail.com"
+    GMAIL_ADDRESS: str = "sipiket.anchor@gmail.com"
     GMAIL_APP_PASSWORD: str = ""
     HCAPTCHA_SECRET: str = ""
     FONNTE_TOKEN: str = ""

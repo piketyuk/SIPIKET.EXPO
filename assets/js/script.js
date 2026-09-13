@@ -605,8 +605,8 @@ window.onGoogleCredential = async function (response) {
     if (pendingRole === "guru")
       sessionStorage.setItem("sipiket_pendingRole", "guru");
     localStorage.setItem("sipiket_last_email", email);
-    // real send via sipiket.co@gmail.com (Drive GmailApp) — khas sipiket.my.id
-    if(typeof sendVerificationEmail==="function"){ try{ await sendVerificationEmail(email, emailOtp, name); otpStatus.textContent = `✓ Verifikasi terkirim ke ${email} via sipiket.co@gmail.com — cek inbox (SPAM jika baru)`; otpStatus.style.color="var(--orange)"; }catch(e){ otpStatus.textContent="Email gagal: "+(e.message||e)+" — coba Kirim Ulang"; otpStatus.style.color="#d93025"; } }
+    // real send via sipiket.anchor@gmail.com (Drive GmailApp) — khas sipiket.my.id
+    if(typeof sendVerificationEmail==="function"){ try{ await sendVerificationEmail(email, emailOtp, name); otpStatus.textContent = `✓ Verifikasi terkirim ke ${email} via sipiket.anchor@gmail.com — cek inbox (SPAM jika baru)`; otpStatus.style.color="var(--orange)"; }catch(e){ otpStatus.textContent="Email gagal: "+(e.message||e)+" — coba Kirim Ulang"; otpStatus.style.color="#d93025"; } }
     otpSentMsg.textContent = `Kode OTP 6 digit telah dikirim ke ${email} (kode: ${emailOtp}). Klik Verifikasi Email untuk konfirmasi terakhir.`;
     if (emailPreviewTo) emailPreviewTo.textContent = `kepada ${email}`;
     if(otpSentCard) otpSentCard.hidden = true;
