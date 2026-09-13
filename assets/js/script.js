@@ -1002,9 +1002,8 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e)=>{
     sessionStorage.setItem("sipiket_pendingLogin", "1");
   }catch(err){ hint.textContent=err.message; hint.style.color="#ff6b6b"; }
 });
-document.getElementById("showLoginPass")?.addEventListener("change",(e)=>{
-  const inp=document.getElementById("loginPassword");
-  if(inp) inp.type=e.target.checked?"text":"password";
+document.getElementById("showLoginPass")?.addEventListener("click",()=>{
+  const inp=document.getElementById("loginPassword"); if(!inp) return; inp.type=inp.type==="password"?"text":"password";
 });
 
 (function loginViews(){
