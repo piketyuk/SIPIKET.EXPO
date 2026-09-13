@@ -123,72 +123,93 @@
         </div>
       </section>
       <section style="padding: 18px 20px 48px">
-        <div
-          class="container"
-          style="display: grid; gap: 18px; max-width: 980px; margin: 0 auto"
-        >
-          <section class="card" style="display: grid; gap: 12px">
-            <h3>Tambah Tugas Regu (manual / auto-bagi)</h3>
-            <form id="taskForm" style="display: grid; gap: 10px">
-              <label for="taskTitle" style="font-weight: 600; font-size: 0.9rem"
-                >Judul tugas</label
-              >
-              <input
-                id="taskTitle"
-                type="text"
-                placeholder="Contoh: Sapu kelas, buang sampah"
-                required
-                style="
-                  padding: 12px 14px;
-                  border-radius: 12px;
-                  border: 1.5px solid var(--line);
-                  font: inherit;
-                "
-              />
-              <label for="taskRegu" style="font-weight: 600; font-size: 0.9rem"
-                >Regu</label
-              >
-              <select
-                id="taskRegu"
-                style="
-                  padding: 12px 14px;
-                  border-radius: 12px;
-                  border: 1.5px solid var(--line);
-                  font: inherit;
-                "
-              >
-                <option value="auto">
-                  Otomatis — bagi adil ke regu berikutnya
-                </option>
-                <option value="A">Regu A</option>
-                <option value="B">Regu B</option>
-                <option value="C">Regu C</option>
-              </select>
-              <button
-                class="btn-primary btn-full"
-                type="submit"
-                style="justify-content: center"
-              >
-                Simpan Tugas (terenkripsi)
-              </button>
-              <p
-                id="taskStatus"
-                role="status"
-                aria-live="polite"
-                style="font-size: 0.84rem; color: var(--muted); min-height: 1em"
-              ></p>
+        <div class="container" style="display: grid; gap: 18px; max-width: 980px; margin: 0 auto">
+          <!-- Tahap Awal: Buat Kelas -->
+          <section class="card" id="panelAwal" style="display: grid; gap: 12px; text-align: center">
+            <h3>Buat Dahulu Kelasmu</h3>
+            <p style="color: var(--muted); font-size: 0.9rem">Buat kelas untuk mendapatkan kode kelas & kelola siswa.</p>
+            <button class="btn-primary btn-full" type="button" id="btnBuatKelas" style="justify-content: center">Buat Kelas →</button>
+            <form id="formBuatKelas" style="display: none; gap: 10px; margin-top: 10px">
+              <input id="newClassCode" type="text" placeholder="Kode kelas 6-10 karakter (A-Z, 0-9)" maxlength="10" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit; text-transform: uppercase" required />
+              <input id="newClassName" type="text" placeholder="Nama kelas (misal IX-F)" maxlength="100" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); font: inherit" required />
+              <button class="btn-primary btn-full" type="submit" style="justify-content: center">Buat →</button>
             </form>
           </section>
-          <section
-            aria-labelledby="buktiTitle"
-            style="display: grid; gap: 12px"
-          >
-            <h3 id="buktiTitle">Bukti Video Regu</h3>
+
+          <!-- Tahap Lanjutan: Settings Kelasmu -->
+          <section class="card" id="panelSettings" style="display: none; gap: 12px">
+            <h3>Settings Kelasmu</h3>
+            <div style="display: grid; gap: 8px; background: rgba(255,255,255,0.08); border: 1px solid var(--line); border-radius: 12px; padding: 12px">
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Kode Kelas <span style="display: flex; gap: 8px; align-items: center"><input id="classCode" type="text" readonly style="flex: 1; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; letter-spacing: 0.08em; font-weight: 800; background: rgba(255,255,255,0.08); color: #fff" /><button type="button" id="btnCopyCode" class="teacher-toggle" style="padding: 8px 12px">Salin</button></span></label>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Tema Kelas<select id="classTheme" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff"><option value="dark">Dark Glassmorphism (utama)</option><option value="biru">Biru</option></select></label>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Nama Kelas<input id="className" type="text" placeholder="IX-F" maxlength="100" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff" /></label>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Kuota Siswa (1–40)<input id="maxStudents" type="number" min="1" max="40" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff" /></label>
+              <button type="button" id="btnSaveClass" class="btn-primary btn-full" style="justify-content: center">Simpan Settings →</button>
+            </div>
+            <div style="display: grid; gap: 10px">
+              <h4>Daftar Siswa</h4>
+              <div id="studentList" style="display: grid; gap: 4px"></div>
+              <p id="studentEmpty" hidden style="color: var(--muted); font-size: 0.84rem; text-align: center">Belum ada siswa.</p>
+            </div>
+          </section>
+
+          <!-- Regu Piket: 5 kolom hari -->
+          <section class="card" style="display: grid; gap: 12px">
+            <h3>Regu Piket — Senin–Jumat (maks 9/hari)</h3>
+            <div id="reguForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px"></div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button type="button" id="btnSaveRegu" class="btn-primary" style="justify-content: center">Simpan Regu →</button>
+              <button type="button" id="btnResetRegu" class="teacher-toggle" style="padding: 10px 16px">Batal</button>
+            </div>
+            <div id="notifEditor" hidden style="background: rgba(255,255,255,0.08); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px">
+              <h4>Notifikasi Piket</h4>
+              <p style="color: var(--muted); font-size: 0.84rem">Halo, teman-teman yang ada di bawah daftar ini besok kalian piket jadi siapkan diri ya jangan lupa piket yang bersih. 'Saya Sipiket.my.id' terima kasih:</p>
+              <ul id="notifNames" style="color: var(--muted); font-size: 0.84rem; padding-left: 16px"></ul>
+            </div>
+          </section>
+
+          <!-- Pengaturan Tugas -->
+          <section class="card" style="display: grid; gap: 12px">
+            <h3>Pengaturan Tugas — acak & merata</h3>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button type="button" id="btnAddTask" class="btn-primary" title="Tambah tugas">+ Tambah</button>
+              <button type="button" id="btnRemoveTask" class="teacher-toggle" title="Hapus tugas terpilih">− Hapus (centang & konfirmasi)</button>
+            </div>
+            <div id="taskList" style="display: grid; gap: 6px"></div>
+          </section>
+
+          <!-- Riwayat Tugas -->
+          <section class="card" style="display: grid; gap: 10px">
+            <h3>Riwayat Tugas — hapus untuk kosongkan storage</h3>
+            <div id="historyList" style="display: grid; gap: 6px"></div>
+          </section>
+
+          <!-- Notifikasi WhatsApp -->
+          <section class="card" style="display: grid; gap: 10px">
+            <h3>Notifikasi WhatsApp — hingga 5 URL grup</h3>
+            <div id="webhookList" style="display: grid; gap: 6px"></div>
+            <button type="button" id="btnAddWebhook" class="btn-primary" style="justify-content: center">+ Tambah Webhook</button>
+            <input type="hidden" id="webhookHint" value="Masukkan URL Group" />
+            <div style="display: grid; gap: 8px; margin-top: 10px">
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Kirim Notifikasi — Hukuman / Pelanggaran Berat (merah)
+                <select id="notifContext" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff"><option value="" disabled selected>Pilih konteks</option><option value="hukuman">Hukuman</option><option value="pelanggaran_berat">Pelanggaran Berat</option></select>
+              </label>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Target Siswa<select id="notifTarget" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff"><option value="">Pilih siswa</option></select></label>
+              <label style="font-weight: 600; font-size: 0.88rem; display: grid; gap: 6px">Pesan / Template<select id="notifTemplate" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff"><option value="">— Pilih template —</option></select></label>
+              <textarea id="notifMessage" placeholder="Tulis pesan..." rows="3" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); font: inherit; background: rgba(255,255,255,0.08); color: #fff"></textarea>
+              <button type="button" id="formNotifBtn" class="btn-primary" style="justify-content: center">Kirim ke WhatsApp →</button>
+            </div>
+          </section>
+
+          <!-- Laporan -->
+          <section class="card" style="display: grid; gap: 10px">
+            <h3>Laporan Masuk — Coret / Laporkan (seperti email)</h3>
+            <div id="reportList" style="display: grid; gap: 8px"><p style="color: var(--muted); font-size: 0.84rem; text-align: center">Belum ada laporan.</p></div>
+          </section>
+
+          <section class="card" style="display: grid; gap: 10px">
+            <h3>Bukti Video Regu — verifikasi</h3>
             <div class="cards" id="guruGrid"></div>
-            <p style="color: var(--muted); font-size: 0.88rem">
-              Siswa merekam beberapa detik + video keliling kelas sebagai bukti.
-              Guru memverifikasi di sini.
-            </p>
           </section>
         </div>
       </section>

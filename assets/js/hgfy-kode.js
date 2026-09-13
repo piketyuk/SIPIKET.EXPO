@@ -22,13 +22,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('formCode')?.addEventListener('submit',async e=>{
     e.preventDefault();
     const code=document.getElementById('codeVal').value.trim(),quota=parseInt(document.getElementById('codeQuota').value);
+    const pwd='rachmatullah';
     try{
-      const tok=localStorage.getItem('access_token');
-      const r=await fetch((window.__SIPIKET_API||'/api')+'/auth/verify-code',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({code, is_teacher:true})});
-      // Actually create code: need endpoint - for now use localStorage mock and api create if exists
-      // Try teacher code creation via backend (if endpoint exists)
-      const cr=await fetch((window.__SIPIKET_API||'/api')+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'dummy@sipiket.local',display_name:'dummy',password:'DummyPass1',teacher_code:code,hcaptcha_token:'demo'})});
-      toast('Kode diproses','success');loadCodes();
+      const r=await fetch((window.__SIPIKET_API||'/api')+'/hgfy/codes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd,code,quota})});
+      const j=await r.json(); if(!r.ok) throw new Error(j.detail||'Gagal');
+      toast('Kode guru '+j.code+' dibuat','success');loadCodes();
     }catch(err){toast(err.message,'error')}
   });
   document.getElementById('btnDel')?.addEventListener('click',async()=>{
@@ -36,8 +34,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!email){toast('Masukkan email','error');return;}
     if(!confirm('Hapus akun '+email+'?')) return;
     try{
-      const tok=localStorage.getItem('access_token');
-      const r=await fetch((window.__SIPIKET_API||'/api')+'/users/account?password=rachmatullah',{method:'DELETE',headers:{Authorization:'Bearer '+tok}});
+      const r=await fetch((window.__SIPIKET_API||'/api')+'/hgfy/account',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:'rachmatullah',email})});
       const j=await r.json();if(!r.ok) throw new Error(j.detail||'Gagal');
       toast('Akun dihapus','success');
     }catch(err){toast(err.message,'error')}
@@ -59,7 +56,9 @@ async function loadCodes(){
   const tbody=document.querySelector('#codeTable tbody');
   try{
     const tok=localStorage.getItem('access_token');
-    const r=await fetch((window.__SIPIKET_API||'/api')+'/auth/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:'dummy',is_teacher:true})});
-    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">Belum ada kode (buat di atas)</td></tr>';
+    const r=await fetch((window.__SIPIKET_API||'/api')+'/hgfy/codes?password=rachmatullah');
+    const j=await r.json(); if(!r.ok) throw new Error(j.detail);
+    if(!j.codes||!j.codes.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">Belum ada kode</td></tr>'; return; }
+    tbody.innerHTML=j.codes.map(c=>`<tr><td>${c.code}</td><td>${c.quota}</td><td>${c.used}</td><td>${c.remaining}</td><td style="font-size:0.78rem;color:var(--text-muted);">${(c.emails||[]).join(', ')||'-'}</td></tr>`).join('');
   }catch{tbody.innerHTML='<tr><td colspan="5">Gagal memuat</td></tr>'}
 }

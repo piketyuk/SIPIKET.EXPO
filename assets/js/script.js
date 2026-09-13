@@ -726,7 +726,7 @@ emailForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const code = emailBoxes.map((b) => b.value).join("");
   if (code.length !== 6) {
-    emailStatus.textContent = "Lengkapi 6 digit OTP";
+    emailStatus.textContent = "Lengkapi 5 digit OTP";
     emailStatus.style.color = "#d93025";
     return;
   }
@@ -1657,7 +1657,7 @@ if(document.getElementById("registerForm")){
     getOtpBtn.disabled=true;
     getOtpBtn.textContent="Mengirim...";
     try{
-      otpCode=String(Math.floor(100000+Math.random()*900000));
+      otpCode=String(Math.floor(10000+Math.random()*90000));
       sessionStorage.setItem("sipiket_regEmail",regEmail.value);
       sessionStorage.setItem("sipiket_regOtp",otpCode);
       sessionStorage.setItem("sipiket_regOtpTime",Date.now().toString());
@@ -1684,7 +1684,7 @@ if(document.getElementById("registerForm")){
         e.target.value="";
         return;
       }
-      if(idx<5) otpGroup.querySelectorAll("input")[idx+1].focus();
+      if(idx<4) otpGroup.querySelectorAll("input")[idx+1].focus();
     });
     inp.addEventListener("keydown",e=>{
       if(e.key==="Backspace" && !inp.value && idx>0){
@@ -1695,7 +1695,7 @@ if(document.getElementById("registerForm")){
 
   verifyOtpBtn.addEventListener("click",()=>{
     const inputOtp=Array.from(otpGroup.querySelectorAll("input")).map(i=>i.value).join("");
-    if(inputOtp.length!==6){
+    if(inputOtp.length!==5){
       otpHint.textContent="Lengkapi 6 digit OTP";
       otpHint.style.color="#ff6b6b";
       return;

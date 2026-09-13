@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('btnRemoveTask')?.addEventListener('click',removeTaskPrompt);
   document.getElementById('btnAddWebhook')?.addEventListener('click',addWebhookPrompt);
   document.getElementById('formNotif')?.addEventListener('submit',sendNotif);
+  document.getElementById('formNotifBtn')?.addEventListener('click',sendNotif);
+  document.getElementById('btnResetRegu')?.addEventListener('click',()=>{ document.querySelectorAll('#reguForm select').forEach(s=>{ [...s.options].forEach(o=>o.selected=false); }); document.getElementById('notifEditor').style.display='none'; });
   loadStudents();loadWebhooks();loadTemplates();
 });
 async function loadProfile(){

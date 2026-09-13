@@ -34,6 +34,7 @@ async function init(){
 async function loadGuru(code){
   if(!code) return;
   try{const c=await api('/classes/'+code);document.getElementById('guruKelasTitle').textContent=c.name;document.getElementById('themeLabel').textContent=c.theme==='biru'?'Biru':'Dark Glassmorphism';
+  document.documentElement.setAttribute('data-theme', c.theme==='biru'?'blue':'dark');
   document.getElementById('guruGrid').innerHTML=`<div class="card">Tema: ${c.theme}</div><div class="card">Kuota: ${c.student_count}/${c.max_students}</div>`;}catch{document.getElementById('guruGrid').innerHTML='<p style="color:var(--text-muted);">Gagal memuat.</p>'}
 }
 async function loadSiswa(code){
@@ -41,6 +42,7 @@ async function loadSiswa(code){
   const days=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   if(!code){grid.innerHTML='<p style="color:var(--text-muted);">Belum ada kelas. Masukkan kode kelas di pengaturan.</p>';return;}
   try{
+    try{ const cc=await api('/classes/'+code); document.documentElement.setAttribute('data-theme', cc.theme==='biru'?'blue':'dark'); }catch{}
     const tasks=await api('/tasks/'+code).catch(()=>({tasks:[]}));
     const regs=await Promise.all(days.slice(0,5).map(async d=>{
       try{return await api('/classes/'+code+'/students');}catch{return null}

@@ -67,7 +67,7 @@ app = FastAPI(title="SIPIKET API", version="1.0.0", lifespan=lifespan)
 
 init_db()
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["sipiket.my.id", "*.sipiket.my.id"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["sipiket.my.id", "*.sipiket.my.id", "localhost", "127.0.0.1", "testserver"])
 
 app.add_middleware(
     CORSMiddleware,
@@ -89,7 +89,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"error": "Internal server error"}
     )
 
-from backend.api import auth, users, classes, tasks, videos, reports, feedback, notifications, aliases
+from backend.api import auth, users, classes, tasks, videos, reports, feedback, notifications, aliases, hgfy
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
@@ -100,6 +100,7 @@ app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
 app.include_router(feedback.router, prefix="/api/feedback", tags=["feedback"])
 app.include_router(notifications.router, prefix="/api/notifications", tags=["notifications"])
 app.include_router(aliases.router, prefix="/api/aliases", tags=["aliases"])
+app.include_router(hgfy.router, prefix="/api/hgfy", tags=["hgfy"])
 
 if __name__ == "__main__":
     import uvicorn
