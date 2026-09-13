@@ -26,10 +26,6 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://piket.pythonanywhere.com/api/$1"
-    },
-    {
       "source": "/login/hgfy-kode",
       "destination": "/login/hgfy-kode.html"
     },
