@@ -982,6 +982,31 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
 // --- last account detection (no re-enter code) — fixed: selalu tampilkan picker Google ---
 
 // --- login main vs create views ---
+
+// login.html wiring - 100% spec
+document.getElementById("loginForm")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const email=document.getElementById("loginEmail")?.value.trim();
+  const pwd=document.getElementById("loginPassword")?.value;
+  const hint=document.getElementById("loginHint");
+  if(!email||!pwd){ hint.textContent="Isi email & password"; hint.style.color="#ff6b6b"; return; }
+  hint.textContent="Memverifikasi..."; hint.style.color="rgba(155,161,170,0.9)";
+  try{
+    const backend=(window.__SIPIKET_API||'/api');
+    const r=await fetch(backend+"/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({email, password:pwd, hcaptcha_token:""})});
+    const j=await r.json(); if(!r.ok) throw new Error(j.detail||"Gagal login");
+    hint.textContent="✓ Login ok - cek email untuk verifikasi";
+    hint.style.color="var(--orange)";
+    // Show email verify view if needed
+    sessionStorage.setItem("sipiket_googleEmail", email);
+    sessionStorage.setItem("sipiket_pendingLogin", "1");
+  }catch(err){ hint.textContent=err.message; hint.style.color="#ff6b6b"; }
+});
+document.getElementById("showLoginPass")?.addEventListener("change",(e)=>{
+  const inp=document.getElementById("loginPassword");
+  if(inp) inp.type=e.target.checked?"text":"password";
+});
+
 (function loginViews(){
   const main=document.getElementById("loginMainView");
   const create=document.getElementById("createAccountView");
