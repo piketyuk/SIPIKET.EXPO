@@ -65,4 +65,4 @@ def validate_password(password: str):
     if not any(c.isupper() for c in password): return False, "Password harus huruf besar"
     if not any(c.isdigit() for c in password): return False, "Password harus angka"
     return True, "OK"
-def generate_otp(): return "".join([str(secrets.randbelow(10)) for _ in range(6)])
+def generate_otp(): return "".join([str(secrets.randbelow(10)) for _ in range(5)])
