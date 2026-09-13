@@ -1,6 +1,8 @@
 function toast(m,t='info'){const el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(()=>el.style.display='none',3000);}
 async function api(path,opts={}){const h={'Content-Type':'application/json'};const tok=localStorage.getItem('access_token');if(tok)h.Authorization='Bearer '+tok;const r=await fetch((window.__SIPIKET_API||'/api')+path,{...opts,headers:{...h,...(opts.headers||{})}});const j=await r.json().catch(()=>({}));if(!r.ok) throw new Error(j.detail||j.error||'Gagal');return j;}
 document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('showNewPassword')?.addEventListener('change',e=>{const inp=document.getElementById('newPassword'); if(inp) inp.type=e.target.checked?'text':'password'});
+  document.getElementById('avatarPreview')?.addEventListener('click',()=>document.getElementById('avatarUpload')?.click());
   document.querySelectorAll('.toggle-password').forEach(b=>b.addEventListener('click',()=>{const inp=b.previousElementSibling;inp.type=inp.type==='password'?'text':'password'}));
   loadMe();
   (document.getElementById('avatarFile')||document.getElementById('avatarUpload'))?.addEventListener('change',uploadAvatar);

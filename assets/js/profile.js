@@ -8,30 +8,47 @@ async function loadProfile(){
   const params=new URLSearchParams(location.search);const email=params.get('email');
   let j;
   try{
-    if(email){j=await api('/users/me'); // fallback: show own if not found
-    // Try fetch specific student via class students? For simplicity show own
-    }
     j=await api('/users/me');
   }catch{location.href='login.html';return;}
-  document.getElementById('profileAvatar').src=j.avatar_url||'/assets/img/favicon.svg';
-  document.getElementById('profileName').textContent=j.display_name;
-  document.getElementById('profileRole').textContent=j.role==='guru'?'Guru':'Siswa';
-  document.getElementById('profileEmail').textContent=j.email;
-  document.getElementById('infoEmail').textContent=j.email;
-  document.getElementById('infoFullName').textContent=j.display_name;
-  document.getElementById('infoRole').textContent=j.role;
-  document.getElementById('infoClass').textContent=j.class_code||'—';
-  document.getElementById('infoRegistered').textContent=new Date(j.registered_at).toLocaleString('id-ID');
-  if(j.role==='guru') document.getElementById('teacherStats').style.display='block';
+  const av=document.getElementById('profileAvatar'); if(av) av.src=j.avatar_url||'/assets/img/favicon.svg';
+  const pn=document.getElementById('profileName'); if(pn) pn.textContent=j.display_name||j.email||'—';
+  const nickEl=document.getElementById('profileNick'); if(nickEl){ if(j.nickname){ nickEl.textContent='@'+j.nickname; nickEl.style.display='block'; } else nickEl.style.display='none'; }
+  const pr=document.getElementById('profileRole'); if(pr) pr.textContent=j.role==='guru'?'Guru':'Siswa';
+  const pe=document.getElementById('profileEmail'); if(pe) pe.textContent=j.email||'—';
+  const ie=document.getElementById('infoEmail'); if(ie) ie.textContent=j.email||'—';
+  const fn=document.getElementById('infoFullName'); if(fn) fn.textContent=j.display_name||'—';
+  const inn=document.getElementById('infoNick'); if(inn) inn.textContent=j.nickname||'—';
+  const ir=document.getElementById('infoRole'); if(ir) ir.textContent=j.role||'—';
+  const ic=document.getElementById('infoClass'); if(ic) ic.textContent=j.class_code||'—';
+  const rg=document.getElementById('infoRegistered'); if(rg) rg.textContent=j.registered_at?new Date(j.registered_at).toLocaleString('id-ID'):'—';
+  if(j.role==='guru'){ const ts=document.getElementById('teacherStats'); if(ts) ts.hidden=false; if(ts) ts.style.display='grid'; }
   else {
-    document.getElementById('studentStats').style.display='block';
-    // Load regu info
+    const ss=document.getElementById('studentStats'); if(ss) ss.hidden=false; if(ss) ss.style.display='grid';
     if(j.class_code){
       try{
-        const regs=await api('/classes/'+j.class_code+'/students');
-        // Find which day student is in (need Regu table, for now just show class)
+        const me=j;
+        let reguName='—',day='—';
+        try{
+          const regs=await api('/classes/'+j.class_code+'/regu');
+          if(Array.isArray(regs)){
+            for(const r of regs){
+              const members=r.members||r.siswa||[];
+              if(members.includes(j.email)||members.includes(j.id)){ reguName=r.name||r.id; day=r.day||'—'; break; }
+            }
+          } else if(regs.regu){
+            for(const r of regs.regu){
+              const members=r.members||[];
+              if(members.includes(j.email)){ reguName=r.name; day=r.day; break; }
+            }
+          }
+        }catch{}
+        try{
+          const det=await api('/classes/'+j.class_code);
+          if(det && det.regu) {}
+        }catch{}
+        const rn=document.getElementById('infoRegu'); if(rn) rn.textContent=reguName;
+        const dy=document.getElementById('infoDay'); if(dy) dy.textContent=day;
       }catch{}
     }
   }
 }
-function logout(){localStorage.clear();location.href='login.html'}
