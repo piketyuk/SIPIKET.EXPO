@@ -61,7 +61,7 @@ create table if not exists videos (
   task_id uuid references tasks(id) on delete set null,
   uploader_email text not null,
   uploader_email_enc text,
-  storage_path_enc text not null, -- path terenkripsi (supabase storage / r2)
+  storage_path_enc text not null, -- path terenkripsi (cloudinary / r2)
   duration_seconds int check (duration_seconds between 3 and 300),
   recorded_at timestamptz default now(),
   verified_by text,

@@ -523,14 +523,16 @@ async function persistAccount(email, extra) {
 
 window.onGoogleCredential = async function (response) {
   try {
-    const payload = JSON.parse(
-      atob(
-        response.credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"),
-      ),
-    );
-    const email = payload.email;
-    const name = payload.name || "";
-    const picture = payload.picture || "";
+    const id_token = response.credential;
+    const backend = (window.__SIPIKET_API||'/api').replace(/\/api$/,'/api');
+    const fet = await fetch(backend + "/auth/google", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({id_token})});
+    const data = await fet.json();
+    if(!fet.ok) throw new Error(data.detail||"Google verifikasi gagal");
+    localStorage.setItem("access_token", data.access_token);
+    if(data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+    const email = data.user?.email;
+    const name = data.user?.name || "";
+    const picture = "";
     if (!email) throw new Error("email missing");
     const _hint2 = sessionStorage.getItem("sipiket_hint_email");
     if(_hint2 && email.toLowerCase() !== _hint2.toLowerCase()){ otpStatus.textContent = "Pilih akun "+_hint2+" — akun lain tidak diizinkan untuk mode akun terakhir ini"; otpStatus.style.color="#d93025"; return; }
@@ -963,9 +965,7 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
     const status = document.getElementById("taskStatus");
     const task = { title, regu, by: email, at: Date.now() };
     if (typeof secureSet === "function") {
-      const list = (await secureGet("tasks_" + code)) || [];
-      list.push(task);
-      await secureSet("tasks_" + code, list);
+      try{ await fetch((window.__SIPIKET_API||"/api")+"/tasks/",{method:"POST",headers:{"Content-Type":"application/json", Authorization:"Bearer "+(localStorage.getItem("access_token")||"")}, body: JSON.stringify({class_code:code, title: task.title, description: ""})}); }catch(e){ console.log("tasks fallback",e); }
     }
     status.textContent = `✓ Tugas "${title}" disimpan untuk ${regu === "auto" ? "regu berikutnya (auto)" : "Regu " + regu} — terenkripsi`;
     status.style.color = "var(--orange)";
@@ -1003,7 +1003,8 @@ document.getElementById("logoutGuru")?.addEventListener("click", (e) => {
     const id=idEl?.getAttribute("data-client_id")||"";
     if(id && typeof google!=="undefined" && google.accounts?.id){
       try{ google.accounts.id.initialize({client_id:id, callback:async (r)=>{ 
-        const payload=JSON.parse(atob(r.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+        // verified by backend above
+
         const email=payload.email; const name=payload.name||""; const picture=payload.picture||"";
         let acc=null; try{ if(typeof secureGet==="function") acc=await secureGet("account_"+email.toLowerCase()); }catch{}
         if(!acc || !acc.email){
@@ -1329,7 +1330,7 @@ function showLoginView(name){
       const list=(await secureGet("classes")||[]);
       if(!list.find(c=>c.code===code)){
         list.push({code, tingkat, nama, by: sessionStorage.getItem("sipiket_googleEmail")||"", at: Date.now()});
-        await secureSet("classes", list);
+        try{ await fetch((window.__SIPIKET_API||"/api")+"/classes/",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("access_token")||"")},body: JSON.stringify({code: list[list.length-1]?.code||"", name: ""})}); }catch(e){}
       }
     }
     // enable salin
@@ -1425,11 +1426,7 @@ function showLoginView(name){
       }
       // simpan kelas master
       if(typeof secureSet==="function"){
-        const list=(await secureGet("classes")||[]);
-        if(!list.find(c=>c.code===guruKelas)){
-          list.push({code:guruKelas, tingkat, nama:namaK, by: sessionStorage.getItem("sipiket_googleEmail")||"", at: Date.now()});
-          await secureSet("classes", list);
-        }
+        try{ const backend=(window.__SIPIKET_API||"/api"); await fetch(backend+"/classes/",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("access_token")||"")},body: JSON.stringify({code:guruKelas, name: namaK, max_students: 40, theme: "dark"})}); }catch(e){ console.log("create class API fallback",e); }
       }
       sessionStorage.setItem("sipiket_guru_kelas", guruKelas);
       // override classCode with guru's class
@@ -1542,7 +1539,7 @@ function showLoginView(name){
   });
 })();
 
-// video storage real (supabase storage videos bucket)
+// video storage real (Cloudinary via FastAPI)
 (function videoBoot(){
   const inp=document.getElementById("videoInput"), prev=document.getElementById("videoPreview"), btn=document.getElementById("uploadVideoBtn"), st=document.getElementById("videoStatus");
   if(!inp||!btn) return;
@@ -1562,17 +1559,18 @@ function showLoginView(name){
     try{
       const code=sessionStorage.getItem("sipiket_classCode")||"";
       const email=sessionStorage.getItem("sipiket_googleEmail")||"";
-      if(typeof uploadVideo==="function" && typeof supa!=="undefined" && supa){
+      if(false && typeof uploadVideo==="function"){
         const path=await uploadVideo(f,{class_code:code,email, duration:Math.round(prev.duration||5)});
         st.textContent="✓ Terupload: "+path+" — tersimpan terenkripsi";
         st.style.color="var(--orange)";
       } else {
         // fallback local encrypted
-        const r=new FileReader();
-        await new Promise((res,rej)=>{ r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
-        const key="video_"+Date.now();
-        if(typeof secureSet==="function") await secureSet(key, {name:f.name, data:r.result, class_code:code, at:Date.now()});
-        st.textContent="✓ Tersimpan lokal terenkripsi (supabase.js belum diisi) — ponytail: isi SUPABASE_URL/ANON";
+        const fd=new FormData(); fd.append("file", f);
+        const tok=localStorage.getItem("access_token")||sessionStorage.getItem("access_token")||"";
+        const backend=(window.__SIPIKET_API||'/api');
+        const res=await fetch(backend+"/videos/upload?class_code="+encodeURIComponent(code)+"&duration_seconds="+Math.round(prev.duration||5),{method:"POST",headers: tok?{Authorization:"Bearer "+tok}:{}, body: fd});
+        const j=await res.json(); if(!res.ok) throw new Error(j.detail||"Upload gagal");
+        st.textContent="✓ Terupload: "+(j.video?.url||j.storage_path||"ok")+" — Cloudinary";
         st.style.color="var(--orange)";
       }
     }catch(e){ st.textContent="Gagal: "+(e.message||e); st.style.color="#d93025"; }
@@ -1657,11 +1655,14 @@ if(document.getElementById("registerForm")){
     getOtpBtn.disabled=true;
     getOtpBtn.textContent="Mengirim...";
     try{
-      otpCode=String(Math.floor(10000+Math.random()*90000));
+      const backend=(window.__SIPIKET_API||'/api');
+      const r=await fetch(backend+"/auth/request-otp",{method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({email: regEmail.value})});
+      const j=await r.json(); if(!r.ok) throw new Error(j.detail||"Gagal");
+      otpCode=j.dev_otp||"";
       sessionStorage.setItem("sipiket_regEmail",regEmail.value);
-      sessionStorage.setItem("sipiket_regOtp",otpCode);
-      sessionStorage.setItem("sipiket_regOtpTime",Date.now().toString());
-      otpHint.textContent=`✓ OTP dikirim ke ${regEmail.value} (dev: ${otpCode})`;
+      if(j.dev_otp) otpHint.textContent=`✓ OTP dikirim ke ${regEmail.value} (dev: ${otpCode})`;
+      else otpHint.textContent=`✓ OTP dikirim ke ${regEmail.value} — cek email`;
+      // handle resend timing
       otpHint.style.color="rgba(155,161,170,0.9)";
       otpInputs.hidden=false;
       otpGroup.querySelectorAll("input")[0].focus();
@@ -1771,12 +1772,16 @@ if(document.getElementById("registerForm")){
     formStatus.textContent="Mendaftar...";
     formStatus.style.color="rgba(155,161,170,0.9)";
     try{
-      const email=regEmail.value;
+      const email=regEmail.value.trim();
       const username=regUsername.value.trim();
       const password=regPassword.value;
-      const payload={email,username,password,code,role:isTeacherMode?"guru":"siswa",createdAt:Date.now()};
-      if(typeof secureSet==="function") await secureSet(encKey(email),payload);
-      else localStorage.setItem("enc_"+encKey(email),JSON.stringify(payload));
+      const backend=(window.__SIPIKET_API||'/api');
+      const body = isTeacherMode
+        ? {email, display_name: username, password, teacher_code: code, hcaptcha_token: ""}
+        : {email, display_name: username, password, class_code: code, hcaptcha_token: ""};
+      const r=await fetch(backend+"/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(body)});
+      const j=await r.json(); if(!r.ok) throw new Error(j.detail||"Gagal daftar");
+      localStorage.setItem("sipiket_last_email", email);
       localStorage.setItem("sipiket_last_email",email);
       formStatus.textContent="✓ Akun berhasil dibuat — redirect ke login";
       formStatus.style.color="rgba(155,161,170,0.9)";

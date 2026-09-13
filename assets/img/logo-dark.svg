@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 44" role="img" aria-label="Logo Sipiket gelap"><title>Sipiket — Platform Piket Digital (dark)</title><defs><linearGradient id="g2" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#0f5bff"/><stop offset="1" stop-color="#0a2a7a"/></linearGradient></defs><rect width="44" height="44" rx="12" fill="url(#g2)"/><g stroke="#0B0C0E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 28 L24 18 M21 18 L24 18 L24 21" stroke="#0B0C0E"/><rect x="12" y="26" width="14" height="4" rx="1.2" fill="#0B0C0E" stroke="none"/><rect x="9" y="30" width="20" height="3" rx="1" fill="#0B0C0E" stroke="none"/><circle cx="32" cy="14" r="2.2" fill="#0B0C0E" stroke="none"/><path d="M29 11 L30.5 8 M32 9 L33.2 6.5 M35 10 L36.5 7.2" stroke="#0B0C0E"/></g><text x="56" y="28" font-family="'Plus Jakarta Sans', Inter, sans-serif" font-weight="800" font-size="18" fill="#0B0C0E" letter-spacing="-0.02em">SIPIKET<tspan font-weight="500" fill="rgba(11,12,14,0.7)">.EXPO</tspan></text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Sipiket logo dark">
+<rect width="120" height="120" rx="26" fill="#ffffff"/>
+<rect x="14" y="14" width="92" height="92" rx="22" fill="none" stroke="#0B0C0E" stroke-width="2.5" opacity="0.12"/>
+<circle cx="60" cy="60" r="32" fill="none" stroke="#0B0C0E" stroke-width="6"/>
+<path d="M42 62 L56 76 L80 48" fill="none" stroke="#0B0C0E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
