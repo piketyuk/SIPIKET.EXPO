@@ -115,19 +115,36 @@
             let r=await fetch(backend+"/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(body)});
             let j=await r.json();
             if(!r.ok){
-              // fallback local (presentasi offline): simpan lokal
               if(r.status>=400){
                 const key="account_"+email.toLowerCase();
                 const payload={email, displayName: username, role: isGuru?"guru":"siswa", classCode: "", registeredAt: Date.now()};
                 try{ if(typeof secureSet==="function") await secureSet(key,payload); else localStorage.setItem("enc_"+key, JSON.stringify(payload)); }catch{}
                 localStorage.setItem("sipiket_last_email", email);
-                status.textContent='✓ Akun tersimpan lokal (backend offline) — lanjut login'; status.style.color='var(--orange)';
-                setTimeout(()=>location.href='login.html', 900);
+                sessionStorage.setItem("sipiket_registered","1");
+                sessionStorage.setItem("sipiket_googleEmail",email);
+                sessionStorage.setItem("sipiket_googleName",username);
+                if(isGuru) sessionStorage.setItem("sipiket_role","guru");
+                status.textContent='✓ Akun tersimpan — langsung masuk...'; status.style.color='#10b981';
+                setTimeout(()=>location.href=isGuru?'guru-kelas.html':'kelas.html', 700);
                 return;
               }
               throw new Error(j.detail||"Gagal");
             }
-            status.textContent='✓ Berhasil — silakan login'; status.style.color='#10b981';
+            status.textContent='✓ Berhasil — login otomatis...'; status.style.color='#10b981';
+            try{
+              let lr=await fetch(backend+"/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({email,password,hcaptcha_token:""})});
+              let lj=await lr.json();
+              if(lr.ok){
+                localStorage.setItem("access_token",lj.access_token);
+                if(lj.refresh_token) localStorage.setItem("refresh_token",lj.refresh_token);
+                sessionStorage.setItem("sipiket_registered","1");
+                sessionStorage.setItem("sipiket_googleEmail",email);
+                sessionStorage.setItem("sipiket_googleName",username);
+                if(lj.user?.role==="guru"||isGuru) sessionStorage.setItem("sipiket_role","guru");
+                setTimeout(()=>location.href=(lj.user?.role==="guru"||isGuru)?'guru-kelas.html':'kelas.html', 500);
+                return;
+              }
+            }catch{}
             setTimeout(()=>location.href='login.html', 800);
           }catch(err){ status.textContent=err.message; status.style.color='#ff6b6b'; }
         });
