@@ -7,17 +7,14 @@ from backend.utils.cache import rate_limiter, login_lockout, session_cache
 from backend.utils.email import email_service
 from backend.config import settings
 from pydantic import BaseModel
-try:
-    from pydantic import EmailStr
-except ImportError:
-    EmailStr=str
+EmailStr=str
 from datetime import datetime, timedelta
 import httpx
 
 router = APIRouter()
 
 class RegisterRequest(BaseModel):
-    email: EmailStr
+    email: str
     display_name: str
     password: str
     class_code: str = None
@@ -25,15 +22,15 @@ class RegisterRequest(BaseModel):
     hcaptcha_token: str
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     hcaptcha_token: str
 
 class OTPRequest(BaseModel):
-    email: EmailStr
+    email: str
 
 class OTPVerifyRequest(BaseModel):
-    email: EmailStr
+    email: str
     otp: str
 
 class CodeVerifyRequest(BaseModel):
